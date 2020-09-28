@@ -1,9 +1,12 @@
-import 'package:chill/bloc/profile/bloc.dart';
-import 'package:chill/repositories/userRepository.dart';
-import 'package:chill/ui/constants.dart';
-import 'package:chill/ui/widgets/profileForm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:certain/blocs/profile/bloc.dart';
+
+import 'package:certain/repositories/userRepository.dart';
+
+import 'package:certain/views/widgets/profileForm.dart';
+import 'package:certain/views/constants.dart';
 
 class Profile extends StatelessWidget {
   final _userRepository;
@@ -18,13 +21,13 @@ class Profile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Profile Setup"),
+        title: Text("Création du profil"),
         centerTitle: true,
         backgroundColor: backgroundColor,
         elevation: 0,
       ),
       body: BlocProvider<ProfileBloc>(
-        create: (context) => ProfileBloc(userRepository: _userRepository),
+        create: (context) => ProfileBloc(_userRepository),
         child: ProfileForm(
           userRepository: _userRepository,
         ),
