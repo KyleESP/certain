@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class Matches extends StatefulWidget {
+class Parameters extends StatefulWidget {
   final String userId;
 
-  const Matches({this.userId});
+  const Parameters({this.userId});
 
   @override
   State<StatefulWidget> createState() {
