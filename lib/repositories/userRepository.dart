@@ -18,7 +18,7 @@ class UserRepository {
         email: email, password: password);
   }
 
-  Future<bool> isFirstTime(String userId) async {
+  Future<bool> userExists(String userId) async {
     bool userExists;
     await _firebaseFirestore.collection('users').doc(userId).get().then((user) {
       userExists = user.exists;
