@@ -3,10 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:certain/blocs/sign_up/bloc.dart';
 
-import 'package:certain/repositories/userRepository.dart';
+import 'package:certain/repositories/user_repository.dart';
 
 import 'package:certain/views/constants.dart';
-import 'package:certain/views/widgets/signUpForm.dart';
+import 'package:certain/views/widgets/sign_up_form.dart';
 
 class SignUp extends StatelessWidget {
   final UserRepository _userRepository;

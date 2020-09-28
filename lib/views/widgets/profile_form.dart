@@ -11,7 +11,7 @@ import 'package:certain/blocs/authentication/authentication_bloc.dart';
 import 'package:certain/blocs/authentication/authentication_event.dart';
 import 'package:certain/blocs/profile/bloc.dart';
 
-import 'package:certain/repositories/userRepository.dart';
+import 'package:certain/repositories/user_repository.dart';
 
 import 'package:certain/views/constants.dart';
 import 'package:certain/views/widgets/gender.dart';
@@ -90,7 +90,6 @@ class _ProfileFormState extends State<ProfileForm> {
       //bloc: _profileBloc,
       listener: (context, state) {
         if (state.isFailure) {
-          print("Failed");
           Scaffold.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
@@ -106,7 +105,6 @@ class _ProfileFormState extends State<ProfileForm> {
             );
         }
         if (state.isSubmitting) {
-          print("Submitting");
           Scaffold.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
@@ -122,7 +120,6 @@ class _ProfileFormState extends State<ProfileForm> {
             );
         }
         if (state.isSuccess) {
-          print("Success!");
           BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
         }
       },
@@ -187,7 +184,6 @@ class _ProfileFormState extends State<ProfileForm> {
                           setState(() {
                             age = date;
                           });
-                          print(age);
                         },
                       );
                     },

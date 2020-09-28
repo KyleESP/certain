@@ -5,7 +5,7 @@ import 'package:certain/blocs/authentication/authentication_bloc.dart';
 import 'package:certain/blocs/authentication/authentication_event.dart';
 import 'package:certain/blocs/sign_up/bloc.dart';
 
-import 'package:certain/repositories/userRepository.dart';
+import 'package:certain/repositories/user_repository.dart';
 
 import '../constants.dart';
 
@@ -73,7 +73,6 @@ class _SignUpFormState extends State<SignUpForm> {
             );
         }
         if (state.isSubmitting) {
-          print("isSubmitting");
           Scaffold.of(context)
             ..showSnackBar(
               SnackBar(
@@ -88,7 +87,6 @@ class _SignUpFormState extends State<SignUpForm> {
             );
         }
         if (state.isSuccess) {
-          print("Success");
           BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
           Navigator.of(context).pop();
         }

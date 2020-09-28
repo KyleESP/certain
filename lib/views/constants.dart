@@ -1,3 +1,3 @@
 import 'package:flutter/material.dart';
 
-const backgroundColor = Colors.pink;
+const backgroundColor = Colors.pinkAccent;

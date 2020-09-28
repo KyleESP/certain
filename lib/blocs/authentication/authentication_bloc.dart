@@ -3,7 +3,7 @@ import 'bloc.dart';
 
 import 'package:bloc/bloc.dart';
 
-import 'package:certain/repositories/userRepository.dart';
+import 'package:certain/repositories/user_repository.dart';
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {

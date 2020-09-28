@@ -4,10 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:certain/blocs/authentication/authentication_bloc.dart';
 import 'package:certain/blocs/authentication/authentication_state.dart';
 
-import 'package:certain/repositories/userRepository.dart';
+import 'package:certain/repositories/user_repository.dart';
 
 import 'package:certain/views/pages/profile.dart';
-import 'package:certain/views/pages/splash.dart';
+import 'package:certain/views/pages/splash_screen.dart';
 import 'package:certain/views/widgets/tabs.dart';
 
 import 'login.dart';

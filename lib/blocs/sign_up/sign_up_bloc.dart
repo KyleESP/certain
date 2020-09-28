@@ -5,7 +5,7 @@ import 'package:rxdart/rxdart.dart';
 
 import 'package:bloc/bloc.dart';
 
-import 'package:certain/repositories/userRepository.dart';
+import 'package:certain/repositories/user_repository.dart';
 
 import 'package:certain/views/validators.dart';
 

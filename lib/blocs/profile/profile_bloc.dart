@@ -5,7 +5,7 @@ import 'bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:bloc/bloc.dart';
 
-import 'package:certain/repositories/userRepository.dart';
+import 'package:certain/repositories/user_repository.dart';
 
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   UserRepository _userRepository;

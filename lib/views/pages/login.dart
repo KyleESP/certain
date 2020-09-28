@@ -5,9 +5,9 @@ import '../constants.dart';
 
 import 'package:certain/blocs/login/bloc.dart';
 
-import 'package:certain/repositories/userRepository.dart';
+import 'package:certain/repositories/user_repository.dart';
 
-import 'package:certain/views/widgets/loginForm.dart';
+import 'package:certain/views/widgets/login_form.dart';
 
 class Login extends StatelessWidget {
   final UserRepository _userRepository;

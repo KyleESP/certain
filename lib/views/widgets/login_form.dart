@@ -5,9 +5,9 @@ import 'package:certain/blocs/authentication/authentication_bloc.dart';
 import 'package:certain/blocs/authentication/authentication_event.dart';
 import 'package:certain/blocs/login/bloc.dart';
 
-import 'package:certain/repositories/userRepository.dart';
+import 'package:certain/repositories/user_repository.dart';
 
-import 'package:certain/views/pages/signUp.dart';
+import 'package:certain/views/pages/sign_up.dart';
 import 'package:certain/views/constants.dart';
 
 class LoginForm extends StatefulWidget {
@@ -95,7 +95,6 @@ class _LoginFormState extends State<LoginForm> {
         }
 
         if (state.isSubmitting) {
-          print("isSubmitting");
           Scaffold.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
@@ -112,7 +111,6 @@ class _LoginFormState extends State<LoginForm> {
         }
 
         if (state.isSuccess) {
-          print("Success");
           BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
         }
       },

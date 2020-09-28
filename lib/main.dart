@@ -6,7 +6,7 @@ import 'blocs/authentication/authentication_bloc.dart';
 import 'blocs/authentication/authentication_event.dart';
 import 'blocs/my_bloc_observer.dart';
 
-import 'repositories/userRepository.dart';
+import 'repositories/user_repository.dart';
 
 import 'views/pages/home.dart';
 
