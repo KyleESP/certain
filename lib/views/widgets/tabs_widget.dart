@@ -6,9 +6,9 @@ import '../constants.dart';
 import 'package:certain/blocs/authentication/authentication_bloc.dart';
 import 'package:certain/blocs/authentication/authentication_event.dart';
 
-import 'package:certain/views/pages/matches.dart';
-import 'package:certain/views/pages/messages.dart';
 import 'package:certain/views/pages/search.dart';
+import 'package:certain/views/pages/messages.dart';
+import 'package:certain/views/pages/parameters.dart';
 
 class Tabs extends StatelessWidget {
   final userId;
@@ -21,10 +21,10 @@ class Tabs extends StatelessWidget {
       Search(
         userId: userId,
       ),
-      Matches(
+      Messages(
         userId: userId,
       ),
-      Messages(
+      Parameters(
         userId: userId,
       ),
     ];
@@ -62,8 +62,8 @@ class Tabs extends StatelessWidget {
                     TabBar(
                       tabs: <Widget>[
                         Tab(icon: Icon(Icons.search)),
-                        Tab(icon: Icon(Icons.people)),
                         Tab(icon: Icon(Icons.message)),
+                        Tab(icon: Icon(Icons.supervised_user_circle)),
                       ],
                     )
                   ],
