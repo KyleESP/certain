@@ -8,7 +8,7 @@ import 'package:certain/repositories/user_repository.dart';
 
 import 'package:certain/views/pages/profile.dart';
 import 'package:certain/views/pages/splash_screen.dart';
-import 'package:certain/views/widgets/tabs.dart';
+import 'package:certain/views/widgets/tabs_widget.dart';
 
 import 'login.dart';
 

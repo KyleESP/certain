@@ -5,7 +5,7 @@ import 'package:certain/blocs/profile/bloc.dart';
 
 import 'package:certain/repositories/user_repository.dart';
 
-import 'package:certain/views/widgets/profile_form.dart';
+import 'package:certain/views/widgets/profile_form_widget.dart';
 import 'package:certain/views/constants.dart';
 
 class Profile extends StatelessWidget {
