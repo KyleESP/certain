@@ -118,7 +118,22 @@ class _LoginFormState extends State<LoginForm> {
         builder: (context, state) {
           return SingleChildScrollView(
             child: Container(
-              color: backgroundColor,
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.topRight,
+                      end: Alignment.bottomLeft,
+                      stops: [
+                        0.3,
+                        0.6,
+                        1.0
+                      ],
+                      colors: [
+                        Colors.red[300],
+                        Colors.deepOrangeAccent[100],
+                        Colors.amber[200]
+                      ]
+                  )
+              ),
               width: size.width,
               height: size.height,
               child: Column(
@@ -139,31 +154,39 @@ class _LoginFormState extends State<LoginForm> {
                       color: Colors.white,
                     ),
                   ),
-                  Padding(
+                  Container(
                     padding: EdgeInsets.all(size.height * 0.02),
+                    width: size.width * 0.9,
                     child: TextFormField(
                       controller: _emailController,
                       autovalidate: true,
                       validator: (_) {
                         return !state.isEmailValid ? "Email invalide" : null;
                       },
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: size.height * 0.025
+                      ),
                       decoration: InputDecoration(
-                        labelText: "Email",
-                        labelStyle: TextStyle(
-                            color: Colors.white, fontSize: size.height * 0.03),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.white, width: 1.0),
+                        prefixIcon: Icon(
+                          Icons.email,
+                          color: Colors.white,
                         ),
+                        hintText: "Email",
+                        hintStyle: TextStyle(
+                            color: Colors.white, fontSize: size.height * 0.025),
+                        filled: true,
+                        fillColor: Colors.white.withOpacity(0.2),
                         enabledBorder: OutlineInputBorder(
                           borderSide:
-                              BorderSide(color: Colors.white, width: 1.0),
+                              BorderSide.none,
                         ),
                       ),
                     ),
                   ),
-                  Padding(
+                  Container(
                     padding: EdgeInsets.all(size.height * 0.02),
+                    width: size.width * 0.9,
                     child: TextFormField(
                       controller: _passwordController,
                       autocorrect: false,
@@ -174,17 +197,23 @@ class _LoginFormState extends State<LoginForm> {
                             ? "Mot de passe invalide"
                             : null;
                       },
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: size.height * 0.025
+                      ),
                       decoration: InputDecoration(
-                        labelText: "Mot de passe",
-                        labelStyle: TextStyle(
-                            color: Colors.white, fontSize: size.height * 0.03),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.white, width: 1.0),
+                        prefixIcon: Icon(
+                          Icons.lock,
+                          color: Colors.white,
                         ),
+                        hintText: "Mot de passe",
+                        hintStyle: TextStyle(
+                            color: Colors.white, fontSize: size.height * 0.025),
+                        filled: true,
+                        fillColor: Colors.white.withOpacity(0.2),
                         enabledBorder: OutlineInputBorder(
                           borderSide:
-                              BorderSide(color: Colors.white, width: 1.0),
+                          BorderSide.none,
                         ),
                       ),
                     ),
@@ -198,12 +227,12 @@ class _LoginFormState extends State<LoginForm> {
                               ? _onFormSubmitted
                               : null,
                           child: Container(
-                            width: size.width * 0.8,
+                            width: size.width * 0.6,
                             height: size.height * 0.06,
                             decoration: BoxDecoration(
                               color: isLoginButtonEnabled(state)
-                                  ? Colors.white
-                                  : Colors.grey,
+                                  ? Color(0xFFE04A5A)
+                                  : Color(0xFFE04A5A).withOpacity(0.3),
                               borderRadius:
                                   BorderRadius.circular(size.height * 0.05),
                             ),
@@ -212,7 +241,7 @@ class _LoginFormState extends State<LoginForm> {
                                 "Se connecter",
                                 style: TextStyle(
                                     fontSize: size.height * 0.025,
-                                    color: Colors.blue),
+                                    color: Colors.white),
                               ),
                             ),
                           ),
