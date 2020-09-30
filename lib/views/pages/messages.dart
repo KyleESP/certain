@@ -71,7 +71,7 @@ class _MessagesState extends State<Messages> {
                 }
               } else
                 return Text(
-                  "Tu n'a aucune conversations.",
+                  "Tu n'a aucune conversation.",
                   style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
                 );
             },
