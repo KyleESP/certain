@@ -1,15 +1,16 @@
-import 'package:certain/models/message.dart';
-import 'package:certain/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'package:certain/models/message.dart';
+import 'package:certain/models/user.dart';
+
 class MessageRepository {
-  final FirebaseFirestore _firestore;
+  final FirebaseFirestore _firebaseFirestore;
 
   MessageRepository({FirebaseFirestore firestore})
-      : _firestore = firestore ?? FirebaseFirestore.instance;
+      : _firebaseFirestore = firestore ?? FirebaseFirestore.instance;
 
   Stream<QuerySnapshot> getChats({userId}) {
-    return _firestore
+    return _firebaseFirestore
         .collection('users')
         .doc(userId)
         .collection('chats')
@@ -18,7 +19,7 @@ class MessageRepository {
   }
 
   Future deleteChat({currentUserId, selectedUserId}) async {
-    await _firestore
+    await _firebaseFirestore
         .collection('users')
         .doc(currentUserId)
         .collection('chats')
@@ -29,14 +30,14 @@ class MessageRepository {
   Future<User> getUserDetail({userId}) async {
     User _user = User();
 
-    await _firestore.collection('users').doc(userId).get().then((user) {
-      _user.uid = user.documentID;
+    await _firebaseFirestore.collection('users').doc(userId).get().then((user) {
+      _user.uid = user.id;
       _user.name = user.data()['name'];
+      _user.photo = user.data()['photoUrl'];
       _user.age = user.data()['age'];
+      _user.location = user.data()['location'];
       _user.gender = user.data()['gender'];
       _user.interestedIn = user.data()['interestedIn'];
-      _user.profilePic = user.data()['profilePicUrl'];
-      _user.location = user.data()['location'];
     });
     return _user;
   }
@@ -44,7 +45,7 @@ class MessageRepository {
   Future<Message> getLastMessage({currentUserId, selectedUserId}) async {
     Message _message = Message();
 
-    await _firestore
+    await _firebaseFirestore
         .collection('users')
         .doc(currentUserId)
         .collection('chats')
@@ -54,9 +55,9 @@ class MessageRepository {
         .snapshots()
         .first
         .then((doc) async {
-      await _firestore
+      await _firebaseFirestore
           .collection('messages')
-          .doc(doc.documents.first.documentID)
+          .doc(doc.docs.first.id)
           .get()
           .then((message) {
         _message.text = message.data()['text'];
