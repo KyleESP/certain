@@ -4,37 +4,36 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:geolocator/geolocator.dart';
 
 import 'package:certain/blocs/authentication/authentication_bloc.dart';
 import 'package:certain/blocs/authentication/authentication_event.dart';
-import 'package:certain/blocs/profile/bloc.dart';
+import 'package:certain/blocs/parameters/bloc.dart';
 
 import 'package:certain/repositories/user_repository.dart';
 
 import 'package:certain/views/constants.dart';
 import 'package:certain/views/widgets/gender_widget.dart';
 
-class ProfileForm extends StatefulWidget {
+class ParametersForm extends StatefulWidget {
   final UserRepository _userRepository;
 
-  ProfileForm({@required UserRepository userRepository})
+  ParametersForm({@required UserRepository userRepository})
       : assert(userRepository != null),
         _userRepository = userRepository;
 
   @override
-  _ProfileFormState createState() => _ProfileFormState();
+  _ParametersFormState createState() => _ParametersFormState();
 }
 
-class _ProfileFormState extends State<ProfileForm> {
+class _ParametersFormState extends State<ParametersForm> {
   final TextEditingController _nameController = TextEditingController();
 
   String gender, interestedIn;
   DateTime age;
   File photo;
   GeoPoint location;
-  ProfileBloc _profileBloc;
+  ParametersBloc _parametersBloc;
 
   //UserRepository get _userRepository => widget._userRepository;
 
@@ -45,7 +44,7 @@ class _ProfileFormState extends State<ProfileForm> {
       photo != null &&
       age != null;
 
-  bool isButtonEnabled(ProfileState state) {
+  bool isButtonEnabled(ParametersState state) {
     return isFilled && !state.isSubmitting;
   }
 
@@ -58,7 +57,7 @@ class _ProfileFormState extends State<ProfileForm> {
 
   _onSubmitted() async {
     await _getLocation();
-    _profileBloc.add(
+    _parametersBloc.add(
       Submitted(
           name: _nameController.text,
           age: age,
@@ -72,7 +71,7 @@ class _ProfileFormState extends State<ProfileForm> {
   @override
   void initState() {
     _getLocation();
-    _profileBloc = BlocProvider.of<ProfileBloc>(context);
+    _parametersBloc = BlocProvider.of<ParametersBloc>(context);
     super.initState();
   }
 
@@ -86,8 +85,8 @@ class _ProfileFormState extends State<ProfileForm> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    return BlocListener<ProfileBloc, ProfileState>(
-      //cubit: _profileBloc,
+    return BlocListener<ParametersBloc, ParametersState>(
+      //cubit: _parametersBloc,
       listener: (context, state) {
         if (state.isFailure) {
           Scaffold.of(context)
@@ -123,7 +122,7 @@ class _ProfileFormState extends State<ProfileForm> {
           BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
         }
       },
-      child: BlocBuilder<ProfileBloc, ProfileState>(
+      child: BlocBuilder<ParametersBloc, ParametersState>(
         builder: (context, state) {
           return SingleChildScrollView(
             scrollDirection: Axis.vertical,
@@ -136,46 +135,26 @@ class _ProfileFormState extends State<ProfileForm> {
                   Container(
                     width: size.width,
                     child: CircleAvatar(
-                        radius: size.width * 0.3,
-                        backgroundColor: Colors.transparent,
-                        child: GestureDetector(
-                            onTap: () async {
-                              FilePickerResult result = await FilePicker
-                                  .platform
-                                  .pickFiles(type: FileType.image);
-                              if (result != null) {
-                                File getPic = File(result.files.single.path);
-                                setState(() {
-                                  photo = getPic;
-                                });
-                              }
-                            },
-                            child: photo == null
-                                ? Image.asset('assets/profilephoto.png')
-                                : CircleAvatar(
-                                    radius: size.width * 0.3,
-                                    backgroundImage: FileImage(photo),
-                                  ))),
-                  ),
-                  textFieldWidget(_nameController, "Nom", size),
-                  GestureDetector(
-                    onTap: () {
-                      DatePicker.showDatePicker(
-                        context,
-                        showTitleActions: true,
-                        minTime: DateTime(1900, 1, 1),
-                        maxTime: DateTime(DateTime.now().year - 19, 1, 1),
-                        onConfirm: (date) {
-                          setState(() {
-                            age = date;
-                          });
+                      radius: size.width * 0.3,
+                      backgroundColor: Colors.transparent,
+                      child: GestureDetector(
+                        onTap: () async {
+                          FilePickerResult result = await FilePicker.platform
+                              .pickFiles(type: FileType.image);
+                          if (result != null) {
+                            File getPic = File(result.files.single.path);
+                            setState(() {
+                              photo = getPic;
+                            });
+                          }
                         },
-                      );
-                    },
-                    child: Text(
-                      "Date d'anniversaire",
-                      style: TextStyle(
-                          color: Colors.white, fontSize: size.width * 0.09),
+                        child: photo == null
+                            ? Image.asset('assets/profilephoto.png')
+                            : CircleAvatar(
+                                radius: size.width * 0.3,
+                                backgroundImage: FileImage(photo),
+                              ),
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -184,49 +163,6 @@ class _ProfileFormState extends State<ProfileForm> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: size.height * 0.02),
-                        child: Text(
-                          "Tu es:",
-                          style: TextStyle(
-                              color: Colors.white, fontSize: size.width * 0.09),
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: <Widget>[
-                          genderWidget(
-                              FontAwesomeIcons.venus, "Female", size, gender,
-                              () {
-                            setState(() {
-                              gender = "Female";
-                            });
-                          }),
-                          genderWidget(
-                              FontAwesomeIcons.mars, "Male", size, gender, () {
-                            setState(() {
-                              gender = "Male";
-                            });
-                          }),
-                          genderWidget(
-                            FontAwesomeIcons.transgender,
-                            "Transgender",
-                            size,
-                            gender,
-                            () {
-                              setState(
-                                () {
-                                  gender = "Transgender";
-                                },
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: size.height * 0.02,
-                      ),
                       Padding(
                         padding: EdgeInsets.symmetric(
                             horizontal: size.height * 0.02),
@@ -305,24 +241,4 @@ class _ProfileFormState extends State<ProfileForm> {
       ),
     );
   }
-}
-
-Widget textFieldWidget(controller, text, size) {
-  return Padding(
-    padding: EdgeInsets.all(size.height * 0.02),
-    child: TextField(
-      controller: controller,
-      decoration: InputDecoration(
-        labelText: text,
-        labelStyle:
-            TextStyle(color: Colors.white, fontSize: size.height * 0.03),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.white, width: 1.0),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.white, width: 1.0),
-        ),
-      ),
-    ),
-  );
 }
