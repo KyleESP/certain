@@ -79,7 +79,7 @@ class _SignUpFormState extends State<SignUpForm> {
                 content: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text("Création du compte..."),
+                    Text("Création de votre compte..."),
                     CircularProgressIndicator(),
                   ],
                 ),
@@ -96,52 +96,79 @@ class _SignUpFormState extends State<SignUpForm> {
           return SingleChildScrollView(
             scrollDirection: Axis.vertical,
             child: Container(
-              color: backgroundColor,
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      begin: Alignment.topRight,
+                      end: Alignment.bottomLeft,
+                      stops: [
+                    0.3,
+                    0.6,
+                    1.0
+                  ],
+                      colors: [
+                    backgroundColorRed,
+                    backgroundColorOrange,
+                    backgroundColorYellow
+                  ])),
               width: size.width,
               height: size.height,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Center(
-                    child: Text(
-                      "Certain",
-                      style: TextStyle(
-                          fontSize: size.width * 0.2, color: Colors.white),
-                    ),
+                    heightFactor: 2,
+                    child: Image.asset('assets/logoHeart.png',
+                        height: 150, width: 150),
                   ),
                   Container(
-                    width: size.width * 0.8,
-                    child: Divider(
-                      height: size.height * 0.05,
-                      color: Colors.white,
+                    child: Text(
+                      "Créer votre compte",
+                      style: TextStyle(
+                          fontSize: size.width * 0.1, color: Colors.white),
                     ),
                   ),
-                  Padding(
+                  SizedBox(
+                    height: 70,
+                  ),
+                  Container(
                     padding: EdgeInsets.all(size.height * 0.02),
+                    width: size.width * 0.9,
                     child: TextFormField(
                       controller: _emailController,
                       autovalidate: true,
                       validator: (_) {
                         return !state.isEmailValid ? "Email invalide" : null;
                       },
+                      cursorColor: Colors.white,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: size.height * 0.025
+                      ),
                       decoration: InputDecoration(
-                        labelText: "Email",
-                        labelStyle: TextStyle(
-                            color: Colors.white, fontSize: size.height * 0.03),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.white, width: 1.0),
+                        contentPadding: EdgeInsets.all(size.height * 0.02),
+                        prefixIcon: Icon(
+                          Icons.email,
+                          color: Colors.white,
                         ),
+                        hintText: "Email",
+                        hintStyle: TextStyle(
+                            color: Colors.white, fontSize: size.height * 0.025),
+                        filled: true,
+                        fillColor: Colors.white.withOpacity(0.2),
                         enabledBorder: OutlineInputBorder(
                           borderSide:
-                              BorderSide(color: Colors.white, width: 1.0),
+                          BorderSide.none,
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide.none,
                         ),
                       ),
                     ),
                   ),
-                  Padding(
+                  Container(
                     padding: EdgeInsets.all(size.height * 0.02),
+                    width: size.width * 0.9,
                     child: TextFormField(
                       controller: _passwordController,
                       autocorrect: false,
@@ -152,17 +179,27 @@ class _SignUpFormState extends State<SignUpForm> {
                             ? "Mot de passe invalide"
                             : null;
                       },
+                      cursorColor: Colors.white,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: size.height * 0.025
+                      ),
                       decoration: InputDecoration(
-                        labelText: "Mot de passe",
-                        labelStyle: TextStyle(
-                            color: Colors.white, fontSize: size.height * 0.03),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.white, width: 1.0),
+                        contentPadding: EdgeInsets.all(size.height * 0.02),
+                        prefixIcon: Icon(
+                          Icons.lock,
+                          color: Colors.white,
                         ),
+                        hintText: "Mot de passe",
+                        hintStyle: TextStyle(
+                            color: Colors.white, fontSize: size.height * 0.025),
+                        filled: true,
+                        fillColor: Colors.white.withOpacity(0.2),
                         enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.white, width: 1.0),
+                          borderSide: BorderSide.none,
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide.none,
                         ),
                       ),
                     ),
@@ -174,12 +211,12 @@ class _SignUpFormState extends State<SignUpForm> {
                           ? _onFormSubmitted
                           : null,
                       child: Container(
-                        width: size.width * 0.8,
+                        width: size.width * 0.6,
                         height: size.height * 0.06,
                         decoration: BoxDecoration(
                           color: isSignUpButtonEnabled(state)
-                              ? Colors.white
-                              : Colors.grey,
+                              ? loginButtonColor
+                              : loginButtonColor.withOpacity(0.3),
                           borderRadius:
                               BorderRadius.circular(size.height * 0.05),
                         ),
@@ -188,7 +225,7 @@ class _SignUpFormState extends State<SignUpForm> {
                             "Créer",
                             style: TextStyle(
                                 fontSize: size.height * 0.025,
-                                color: Colors.blue),
+                                color: Colors.white),
                           ),
                         ),
                       ),
