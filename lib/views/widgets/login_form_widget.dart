@@ -155,11 +155,13 @@ class _LoginFormState extends State<LoginForm> {
                       validator: (_) {
                         return !state.isEmailValid ? "Email invalide" : null;
                       },
+                      cursorColor: Colors.white,
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: size.height * 0.025
                       ),
                       decoration: InputDecoration(
+                        contentPadding: EdgeInsets.all(size.height * 0.02),
                         prefixIcon: Icon(
                           Icons.email,
                           color: Colors.white,
@@ -172,6 +174,9 @@ class _LoginFormState extends State<LoginForm> {
                         enabledBorder: OutlineInputBorder(
                           borderSide:
                               BorderSide.none,
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide.none,
                         ),
                       ),
                     ),
@@ -189,11 +194,13 @@ class _LoginFormState extends State<LoginForm> {
                             ? "Mot de passe invalide"
                             : null;
                       },
+                      cursorColor: Colors.white,
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: size.height * 0.025
                       ),
                       decoration: InputDecoration(
+                        contentPadding: EdgeInsets.all(size.height * 0.02),
                         prefixIcon: Icon(
                           Icons.lock,
                           color: Colors.white,
@@ -204,8 +211,10 @@ class _LoginFormState extends State<LoginForm> {
                         filled: true,
                         fillColor: Colors.white.withOpacity(0.2),
                         enabledBorder: OutlineInputBorder(
-                          borderSide:
-                          BorderSide.none,
+                          borderSide: BorderSide.none,
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide.none,
                         ),
                       ),
                     ),
