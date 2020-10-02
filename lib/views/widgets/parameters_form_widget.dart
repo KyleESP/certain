@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:certain/views/widgets/slider_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -160,6 +161,7 @@ class _ParametersFormState extends State<ParametersForm> {
                   SizedBox(
                     height: 10.0,
                   ),
+                  SliderWidget(),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
@@ -205,6 +207,15 @@ class _ParametersFormState extends State<ParametersForm> {
                       ),
                     ],
                   ),
+                  Center(
+                    child: RaisedButton(
+                      onPressed: () => {
+                        BlocProvider.of<AuthenticationBloc>(context)
+                            .add(LoggedOut())
+                      },
+                      child: Text("Se déconnecter"),
+                    ),
+                  ),
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: size.height * 0.02),
                     child: GestureDetector(
@@ -225,7 +236,7 @@ class _ParametersFormState extends State<ParametersForm> {
                         ),
                         child: Center(
                             child: Text(
-                          "Enregistrer",
+                          "Sauvegarder",
                           style: TextStyle(
                               fontSize: size.height * 0.025,
                               color: Colors.blue),
