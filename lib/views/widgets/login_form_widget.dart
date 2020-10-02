@@ -103,7 +103,10 @@ class _LoginFormState extends State<LoginForm> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Text("Connexion..."),
-                    CircularProgressIndicator(),
+                    CircularProgressIndicator(
+                      backgroundColor: loginButtonColor,
+                      valueColor: AlwaysStoppedAnimation<Color>(backgroundColorOrange),
+                    ),
                   ],
                 ),
               ),
@@ -128,9 +131,9 @@ class _LoginFormState extends State<LoginForm> {
                         1.0
                       ],
                       colors: [
-                        Colors.red[300],
-                        Colors.deepOrangeAccent[100],
-                        Colors.amber[200]
+                        backgroundColorRed,
+                        backgroundColorOrange,
+                        backgroundColorYellow
                       ]
                   )
               ),
@@ -141,18 +144,7 @@ class _LoginFormState extends State<LoginForm> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Center(
-                    child: Text(
-                      "Certain",
-                      style: TextStyle(
-                          fontSize: size.width * 0.2, color: Colors.white),
-                    ),
-                  ),
-                  Container(
-                    width: size.width * 0.8,
-                    child: Divider(
-                      height: size.height * 0.05,
-                      color: Colors.white,
-                    ),
+                    child: Image.asset('assets/logo.png'),
                   ),
                   Container(
                     padding: EdgeInsets.all(size.height * 0.02),
@@ -231,8 +223,8 @@ class _LoginFormState extends State<LoginForm> {
                             height: size.height * 0.06,
                             decoration: BoxDecoration(
                               color: isLoginButtonEnabled(state)
-                                  ? Color(0xFFE04A5A)
-                                  : Color(0xFFE04A5A).withOpacity(0.3),
+                                  ? loginButtonColor
+                                  : loginButtonColor.withOpacity(0.3),
                               borderRadius:
                                   BorderRadius.circular(size.height * 0.05),
                             ),
