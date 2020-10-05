@@ -125,7 +125,7 @@ class _SignUpFormState extends State<SignUpForm> {
                     child: Text(
                       "Créer votre compte",
                       style: TextStyle(
-                          fontSize: size.width * 0.1, color: Colors.white),
+                          fontSize: size.width * 0.08, color: Colors.white),
                     ),
                   ),
                   SizedBox(
@@ -143,7 +143,7 @@ class _SignUpFormState extends State<SignUpForm> {
                       cursorColor: Colors.white,
                       style: TextStyle(
                           color: Colors.white,
-                          fontSize: size.height * 0.025
+                          fontSize: size.height * 0.02
                       ),
                       decoration: InputDecoration(
                         contentPadding: EdgeInsets.all(size.height * 0.02),
@@ -153,7 +153,7 @@ class _SignUpFormState extends State<SignUpForm> {
                         ),
                         hintText: "Email",
                         hintStyle: TextStyle(
-                            color: Colors.white, fontSize: size.height * 0.025),
+                            color: Colors.white, fontSize: size.height * 0.02),
                         filled: true,
                         fillColor: Colors.white.withOpacity(0.2),
                         enabledBorder: OutlineInputBorder(
@@ -182,7 +182,7 @@ class _SignUpFormState extends State<SignUpForm> {
                       cursorColor: Colors.white,
                       style: TextStyle(
                           color: Colors.white,
-                          fontSize: size.height * 0.025
+                          fontSize: size.height * 0.02
                       ),
                       decoration: InputDecoration(
                         contentPadding: EdgeInsets.all(size.height * 0.02),
@@ -192,7 +192,7 @@ class _SignUpFormState extends State<SignUpForm> {
                         ),
                         hintText: "Mot de passe",
                         hintStyle: TextStyle(
-                            color: Colors.white, fontSize: size.height * 0.025),
+                            color: Colors.white, fontSize: size.height * 0.02),
                         filled: true,
                         fillColor: Colors.white.withOpacity(0.2),
                         enabledBorder: OutlineInputBorder(
@@ -211,7 +211,7 @@ class _SignUpFormState extends State<SignUpForm> {
                           ? _onFormSubmitted
                           : null,
                       child: Container(
-                        width: size.width * 0.6,
+                        width: size.width * 0.5,
                         height: size.height * 0.06,
                         decoration: BoxDecoration(
                           color: isSignUpButtonEnabled(state)
@@ -224,7 +224,7 @@ class _SignUpFormState extends State<SignUpForm> {
                           child: Text(
                             "Créer",
                             style: TextStyle(
-                                fontSize: size.height * 0.025,
+                                fontSize: size.height * 0.023,
                                 color: Colors.white),
                           ),
                         ),
