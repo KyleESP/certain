@@ -18,13 +18,10 @@ class SignUp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: Text(
-          "Création du compte",
-          style: TextStyle(fontSize: 36.0),
-        ),
         centerTitle: true,
-        backgroundColor: backgroundColor,
+        backgroundColor: Colors.transparent,
         elevation: 0,
       ),
       body: BlocProvider<SignUpBloc>(

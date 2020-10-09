@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -105,7 +106,8 @@ class _LoginFormState extends State<LoginForm> {
                     Text("Connexion..."),
                     CircularProgressIndicator(
                       backgroundColor: loginButtonColor,
-                      valueColor: AlwaysStoppedAnimation<Color>(backgroundColorOrange),
+                      valueColor:
+                          AlwaysStoppedAnimation<Color>(backgroundColorOrange),
                     ),
                   ],
                 ),
@@ -126,24 +128,23 @@ class _LoginFormState extends State<LoginForm> {
                       begin: Alignment.topRight,
                       end: Alignment.bottomLeft,
                       stops: [
-                        0.3,
-                        0.6,
-                        1.0
-                      ],
+                    0.3,
+                    0.6,
+                    1.0
+                  ],
                       colors: [
-                        backgroundColorRed,
-                        backgroundColorOrange,
-                        backgroundColorYellow
-                      ]
-                  )
-              ),
+                    backgroundColorRed,
+                    backgroundColorOrange,
+                    backgroundColorYellow
+                  ])),
               width: size.width,
               height: size.height,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  Center(
+                  Container(
+                    margin: EdgeInsets.only(top: size.height * 0.1),
                     child: Image.asset('assets/logo.png'),
                   ),
                   Container(
@@ -157,9 +158,7 @@ class _LoginFormState extends State<LoginForm> {
                       },
                       cursorColor: Colors.white,
                       style: TextStyle(
-                          color: Colors.white,
-                          fontSize: size.height * 0.025
-                      ),
+                          color: Colors.white, fontSize: size.height * 0.02),
                       decoration: InputDecoration(
                         contentPadding: EdgeInsets.all(size.height * 0.02),
                         prefixIcon: Icon(
@@ -168,15 +167,14 @@ class _LoginFormState extends State<LoginForm> {
                         ),
                         hintText: "Email",
                         hintStyle: TextStyle(
-                            color: Colors.white, fontSize: size.height * 0.025),
+                            color: Colors.white, fontSize: size.height * 0.02),
                         filled: true,
                         fillColor: Colors.white.withOpacity(0.2),
                         enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide.none,
+                          borderSide: BorderSide.none,
                         ),
                         focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide.none,
+                          borderSide: BorderSide.none,
                         ),
                       ),
                     ),
@@ -196,9 +194,7 @@ class _LoginFormState extends State<LoginForm> {
                       },
                       cursorColor: Colors.white,
                       style: TextStyle(
-                          color: Colors.white,
-                          fontSize: size.height * 0.025
-                      ),
+                          color: Colors.white, fontSize: size.height * 0.02),
                       decoration: InputDecoration(
                         contentPadding: EdgeInsets.all(size.height * 0.02),
                         prefixIcon: Icon(
@@ -207,7 +203,7 @@ class _LoginFormState extends State<LoginForm> {
                         ),
                         hintText: "Mot de passe",
                         hintStyle: TextStyle(
-                            color: Colors.white, fontSize: size.height * 0.025),
+                            color: Colors.white, fontSize: size.height * 0.02),
                         filled: true,
                         fillColor: Colors.white.withOpacity(0.2),
                         enabledBorder: OutlineInputBorder(
@@ -241,35 +237,51 @@ class _LoginFormState extends State<LoginForm> {
                               child: Text(
                                 "Se connecter",
                                 style: TextStyle(
-                                    fontSize: size.height * 0.025,
+                                    fontSize: size.height * 0.023,
                                     color: Colors.white),
                               ),
                             ),
                           ),
                         ),
-                        SizedBox(
-                          height: size.height * 0.02,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return SignUp(
-                                    userRepository: _userRepository,
-                                  );
-                                },
-                              ),
-                            );
-                          },
-                          child: Text(
-                            "Créer un compte",
-                            style: TextStyle(
-                                fontSize: size.height * 0.025,
-                                color: Colors.white),
-                          ),
-                        )
                       ],
+                    ),
+                  ),
+
+                  Container(
+                    padding: EdgeInsets.all(size.height * 0.02),
+                    margin: EdgeInsets.only(top: size.height * 0.1),
+                    child: RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: 'Vous n\'êtes pas encore inscrit ? ',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: size.height * 0.02,
+                            ),
+                          ),
+                          TextSpan(
+                            text: 'Inscrivez-vous',
+                            style: TextStyle(
+                                decoration: TextDecoration.underline,
+                                color: loginButtonColor,
+                                fontSize: size.height * 0.02,
+                            ),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return SignUp(
+                                        userRepository: _userRepository,
+                                      );
+                                    },
+                                  ),
+                                );
+                              },
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
