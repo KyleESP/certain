@@ -107,7 +107,7 @@ class _SearchState extends State<Search> {
                             " " +
                                 _user.name +
                                 ", " +
-                                (DateTime.now().year - _user.age.toDate().year)
+                                (DateTime.now().year - _user.birthdate.toDate().year)
                                     .toString(),
                             style: TextStyle(
                                 color: Colors.white,

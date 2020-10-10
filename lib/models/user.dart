@@ -6,8 +6,11 @@ class User {
   String gender;
   String interestedIn;
   String photo;
-  Timestamp age;
+  Timestamp birthdate;
   GeoPoint location;
+  int maxDistance;
+  int minAge;
+  int maxAge;
 
   User(
       {this.uid,
@@ -15,6 +18,9 @@ class User {
       this.gender,
       this.interestedIn,
       this.photo,
-      this.age,
-      this.location});
+      this.birthdate,
+      this.location,
+      this.maxDistance,
+      this.minAge,
+      this.maxAge});
 }

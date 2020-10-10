@@ -8,12 +8,12 @@ class UserRepository {
   final FirebaseAuth _firebaseAuth;
   final FirebaseFirestore _firebaseFirestore;
 
-  UserRepository({FirebaseAuth firebaseAuth, FirebaseFirestore firestore})
+  UserRepository(
+      {FirebaseAuth firebaseAuth, FirebaseFirestore firebaseFirestore})
       : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
-        _firebaseFirestore = firestore ?? FirebaseFirestore.instance;
+        _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
 
   Future<void> signUpWithEmailAndPassword(String email, String password) async {
-    print(_firebaseAuth);
     return await _firebaseAuth.createUserWithEmailAndPassword(
         email: email, password: password);
   }
@@ -50,7 +50,7 @@ class UserRepository {
       String name,
       String gender,
       String interestedIn,
-      DateTime age,
+      DateTime birthdate,
       GeoPoint location) async {
     StorageUploadTask storageUploadTask;
     storageUploadTask = FirebaseStorage.instance
@@ -59,6 +59,8 @@ class UserRepository {
         .child(userId)
         .child(userId)
         .putFile(photo);
+
+    final age = DateTime.now().year - birthdate.year;
 
     return await storageUploadTask.onComplete.then((ref) async {
       await ref.ref.getDownloadURL().then((url) async {
@@ -69,9 +71,46 @@ class UserRepository {
           'location': location,
           'gender': gender,
           'interestedIn': interestedIn,
-          'age': age
+          'birthdate': birthdate,
+          'maxDistance': 30,
+          'minAge': age,
+          'maxAge': age + 1
         });
       });
     });
+  }
+
+  Future update(
+      {File photo,
+      int maxDistance,
+      int minAge,
+      int maxAge,
+      String interestedIn}) async {
+    var params = {};
+    final uid = _firebaseAuth.currentUser.uid;
+    if (photo != null) {
+      StorageUploadTask storageUploadTask;
+      storageUploadTask = FirebaseStorage.instance
+          .ref()
+          .child('userPhotos')
+          .child(uid)
+          .child(uid)
+          .putFile(photo);
+
+      await storageUploadTask.onComplete.then((ref) async {
+        await ref.ref.getDownloadURL().then((url) async {
+          params = {'photoUrl': url};
+        });
+      });
+    } else if (maxDistance != null) {
+      params = {'maxDistance': maxDistance};
+    } else if (minAge != null) {
+      params = {'minAge': minAge};
+    } else if (maxAge != null) {
+      params = {'maxAge': maxAge};
+    } else if (interestedIn != null) {
+      params = {'interestedIn': interestedIn};
+    }
+    return await _firebaseFirestore.collection('users').doc(uid).update(params);
   }
 }

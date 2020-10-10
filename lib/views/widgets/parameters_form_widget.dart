@@ -2,10 +2,8 @@ import 'dart:io';
 import 'package:certain/views/widgets/slider_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:geolocator/geolocator.dart';
 
 import 'package:certain/blocs/authentication/authentication_bloc.dart';
 import 'package:certain/blocs/authentication/authentication_event.dart';
@@ -28,58 +26,14 @@ class ParametersForm extends StatefulWidget {
 }
 
 class _ParametersFormState extends State<ParametersForm> {
-  final TextEditingController _nameController = TextEditingController();
-
-  String gender, interestedIn;
-  DateTime age;
+  String interestedIn;
   File photo;
-  GeoPoint location;
   ParametersBloc _parametersBloc;
-
-  //UserRepository get _userRepository => widget._userRepository;
-
-  bool get isFilled =>
-      _nameController.text.isNotEmpty &&
-      gender != null &&
-      interestedIn != null &&
-      photo != null &&
-      age != null;
-
-  bool isButtonEnabled(ParametersState state) {
-    return isFilled && !state.isSubmitting;
-  }
-
-  _getLocation() async {
-    Position position =
-        await getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-
-    location = GeoPoint(position.latitude, position.longitude);
-  }
-
-  _onSubmitted() async {
-    await _getLocation();
-    _parametersBloc.add(
-      Submitted(
-          name: _nameController.text,
-          age: age,
-          location: location,
-          gender: gender,
-          interestedIn: interestedIn,
-          photo: photo),
-    );
-  }
 
   @override
   void initState() {
-    _getLocation();
     _parametersBloc = BlocProvider.of<ParametersBloc>(context);
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    super.dispose();
   }
 
   @override
@@ -97,30 +51,12 @@ class _ParametersFormState extends State<ParametersForm> {
                 content: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text('Création du profil échoué'),
+                    Text('Erreur lors de la mise à jour.'),
                     Icon(Icons.error)
                   ],
                 ),
               ),
             );
-        }
-        if (state.isSubmitting) {
-          Scaffold.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(
-                content: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text('Création...'),
-                    CircularProgressIndicator()
-                  ],
-                ),
-              ),
-            );
-        }
-        if (state.isSuccess) {
-          BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
         }
       },
       child: BlocBuilder<ParametersBloc, ParametersState>(
@@ -147,6 +83,7 @@ class _ParametersFormState extends State<ParametersForm> {
                             setState(() {
                               photo = getPic;
                             });
+                            _parametersBloc.add(PhotoChanged(photo: photo));
                           }
                         },
                         child: photo == null
@@ -161,7 +98,13 @@ class _ParametersFormState extends State<ParametersForm> {
                   SizedBox(
                     height: 10.0,
                   ),
-                  SliderWidget(),
+                  Slider(
+                      min: 18,
+                      max: 55,
+                      value: 19,
+                      onChanged: (value) {
+                        setState(() {});
+                      }),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
@@ -214,34 +157,6 @@ class _ParametersFormState extends State<ParametersForm> {
                             .add(LoggedOut())
                       },
                       child: Text("Se déconnecter"),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: size.height * 0.02),
-                    child: GestureDetector(
-                      onTap: () {
-                        if (isButtonEnabled(state)) {
-                          _onSubmitted();
-                        } else {}
-                      },
-                      child: Container(
-                        width: size.width * 0.8,
-                        height: size.height * 0.06,
-                        decoration: BoxDecoration(
-                          color: isButtonEnabled(state)
-                              ? Colors.white
-                              : Colors.grey,
-                          borderRadius:
-                              BorderRadius.circular(size.height * 0.05),
-                        ),
-                        child: Center(
-                            child: Text(
-                          "Sauvegarder",
-                          style: TextStyle(
-                              fontSize: size.height * 0.025,
-                              color: Colors.blue),
-                        )),
-                      ),
                     ),
                   )
                 ],

@@ -94,7 +94,7 @@ class SearchRepository {
           _user.uid = user.id;
           _user.name = user.data()['name'];
           _user.photo = user.data()['photoUrl'];
-          _user.age = user.data()['age'];
+          _user.birthdate = user.data()['birthdate'];
           _user.location = user.data()['location'];
           _user.gender = user.data()['gender'];
           _user.interestedIn = user.data()['interestedIn'];

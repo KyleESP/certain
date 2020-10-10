@@ -31,7 +31,7 @@ class _ProfileFormState extends State<ProfileForm> {
   final TextEditingController _nameController = TextEditingController();
 
   String gender, interestedIn;
-  DateTime age;
+  DateTime birthdate;
   File photo;
   GeoPoint location;
   ProfileBloc _profileBloc;
@@ -43,7 +43,7 @@ class _ProfileFormState extends State<ProfileForm> {
       gender != null &&
       interestedIn != null &&
       photo != null &&
-      age != null;
+      birthdate != null;
 
   bool isButtonEnabled(ProfileState state) {
     return isFilled && !state.isSubmitting;
@@ -61,7 +61,7 @@ class _ProfileFormState extends State<ProfileForm> {
     _profileBloc.add(
       Submitted(
           name: _nameController.text,
-          age: age,
+          birthdate: birthdate,
           location: location,
           gender: gender,
           interestedIn: interestedIn,
@@ -157,7 +157,25 @@ class _ProfileFormState extends State<ProfileForm> {
                                     backgroundImage: FileImage(photo),
                                   ))),
                   ),
-                  textFieldWidget(_nameController, "Nom", size),
+                  Padding(
+                    padding: EdgeInsets.all(size.height * 0.02),
+                    child: TextField(
+                      controller: _nameController,
+                      decoration: InputDecoration(
+                        labelText: "Nom",
+                        labelStyle: TextStyle(
+                            color: Colors.white, fontSize: size.height * 0.03),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.white, width: 1.0),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.white, width: 1.0),
+                        ),
+                      ),
+                    ),
+                  ),
                   GestureDetector(
                     onTap: () {
                       DatePicker.showDatePicker(
@@ -167,7 +185,7 @@ class _ProfileFormState extends State<ProfileForm> {
                         maxTime: DateTime(DateTime.now().year - 19, 1, 1),
                         onConfirm: (date) {
                           setState(() {
-                            age = date;
+                            birthdate = date;
                           });
                         },
                       );
@@ -305,24 +323,4 @@ class _ProfileFormState extends State<ProfileForm> {
       ),
     );
   }
-}
-
-Widget textFieldWidget(controller, text, size) {
-  return Padding(
-    padding: EdgeInsets.all(size.height * 0.02),
-    child: TextField(
-      controller: controller,
-      decoration: InputDecoration(
-        labelText: text,
-        labelStyle:
-            TextStyle(color: Colors.white, fontSize: size.height * 0.03),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.white, width: 1.0),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.white, width: 1.0),
-        ),
-      ),
-    ),
-  );
 }
