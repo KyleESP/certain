@@ -1,3 +1,4 @@
+import 'package:certain/views/widgets/loader_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -56,18 +57,10 @@ class _SearchState extends State<Search> {
           _searchBloc.add(
             LoadUserEvent(userId: widget.userId),
           );
-          return Center(
-            child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation(Colors.blueGrey),
-            ),
-          );
+          return loaderWidget();
         }
         if (state is LoadingState) {
-          return Center(
-            child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation(Colors.blueGrey),
-            ),
-          );
+          return loaderWidget();
         }
         if (state is LoadUserState) {
           _user = state.user;
@@ -107,7 +100,8 @@ class _SearchState extends State<Search> {
                             " " +
                                 _user.name +
                                 ", " +
-                                (DateTime.now().year - _user.age.toDate().year)
+                                (DateTime.now().year -
+                                        _user.birthdate.toDate().year)
                                     .toString(),
                             style: TextStyle(
                                 color: Colors.white,

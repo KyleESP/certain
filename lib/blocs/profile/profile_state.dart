@@ -4,7 +4,7 @@ import 'package:meta/meta.dart';
 class ProfileState {
   final bool isPhotoEmpty;
   final bool isNameEmpty;
-  final bool isAgeEmpty;
+  final bool isBirthdateEmpty;
   final bool isGenderEmpty;
   final bool isInterestedInEmpty;
   final bool isLocationEmpty;
@@ -15,14 +15,14 @@ class ProfileState {
   bool get isFormValid =>
       isPhotoEmpty &&
       isNameEmpty &&
-      isAgeEmpty &&
+      isBirthdateEmpty &&
       isGenderEmpty &&
       isInterestedInEmpty;
 
   ProfileState({
     @required this.isPhotoEmpty,
     @required this.isNameEmpty,
-    @required this.isAgeEmpty,
+    @required this.isBirthdateEmpty,
     @required this.isGenderEmpty,
     @required this.isInterestedInEmpty,
     @required this.isLocationEmpty,
@@ -38,7 +38,7 @@ class ProfileState {
       isSuccess: false,
       isSubmitting: false,
       isNameEmpty: false,
-      isAgeEmpty: false,
+      isBirthdateEmpty: false,
       isGenderEmpty: false,
       isInterestedInEmpty: false,
       isLocationEmpty: false,
@@ -52,7 +52,7 @@ class ProfileState {
       isSuccess: false,
       isSubmitting: true,
       isNameEmpty: false,
-      isAgeEmpty: false,
+      isBirthdateEmpty: false,
       isGenderEmpty: false,
       isInterestedInEmpty: false,
       isLocationEmpty: false,
@@ -66,7 +66,7 @@ class ProfileState {
       isSuccess: false,
       isSubmitting: false,
       isNameEmpty: false,
-      isAgeEmpty: false,
+      isBirthdateEmpty: false,
       isGenderEmpty: false,
       isInterestedInEmpty: false,
       isLocationEmpty: false,
@@ -80,7 +80,7 @@ class ProfileState {
       isSuccess: true,
       isSubmitting: false,
       isNameEmpty: false,
-      isAgeEmpty: false,
+      isBirthdateEmpty: false,
       isGenderEmpty: false,
       isInterestedInEmpty: false,
       isLocationEmpty: false,
@@ -90,7 +90,7 @@ class ProfileState {
   ProfileState update({
     bool isPhotoEmpty,
     bool isNameEmpty,
-    bool isAgeEmpty,
+    bool isBirthdateEmpty,
     bool isGenderEmpty,
     bool isInterestedInEmpty,
     bool isLocationEmpty,
@@ -101,7 +101,7 @@ class ProfileState {
       isSubmitting: false,
       isPhotoEmpty: isPhotoEmpty,
       isNameEmpty: isNameEmpty,
-      isAgeEmpty: isAgeEmpty,
+      isBirthdateEmpty: isBirthdateEmpty,
       isGenderEmpty: isGenderEmpty,
       isInterestedInEmpty: isInterestedInEmpty,
       isLocationEmpty: isLocationEmpty,
@@ -111,7 +111,7 @@ class ProfileState {
   ProfileState copyWith({
     bool isPhotoEmpty,
     bool isNameEmpty,
-    bool isAgeEmpty,
+    bool isBirthdateEmpty,
     bool isGenderEmpty,
     bool isInterestedInEmpty,
     bool isLocationEmpty,
@@ -125,7 +125,7 @@ class ProfileState {
       isLocationEmpty: isLocationEmpty ?? this.isLocationEmpty,
       isInterestedInEmpty: isInterestedInEmpty ?? this.isInterestedInEmpty,
       isGenderEmpty: isGenderEmpty ?? this.isGenderEmpty,
-      isAgeEmpty: isAgeEmpty ?? this.isAgeEmpty,
+      isBirthdateEmpty: isBirthdateEmpty ?? this.isBirthdateEmpty,
       isSubmitting: isSubmitting ?? this.isSubmitting,
       isSuccess: isSuccess ?? this.isSuccess,
       isFailure: isFailure ?? this.isFailure,

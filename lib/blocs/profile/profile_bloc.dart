@@ -16,8 +16,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   Stream<ProfileState> mapEventToState(ProfileEvent event) async* {
     if (event is NameChanged) {
       yield* _mapNameChangedToState(event.name);
-    } else if (event is AgeChanged) {
-      yield* _mapAgeChangedToState(event.age);
+    } else if (event is BirthdateChanged) {
+      yield* _mapBirthdateChangedToState(event.birthdate);
     } else if (event is GenderChanged) {
       yield* _mapGenderChangedToState(event.gender);
     } else if (event is InterestedInChanged) {
@@ -27,13 +27,13 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     } else if (event is PhotoChanged) {
       yield* _mapPhotoChangedToState(event.photo);
     } else if (event is Submitted) {
-      final uid = await _userRepository.getUser();
+      final uid = _userRepository.getUserId();
       yield* _mapSubmittedToState(
           photo: event.photo,
           name: event.name,
           gender: event.gender,
           userId: uid,
-          age: event.age,
+          birthdate: event.birthdate,
           location: event.location,
           interestedIn: event.interestedIn);
     }
@@ -51,9 +51,9 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     );
   }
 
-  Stream<ProfileState> _mapAgeChangedToState(DateTime age) async* {
+  Stream<ProfileState> _mapBirthdateChangedToState(DateTime birthdate) async* {
     yield state.update(
-      isAgeEmpty: age == null,
+      isBirthdateEmpty: birthdate == null,
     );
   }
 
@@ -81,13 +81,13 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       String gender,
       String name,
       String userId,
-      DateTime age,
+      DateTime birthdate,
       GeoPoint location,
       String interestedIn}) async* {
     yield ProfileState.loading();
     try {
       await _userRepository.createProfile(
-          photo, userId, name, gender, interestedIn, age, location);
+          photo, userId, name, gender, interestedIn, birthdate, location);
       yield ProfileState.success();
     } catch (_) {
       yield ProfileState.failure();

@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -9,15 +8,6 @@ abstract class ParametersEvent extends Equatable {
 
   @override
   List<Object> get props => [];
-}
-
-class NameChanged extends ParametersEvent {
-  final String name;
-
-  NameChanged({@required this.name});
-
-  @override
-  List<Object> get props => [name];
 }
 
 class PhotoChanged extends ParametersEvent {
@@ -29,24 +19,6 @@ class PhotoChanged extends ParametersEvent {
   List<Object> get props => [photo];
 }
 
-class AgeChanged extends ParametersEvent {
-  final DateTime age;
-
-  AgeChanged({@required this.age});
-
-  @override
-  List<Object> get props => [age];
-}
-
-class GenderChanged extends ParametersEvent {
-  final String gender;
-
-  GenderChanged({@required this.gender});
-
-  @override
-  List<Object> get props => [gender];
-}
-
 class InterestedInChanged extends ParametersEvent {
   final String interestedIn;
 
@@ -56,29 +28,29 @@ class InterestedInChanged extends ParametersEvent {
   List<Object> get props => [interestedIn];
 }
 
-class LocationChanged extends ParametersEvent {
-  final GeoPoint location;
+class MaxDistanceChanged extends ParametersEvent {
+  final int maxDistance;
 
-  LocationChanged({@required this.location});
+  MaxDistanceChanged({@required this.maxDistance});
 
   @override
-  List<Object> get props => [location];
+  List<Object> get props => [maxDistance];
 }
 
-class Submitted extends ParametersEvent {
-  final String name, gender, interestedIn;
-  final DateTime age;
-  final GeoPoint location;
-  final File photo;
+class MinAgeChanged extends ParametersEvent {
+  final int minAge;
 
-  Submitted(
-      {@required this.name,
-      @required this.gender,
-      @required this.interestedIn,
-      @required this.age,
-      @required this.location,
-      @required this.photo});
+  MinAgeChanged({@required this.minAge});
 
   @override
-  List<Object> get props => [location, name, age, gender, interestedIn, photo];
+  List<Object> get props => [minAge];
+}
+
+class MaxAgeChanged extends ParametersEvent {
+  final int maxAge;
+
+  MaxAgeChanged({@required this.maxAge});
+
+  @override
+  List<Object> get props => [maxAge];
 }
