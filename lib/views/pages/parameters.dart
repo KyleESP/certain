@@ -4,8 +4,6 @@ import 'package:certain/views/widgets/parameters_form_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:certain/models/user.dart';
-
 class Parameters extends StatefulWidget {
   final String userId;
 
@@ -17,13 +15,9 @@ class Parameters extends StatefulWidget {
 
 class _ParametersState extends State<Parameters> {
   final UserRepository _userRepository = UserRepository();
-  ParametersBloc _parametersBloc;
-  User _user, _currentUser;
 
   @override
   void initState() {
-    _parametersBloc = ParametersBloc(_userRepository);
-
     super.initState();
   }
 

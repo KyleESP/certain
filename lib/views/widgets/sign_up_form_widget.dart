@@ -5,17 +5,9 @@ import 'package:certain/blocs/authentication/authentication_bloc.dart';
 import 'package:certain/blocs/authentication/authentication_event.dart';
 import 'package:certain/blocs/sign_up/bloc.dart';
 
-import 'package:certain/repositories/user_repository.dart';
-
 import '../constants.dart';
 
 class SignUpForm extends StatefulWidget {
-  final UserRepository _userRepository;
-
-  SignUpForm({@required UserRepository userRepository})
-      : assert(userRepository != null),
-        _userRepository = userRepository;
-
   @override
   _SignUpFormState createState() => _SignUpFormState();
 }
@@ -25,7 +17,6 @@ class _SignUpFormState extends State<SignUpForm> {
   final TextEditingController _passwordController = TextEditingController();
 
   SignUpBloc _signUpBloc;
-  //UserRepository get _userRepository => widget._userRepository;
 
   bool get isPopulated =>
       _emailController.text.isNotEmpty && _passwordController.text.isNotEmpty;
@@ -142,9 +133,7 @@ class _SignUpFormState extends State<SignUpForm> {
                       },
                       cursorColor: Colors.white,
                       style: TextStyle(
-                          color: Colors.white,
-                          fontSize: size.height * 0.02
-                      ),
+                          color: Colors.white, fontSize: size.height * 0.02),
                       decoration: InputDecoration(
                         contentPadding: EdgeInsets.all(size.height * 0.02),
                         prefixIcon: Icon(
@@ -157,8 +146,7 @@ class _SignUpFormState extends State<SignUpForm> {
                         filled: true,
                         fillColor: Colors.white.withOpacity(0.2),
                         enabledBorder: OutlineInputBorder(
-                          borderSide:
-                          BorderSide.none,
+                          borderSide: BorderSide.none,
                         ),
                         focusedBorder: UnderlineInputBorder(
                           borderSide: BorderSide.none,
@@ -181,9 +169,7 @@ class _SignUpFormState extends State<SignUpForm> {
                       },
                       cursorColor: Colors.white,
                       style: TextStyle(
-                          color: Colors.white,
-                          fontSize: size.height * 0.02
-                      ),
+                          color: Colors.white, fontSize: size.height * 0.02),
                       decoration: InputDecoration(
                         contentPadding: EdgeInsets.all(size.height * 0.02),
                         prefixIcon: Icon(

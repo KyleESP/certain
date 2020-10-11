@@ -29,7 +29,7 @@ class _ParametersFormState extends State<ParametersForm> {
   String interestedIn;
   File photo;
   ParametersBloc _parametersBloc;
-  int _maxDistance = 20;
+  int _maxDistance = 80;
   RangeValues _ageRange = RangeValues(19, 20);
 
   UserRepository get _userRepository => widget._userRepository;
@@ -149,10 +149,18 @@ class _ParametersFormState extends State<ParametersForm> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: <Widget>[
-                          genderWidget(FontAwesomeIcons.venus, "Female", size,
-                              interestedIn == "Female", _onTapInterestedIn("Female")),
-                          genderWidget(FontAwesomeIcons.mars, "Male", size,
-                              interestedIn == "Male", _onTapInterestedIn("Male")),
+                          genderWidget(
+                              FontAwesomeIcons.venus,
+                              "Female",
+                              size,
+                              interestedIn == "Female",
+                              _onTapInterestedIn("Female")),
+                          genderWidget(
+                              FontAwesomeIcons.mars,
+                              "Male",
+                              size,
+                              interestedIn == "Male",
+                              _onTapInterestedIn("Male")),
                           genderWidget(
                               FontAwesomeIcons.transgender,
                               "Transgender",
