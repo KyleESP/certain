@@ -23,13 +23,12 @@ class ParametersBloc extends Bloc<ParametersEvent, ParametersState> {
       yield* _mapMaxDistanceChangedToState(event.maxDistance);
     } else if (event is AgeRangeChanged) {
       yield* _mapAgeRangeChangedToState(event.minAge, event.maxAge);
-    }
-    if (event is LoadUserEvent) {
-      yield* _mapLoadUserToState(currentUserId: event.userId);
+    } else if (event is LoadUserEvent) {
+      yield* _mapLoadUserToState();
     }
   }
 
-  Stream<ParametersState> _mapLoadUserToState({String currentUserId}) async* {
+  Stream<ParametersState> _mapLoadUserToState() async* {
     yield LoadingState();
     DocumentSnapshot user = await _userRepository.getUser();
 
