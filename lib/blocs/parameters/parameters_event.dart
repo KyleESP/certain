@@ -10,6 +10,15 @@ abstract class ParametersEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class LoadUserEvent extends ParametersEvent {
+  final String userId;
+
+  LoadUserEvent({this.userId});
+
+  @override
+  List<Object> get props => [userId];
+}
+
 class PhotoChanged extends ParametersEvent {
   final File photo;
 

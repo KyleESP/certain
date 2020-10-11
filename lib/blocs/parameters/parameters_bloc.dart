@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'bloc.dart';
 
 import 'package:bloc/bloc.dart';
@@ -24,6 +26,16 @@ class ParametersBloc extends Bloc<ParametersEvent, ParametersState> {
     } else if (event is MaxAgeChanged) {
       yield* _mapMaxAgeChangedToState(event.maxAge);
     }
+    if (event is LoadUserEvent) {
+      yield* _mapLoadUserToState(currentUserId: event.userId);
+    }
+  }
+
+  Stream<ParametersState> _mapLoadUserToState({String currentUserId}) async* {
+    yield LoadingState();
+    DocumentSnapshot user = await _userRepository.getUser();
+
+    yield LoadUserState(user);
   }
 
   Stream<ParametersState> _mapPhotoChangedToState(File photo) async* {
