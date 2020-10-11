@@ -11,18 +11,10 @@ import 'package:certain/blocs/authentication/authentication_bloc.dart';
 import 'package:certain/blocs/authentication/authentication_event.dart';
 import 'package:certain/blocs/profile/bloc.dart';
 
-import 'package:certain/repositories/user_repository.dart';
-
 import 'package:certain/views/constants.dart';
 import 'package:certain/views/widgets/gender_widget.dart';
 
 class ProfileForm extends StatefulWidget {
-  final UserRepository _userRepository;
-
-  ProfileForm({@required UserRepository userRepository})
-      : assert(userRepository != null),
-        _userRepository = userRepository;
-
   @override
   _ProfileFormState createState() => _ProfileFormState();
 }
@@ -35,8 +27,6 @@ class _ProfileFormState extends State<ProfileForm> {
   File photo;
   GeoPoint location;
   ProfileBloc _profileBloc;
-
-  //UserRepository get _userRepository => widget._userRepository;
 
   bool get isFilled =>
       _nameController.text.isNotEmpty &&
@@ -258,14 +248,13 @@ class _ProfileFormState extends State<ProfileForm> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: <Widget>[
                           genderWidget(FontAwesomeIcons.venus, "Female", size,
-                              interestedIn, () {
+                              interestedIn == "Female", () {
                             setState(() {
                               interestedIn = "Female";
                             });
                           }),
-                          genderWidget(
-                              FontAwesomeIcons.mars, "Male", size, interestedIn,
-                              () {
+                          genderWidget(FontAwesomeIcons.mars, "Male", size,
+                              interestedIn == "Male", () {
                             setState(() {
                               interestedIn = "Male";
                             });
@@ -274,7 +263,7 @@ class _ProfileFormState extends State<ProfileForm> {
                             FontAwesomeIcons.transgender,
                             "Transgender",
                             size,
-                            interestedIn,
+                            interestedIn == "Transgender",
                             () {
                               setState(
                                 () {

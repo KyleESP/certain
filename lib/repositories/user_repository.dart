@@ -40,7 +40,14 @@ class UserRepository {
     return await _firebaseAuth.signOut();
   }
 
-  Future<String> getUser() async {
+  Future<DocumentSnapshot> getUser() async {
+    return await _firebaseFirestore
+        .collection('users')
+        .doc(_firebaseAuth.currentUser.uid)
+        .get();
+  }
+
+  String getUserId() {
     return _firebaseAuth.currentUser.uid;
   }
 
@@ -86,7 +93,7 @@ class UserRepository {
       int minAge,
       int maxAge,
       String interestedIn}) async {
-    var params = {};
+    Map<String, dynamic> params = {};
     final uid = _firebaseAuth.currentUser.uid;
     if (photo != null) {
       StorageUploadTask storageUploadTask;
@@ -99,17 +106,21 @@ class UserRepository {
 
       await storageUploadTask.onComplete.then((ref) async {
         await ref.ref.getDownloadURL().then((url) async {
-          params = {'photoUrl': url};
+          params['photoUrl'] = url;
         });
       });
-    } else if (maxDistance != null) {
-      params = {'maxDistance': maxDistance};
-    } else if (minAge != null) {
-      params = {'minAge': minAge};
-    } else if (maxAge != null) {
-      params = {'maxAge': maxAge};
-    } else if (interestedIn != null) {
-      params = {'interestedIn': interestedIn};
+    }
+    if (maxDistance != null) {
+      params['maxDistance'] = maxDistance;
+    }
+    if (minAge != null) {
+      params['minAge'] = minAge;
+    }
+    if (maxAge != null) {
+      params['maxAge'] = maxAge;
+    }
+    if (interestedIn != null) {
+      params['interestedIn'] = interestedIn;
     }
     return await _firebaseFirestore.collection('users').doc(uid).update(params);
   }

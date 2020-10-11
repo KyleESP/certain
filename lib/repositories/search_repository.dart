@@ -4,8 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class SearchRepository {
   final FirebaseFirestore _firebaseFirestore;
 
-  SearchRepository({FirebaseFirestore firestore})
-      : _firebaseFirestore = firestore ?? FirebaseFirestore.instance;
+  SearchRepository({FirebaseFirestore firebaseFirestore})
+      : _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
 
   Future<User> chooseUser(currentUserId, selectedUserId, name, photoUrl) async {
     await _firebaseFirestore

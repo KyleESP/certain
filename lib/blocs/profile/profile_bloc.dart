@@ -27,7 +27,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     } else if (event is PhotoChanged) {
       yield* _mapPhotoChangedToState(event.photo);
     } else if (event is Submitted) {
-      final uid = await _userRepository.getUser();
+      final uid = _userRepository.getUserId();
       yield* _mapSubmittedToState(
           photo: event.photo,
           name: event.name,

@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:certain/views/widgets/slider_widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,6 +29,10 @@ class _ParametersFormState extends State<ParametersForm> {
   String interestedIn;
   File photo;
   ParametersBloc _parametersBloc;
+  int _maxDistance = 20;
+  RangeValues _ageRange = RangeValues(19, 20);
+
+  UserRepository get _userRepository => widget._userRepository;
 
   @override
   void initState() {
@@ -36,12 +40,20 @@ class _ParametersFormState extends State<ParametersForm> {
     super.initState();
   }
 
+  _onTapInterestedIn(interestedIn) {
+    return () async {
+      setState(() {
+        this.interestedIn = interestedIn;
+      });
+      await _userRepository.update(interestedIn: interestedIn);
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
     return BlocListener<ParametersBloc, ParametersState>(
-      //cubit: _parametersBloc,
+      cubit: _parametersBloc,
       listener: (context, state) {
         if (state.isFailure) {
           Scaffold.of(context)
@@ -99,53 +111,54 @@ class _ParametersFormState extends State<ParametersForm> {
                     height: 10.0,
                   ),
                   Slider(
-                      min: 18,
-                      max: 55,
-                      value: 19,
-                      onChanged: (value) {
-                        setState(() {});
-                      }),
+                    value: _maxDistance.toDouble(),
+                    min: 1,
+                    max: 100,
+                    divisions: _maxDistance,
+                    label: '$_maxDistance',
+                    onChanged: (double newValue) {
+                      setState(() {
+                        _maxDistance = newValue.toInt();
+                      });
+                    },
+                    onChangeEnd: (double newValue) {
+                      _userRepository.update(maxDistance: newValue.toInt());
+                    },
+                  ),
+                  RangeSlider(
+                    values: _ageRange,
+                    min: 18,
+                    max: 55,
+                    divisions: 55 - 18,
+                    labels: RangeLabels(_ageRange.start.toInt().toString(),
+                        _ageRange.end.toInt().toString()),
+                    onChanged: (RangeValues newValues) {
+                      setState(() {
+                        _ageRange = newValues;
+                      });
+                    },
+                    onChangeEnd: (RangeValues endValues) {
+                      _userRepository.update(
+                          minAge: endValues.start.toInt(),
+                          maxAge: endValues.end.toInt());
+                    },
+                  ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: size.height * 0.02),
-                        child: Text(
-                          "Tu cherche:",
-                          style: TextStyle(
-                              color: Colors.white, fontSize: size.width * 0.09),
-                        ),
-                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: <Widget>[
                           genderWidget(FontAwesomeIcons.venus, "Female", size,
-                              interestedIn, () {
-                            setState(() {
-                              interestedIn = "Female";
-                            });
-                          }),
+                              interestedIn == "Female", _onTapInterestedIn("Female")),
+                          genderWidget(FontAwesomeIcons.mars, "Male", size,
+                              interestedIn == "Male", _onTapInterestedIn("Male")),
                           genderWidget(
-                              FontAwesomeIcons.mars, "Male", size, interestedIn,
-                              () {
-                            setState(() {
-                              interestedIn = "Male";
-                            });
-                          }),
-                          genderWidget(
-                            FontAwesomeIcons.transgender,
-                            "Transgender",
-                            size,
-                            interestedIn,
-                            () {
-                              setState(
-                                () {
-                                  interestedIn = "Transgender";
-                                },
-                              );
-                            },
-                          ),
+                              FontAwesomeIcons.transgender,
+                              "Transgender",
+                              size,
+                              interestedIn == "Transgender",
+                              _onTapInterestedIn("Transgender")),
                         ],
                       ),
                     ],
