@@ -85,11 +85,10 @@ class _ParametersState extends State<Parameters> {
             }
             if (state is LoadUserState) {
               _user = state.user;
-              int maxDistance = _maxDistance ?? _user.get('maxDistance');
-              RangeValues ageRange = _ageRange ??
-                  RangeValues(_user.get('minAge').toDouble(),
-                      _user.get('maxAge').toDouble());
-              String interestedIn = _interestedIn ?? _user.get('interestedIn');
+              _maxDistance ??= _user.get('maxDistance');
+              _ageRange ??= RangeValues(_user.get('minAge').toDouble(),
+                  _user.get('maxAge').toDouble());
+              _interestedIn = _user.get('interestedIn');
               return SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: Container(
@@ -131,11 +130,11 @@ class _ParametersState extends State<Parameters> {
                         height: 10.0,
                       ),
                       Slider(
-                        value: maxDistance.toDouble(),
+                        value: _maxDistance.toDouble(),
                         min: 1,
                         max: 100,
-                        divisions: maxDistance,
-                        label: '$maxDistance',
+                        divisions: _maxDistance,
+                        label: '$_maxDistance',
                         onChanged: (double newValue) {
                           setState(() {
                             _maxDistance = newValue.toInt();
@@ -146,12 +145,12 @@ class _ParametersState extends State<Parameters> {
                         },
                       ),
                       RangeSlider(
-                        values: ageRange,
+                        values: _ageRange,
                         min: 18,
                         max: 55,
                         divisions: 55 - 18,
-                        labels: RangeLabels(ageRange.start.toInt().toString(),
-                            ageRange.end.toInt().toString()),
+                        labels: RangeLabels(_ageRange.start.toInt().toString(),
+                            _ageRange.end.toInt().toString()),
                         onChanged: (RangeValues newValues) {
                           setState(() {
                             _ageRange = newValues;
@@ -173,19 +172,19 @@ class _ParametersState extends State<Parameters> {
                                   FontAwesomeIcons.venus,
                                   "Female",
                                   size,
-                                  interestedIn == "Female",
+                                  _interestedIn == "Female",
                                   _onTapInterestedIn("Female")),
                               genderWidget(
                                   FontAwesomeIcons.mars,
                                   "Male",
                                   size,
-                                  interestedIn == "Male",
+                                  _interestedIn == "Male",
                                   _onTapInterestedIn("Male")),
                               genderWidget(
                                   FontAwesomeIcons.transgender,
                                   "Transgender",
                                   size,
-                                  interestedIn == "Transgender",
+                                  _interestedIn == "Transgender",
                                   _onTapInterestedIn("Transgender")),
                             ],
                           ),
