@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
 @immutable
@@ -14,3 +15,11 @@ class ParametersState {
 }
 
 class ParametersInitialState extends ParametersState {}
+
+class LoadingState extends ParametersState {}
+
+class LoadUserState extends ParametersState {
+  final DocumentSnapshot user;
+
+  LoadUserState(this.user);
+}

@@ -1,8 +1,20 @@
+import 'dart:io';
+
+import 'package:certain/blocs/authentication/authentication_bloc.dart';
+import 'package:certain/blocs/authentication/authentication_event.dart';
 import 'package:certain/blocs/parameters/parameters_bloc.dart';
+import 'package:certain/blocs/parameters/parameters_event.dart';
+import 'package:certain/blocs/parameters/parameters_state.dart';
 import 'package:certain/repositories/user_repository.dart';
-import 'package:certain/views/widgets/parameters_form_widget.dart';
+import 'package:certain/views/widgets/gender_widget.dart';
+import 'package:certain/views/widgets/loader_widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import '../constants.dart';
 
 class Parameters extends StatefulWidget {
   final String userId;
@@ -15,21 +27,184 @@ class Parameters extends StatefulWidget {
 
 class _ParametersState extends State<Parameters> {
   final UserRepository _userRepository = UserRepository();
+  ParametersBloc _parametersBloc;
+  DocumentSnapshot _user;
+  String _interestedIn;
+  File photo;
+  int _maxDistance;
+  RangeValues _ageRange;
 
   @override
   void initState() {
+    _parametersBloc = ParametersBloc(_userRepository);
     super.initState();
   }
 
-  @override
+  _onTapInterestedIn(interestedIn) {
+    return () async {
+      setState(() {
+        this._interestedIn = interestedIn;
+      });
+      _parametersBloc.add(InterestedInChanged(interestedIn: _interestedIn));
+    };
+  }
+
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: BlocProvider<ParametersBloc>(
-        create: (context) => ParametersBloc(_userRepository),
-        child: ParametersForm(
-          userRepository: _userRepository,
-        ),
-      ),
-    );
+    Size size = MediaQuery.of(context).size;
+
+    return BlocListener<ParametersBloc, ParametersState>(
+        cubit: _parametersBloc,
+        listener: (context, state) {
+          if (state.isFailure) {
+            Scaffold.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                SnackBar(
+                  content: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text('Erreur lors de la mise à jour.'),
+                      Icon(Icons.error)
+                    ],
+                  ),
+                ),
+              );
+          }
+        },
+        child: BlocBuilder<ParametersBloc, ParametersState>(
+          cubit: _parametersBloc,
+          builder: (context, state) {
+            if (state is ParametersInitialState) {
+              _parametersBloc.add(
+                LoadUserEvent(userId: widget.userId),
+              );
+              return loaderWidget();
+            }
+            if (state is LoadingState) {
+              return loaderWidget();
+            }
+            if (state is LoadUserState) {
+              _user = state.user;
+              _maxDistance ??= _user.get('maxDistance');
+              _ageRange ??= RangeValues(_user.get('minAge').toDouble(),
+                  _user.get('maxAge').toDouble());
+              _interestedIn ??= _user.get('interestedIn');
+              return SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Container(
+                  color: backgroundColor,
+                  width: size.width,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        width: size.width,
+                        child: CircleAvatar(
+                          radius: size.width * 0.3,
+                          backgroundColor: Colors.transparent,
+                          child: GestureDetector(
+                            onTap: () async {
+                              FilePickerResult result = await FilePicker
+                                  .platform
+                                  .pickFiles(type: FileType.image);
+                              if (result != null) {
+                                File getPic = File(result.files.single.path);
+                                setState(() {
+                                  photo = getPic;
+                                });
+                                _parametersBloc.add(PhotoChanged(photo: photo));
+                              }
+                            },
+                            child: CircleAvatar(
+                              radius: size.width * 0.3,
+                              backgroundImage: photo != null
+                                  ? FileImage(photo)
+                                  : NetworkImage(_user.get('photoUrl')),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10.0,
+                      ),
+                      Slider(
+                        value: _maxDistance.toDouble(),
+                        min: 1,
+                        max: 100,
+                        divisions: _maxDistance,
+                        label: '$_maxDistance',
+                        onChanged: (double newValue) {
+                          setState(() {
+                            _maxDistance = newValue.toInt();
+                          });
+                        },
+                        onChangeEnd: (double newValue) {
+                          _parametersBloc.add(MaxDistanceChanged(
+                              maxDistance: newValue.toInt()));
+                        },
+                      ),
+                      RangeSlider(
+                        values: _ageRange,
+                        min: 18,
+                        max: 55,
+                        divisions: 55 - 18,
+                        labels: RangeLabels(_ageRange.start.toInt().toString(),
+                            _ageRange.end.toInt().toString()),
+                        onChanged: (RangeValues newValues) {
+                          setState(() {
+                            _ageRange = newValues;
+                          });
+                        },
+                        onChangeEnd: (RangeValues endValues) {
+                          _parametersBloc.add(AgeRangeChanged(
+                              minAge: endValues.start.toInt(),
+                              maxAge: endValues.end.toInt()));
+                        },
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: <Widget>[
+                              genderWidget(
+                                  FontAwesomeIcons.venus,
+                                  "Female",
+                                  size,
+                                  _interestedIn == "Female",
+                                  _onTapInterestedIn("Female")),
+                              genderWidget(
+                                  FontAwesomeIcons.mars,
+                                  "Male",
+                                  size,
+                                  _interestedIn == "Male",
+                                  _onTapInterestedIn("Male")),
+                              genderWidget(
+                                  FontAwesomeIcons.transgender,
+                                  "Transgender",
+                                  size,
+                                  _interestedIn == "Transgender",
+                                  _onTapInterestedIn("Transgender")),
+                            ],
+                          ),
+                        ],
+                      ),
+                      Center(
+                        child: RaisedButton(
+                          onPressed: () => {
+                            BlocProvider.of<AuthenticationBloc>(context)
+                                .add(LoggedOut())
+                          },
+                          child: Text("Se déconnecter"),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              );
+            } else
+              return Container();
+          },
+        ));
   }
 }

@@ -2,12 +2,22 @@ import 'dart:io';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 abstract class ParametersEvent extends Equatable {
   const ParametersEvent();
 
   @override
   List<Object> get props => [];
+}
+
+class LoadUserEvent extends ParametersEvent {
+  final String userId;
+
+  LoadUserEvent({this.userId});
+
+  @override
+  List<Object> get props => [userId];
 }
 
 class PhotoChanged extends ParametersEvent {
@@ -37,20 +47,13 @@ class MaxDistanceChanged extends ParametersEvent {
   List<Object> get props => [maxDistance];
 }
 
-class MinAgeChanged extends ParametersEvent {
+
+class AgeRangeChanged extends ParametersEvent {
   final int minAge;
-
-  MinAgeChanged({@required this.minAge});
-
-  @override
-  List<Object> get props => [minAge];
-}
-
-class MaxAgeChanged extends ParametersEvent {
   final int maxAge;
 
-  MaxAgeChanged({@required this.maxAge});
+  AgeRangeChanged({@required this.minAge, @required this.maxAge});
 
   @override
-  List<Object> get props => [maxAge];
+  List<Object> get props => [minAge, maxAge];
 }

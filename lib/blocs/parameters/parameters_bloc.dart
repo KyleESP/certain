@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'bloc.dart';
 
 import 'package:bloc/bloc.dart';
@@ -19,11 +21,18 @@ class ParametersBloc extends Bloc<ParametersEvent, ParametersState> {
       yield* _mapPhotoChangedToState(event.photo);
     } else if (event is MaxDistanceChanged) {
       yield* _mapMaxDistanceChangedToState(event.maxDistance);
-    } else if (event is MinAgeChanged) {
-      yield* _mapMinAgeChangedToState(event.minAge);
-    } else if (event is MaxAgeChanged) {
-      yield* _mapMaxAgeChangedToState(event.maxAge);
+    } else if (event is AgeRangeChanged) {
+      yield* _mapAgeRangeChangedToState(event.minAge, event.maxAge);
+    } else if (event is LoadUserEvent) {
+      yield* _mapLoadUserToState();
     }
+  }
+
+  Stream<ParametersState> _mapLoadUserToState() async* {
+    yield LoadingState();
+    DocumentSnapshot user = await _userRepository.getUser();
+
+    yield LoadUserState(user);
   }
 
   Stream<ParametersState> _mapPhotoChangedToState(File photo) async* {
@@ -52,17 +61,9 @@ class ParametersBloc extends Bloc<ParametersEvent, ParametersState> {
     }
   }
 
-  Stream<ParametersState> _mapMinAgeChangedToState(int minAge) async* {
+  Stream<ParametersState> _mapAgeRangeChangedToState(int minAge, int maxAge) async* {
     try {
-      await _userRepository.update(minAge: minAge);
-    } catch (_) {
-      yield ParametersState.failure();
-    }
-  }
-
-  Stream<ParametersState> _mapMaxAgeChangedToState(int maxAge) async* {
-    try {
-      await _userRepository.update(maxAge: maxAge);
+      await _userRepository.update(minAge: minAge, maxAge: maxAge);
     } catch (_) {
       yield ParametersState.failure();
     }
