@@ -45,7 +45,7 @@ class _ParametersState extends State<Parameters> {
       setState(() {
         this._interestedIn = interestedIn;
       });
-      await _userRepository.update(interestedIn: interestedIn);
+      _parametersBloc.add(InterestedInChanged(interestedIn: _interestedIn));
     };
   }
 
@@ -88,7 +88,7 @@ class _ParametersState extends State<Parameters> {
               _maxDistance ??= _user.get('maxDistance');
               _ageRange ??= RangeValues(_user.get('minAge').toDouble(),
                   _user.get('maxAge').toDouble());
-              _interestedIn = _user.get('interestedIn');
+              _interestedIn ??= _user.get('interestedIn');
               return SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: Container(
@@ -111,18 +111,16 @@ class _ParametersState extends State<Parameters> {
                                 File getPic = File(result.files.single.path);
                                 setState(() {
                                   photo = getPic;
-                                  print("uu");
-                                  print(photo);
                                 });
                                 _parametersBloc.add(PhotoChanged(photo: photo));
                               }
                             },
-                            child: photo == null
-                                ? Image.asset('assets/profilephoto.png')
-                                : CircleAvatar(
-                                    radius: size.width * 0.3,
-                                    backgroundImage: FileImage(photo),
-                                  ),
+                            child: CircleAvatar(
+                              radius: size.width * 0.3,
+                              backgroundImage: photo != null
+                                  ? FileImage(photo)
+                                  : NetworkImage(_user.get('photoUrl')),
+                            ),
                           ),
                         ),
                       ),
@@ -141,7 +139,8 @@ class _ParametersState extends State<Parameters> {
                           });
                         },
                         onChangeEnd: (double newValue) {
-                          _userRepository.update(maxDistance: newValue.toInt());
+                          _parametersBloc.add(MaxDistanceChanged(
+                              maxDistance: newValue.toInt()));
                         },
                       ),
                       RangeSlider(
@@ -157,9 +156,9 @@ class _ParametersState extends State<Parameters> {
                           });
                         },
                         onChangeEnd: (RangeValues endValues) {
-                          _userRepository.update(
+                          _parametersBloc.add(AgeRangeChanged(
                               minAge: endValues.start.toInt(),
-                              maxAge: endValues.end.toInt());
+                              maxAge: endValues.end.toInt()));
                         },
                       ),
                       Column(
