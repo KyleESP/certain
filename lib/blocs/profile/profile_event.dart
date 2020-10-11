@@ -29,13 +29,13 @@ class PhotoChanged extends ProfileEvent {
   List<Object> get props => [photo];
 }
 
-class AgeChanged extends ProfileEvent {
-  final DateTime age;
+class BirthdateChanged extends ProfileEvent {
+  final DateTime birthdate;
 
-  AgeChanged({@required this.age});
+  BirthdateChanged({@required this.birthdate});
 
   @override
-  List<Object> get props => [age];
+  List<Object> get props => [birthdate];
 }
 
 class GenderChanged extends ProfileEvent {
@@ -67,7 +67,7 @@ class LocationChanged extends ProfileEvent {
 
 class Submitted extends ProfileEvent {
   final String name, gender, interestedIn;
-  final DateTime age;
+  final DateTime birthdate;
   final GeoPoint location;
   final File photo;
 
@@ -75,10 +75,10 @@ class Submitted extends ProfileEvent {
       {@required this.name,
       @required this.gender,
       @required this.interestedIn,
-      @required this.age,
+      @required this.birthdate,
       @required this.location,
       @required this.photo});
 
   @override
-  List<Object> get props => [location, name, age, gender, interestedIn, photo];
+  List<Object> get props => [location, name, birthdate, gender, interestedIn, photo];
 }

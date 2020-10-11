@@ -28,9 +28,7 @@ class Profile extends StatelessWidget {
       ),
       body: BlocProvider<ProfileBloc>(
         create: (context) => ProfileBloc(_userRepository),
-        child: ProfileForm(
-          userRepository: _userRepository,
-        ),
+        child: ProfileForm(),
       ),
     );
   }

@@ -1,10 +1,9 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:geolocator/geolocator.dart';
 
 import 'package:certain/blocs/authentication/authentication_bloc.dart';
 import 'package:certain/blocs/authentication/authentication_event.dart';
@@ -27,66 +26,34 @@ class ParametersForm extends StatefulWidget {
 }
 
 class _ParametersFormState extends State<ParametersForm> {
-  final TextEditingController _nameController = TextEditingController();
-
-  String gender, interestedIn;
-  DateTime age;
+  String interestedIn;
   File photo;
-  GeoPoint location;
   ParametersBloc _parametersBloc;
+  int _maxDistance = 80;
+  RangeValues _ageRange = RangeValues(19, 20);
 
-  //UserRepository get _userRepository => widget._userRepository;
-
-  bool get isFilled =>
-      _nameController.text.isNotEmpty &&
-      gender != null &&
-      interestedIn != null &&
-      photo != null &&
-      age != null;
-
-  bool isButtonEnabled(ParametersState state) {
-    return isFilled && !state.isSubmitting;
-  }
-
-  _getLocation() async {
-    Position position =
-        await getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-
-    location = GeoPoint(position.latitude, position.longitude);
-  }
-
-  _onSubmitted() async {
-    await _getLocation();
-    _parametersBloc.add(
-      Submitted(
-          name: _nameController.text,
-          age: age,
-          location: location,
-          gender: gender,
-          interestedIn: interestedIn,
-          photo: photo),
-    );
-  }
+  UserRepository get _userRepository => widget._userRepository;
 
   @override
   void initState() {
-    _getLocation();
     _parametersBloc = BlocProvider.of<ParametersBloc>(context);
     super.initState();
   }
 
-  @override
-  void dispose() {
-    _nameController.dispose();
-    super.dispose();
+  _onTapInterestedIn(interestedIn) {
+    return () async {
+      setState(() {
+        this.interestedIn = interestedIn;
+      });
+      await _userRepository.update(interestedIn: interestedIn);
+    };
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
     return BlocListener<ParametersBloc, ParametersState>(
-      //cubit: _parametersBloc,
+      cubit: _parametersBloc,
       listener: (context, state) {
         if (state.isFailure) {
           Scaffold.of(context)
@@ -96,30 +63,12 @@ class _ParametersFormState extends State<ParametersForm> {
                 content: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text('Création du profil échoué'),
+                    Text('Erreur lors de la mise à jour.'),
                     Icon(Icons.error)
                   ],
                 ),
               ),
             );
-        }
-        if (state.isSubmitting) {
-          Scaffold.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(
-                content: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text('Création...'),
-                    CircularProgressIndicator()
-                  ],
-                ),
-              ),
-            );
-        }
-        if (state.isSuccess) {
-          BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
         }
       },
       child: BlocBuilder<ParametersBloc, ParametersState>(
@@ -146,6 +95,7 @@ class _ParametersFormState extends State<ParametersForm> {
                             setState(() {
                               photo = getPic;
                             });
+                            _parametersBloc.add(PhotoChanged(photo: photo));
                           }
                         },
                         child: photo == null
@@ -160,77 +110,74 @@ class _ParametersFormState extends State<ParametersForm> {
                   SizedBox(
                     height: 10.0,
                   ),
+                  Slider(
+                    value: _maxDistance.toDouble(),
+                    min: 1,
+                    max: 100,
+                    divisions: _maxDistance,
+                    label: '$_maxDistance',
+                    onChanged: (double newValue) {
+                      setState(() {
+                        _maxDistance = newValue.toInt();
+                      });
+                    },
+                    onChangeEnd: (double newValue) {
+                      _userRepository.update(maxDistance: newValue.toInt());
+                    },
+                  ),
+                  RangeSlider(
+                    values: _ageRange,
+                    min: 18,
+                    max: 55,
+                    divisions: 55 - 18,
+                    labels: RangeLabels(_ageRange.start.toInt().toString(),
+                        _ageRange.end.toInt().toString()),
+                    onChanged: (RangeValues newValues) {
+                      setState(() {
+                        _ageRange = newValues;
+                      });
+                    },
+                    onChangeEnd: (RangeValues endValues) {
+                      _userRepository.update(
+                          minAge: endValues.start.toInt(),
+                          maxAge: endValues.end.toInt());
+                    },
+                  ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: size.height * 0.02),
-                        child: Text(
-                          "Tu cherche:",
-                          style: TextStyle(
-                              color: Colors.white, fontSize: size.width * 0.09),
-                        ),
-                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: <Widget>[
-                          genderWidget(FontAwesomeIcons.venus, "Female", size,
-                              interestedIn, () {
-                            setState(() {
-                              interestedIn = "Female";
-                            });
-                          }),
                           genderWidget(
-                              FontAwesomeIcons.mars, "Male", size, interestedIn,
-                              () {
-                            setState(() {
-                              interestedIn = "Male";
-                            });
-                          }),
+                              FontAwesomeIcons.venus,
+                              "Female",
+                              size,
+                              interestedIn == "Female",
+                              _onTapInterestedIn("Female")),
                           genderWidget(
-                            FontAwesomeIcons.transgender,
-                            "Transgender",
-                            size,
-                            interestedIn,
-                            () {
-                              setState(
-                                () {
-                                  interestedIn = "Transgender";
-                                },
-                              );
-                            },
-                          ),
+                              FontAwesomeIcons.mars,
+                              "Male",
+                              size,
+                              interestedIn == "Male",
+                              _onTapInterestedIn("Male")),
+                          genderWidget(
+                              FontAwesomeIcons.transgender,
+                              "Transgender",
+                              size,
+                              interestedIn == "Transgender",
+                              _onTapInterestedIn("Transgender")),
                         ],
                       ),
                     ],
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: size.height * 0.02),
-                    child: GestureDetector(
-                      onTap: () {
-                        if (isButtonEnabled(state)) {
-                          _onSubmitted();
-                        } else {}
+                  Center(
+                    child: RaisedButton(
+                      onPressed: () => {
+                        BlocProvider.of<AuthenticationBloc>(context)
+                            .add(LoggedOut())
                       },
-                      child: Container(
-                        width: size.width * 0.8,
-                        height: size.height * 0.06,
-                        decoration: BoxDecoration(
-                          color: isButtonEnabled(state)
-                              ? Colors.white
-                              : Colors.grey,
-                          borderRadius:
-                              BorderRadius.circular(size.height * 0.05),
-                        ),
-                        child: Center(
-                            child: Text(
-                          "Enregistrer",
-                          style: TextStyle(
-                              fontSize: size.height * 0.025,
-                              color: Colors.blue),
-                        )),
-                      ),
+                      child: Text("Se déconnecter"),
                     ),
                   )
                 ],
