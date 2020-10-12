@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../constants.dart';
 
 import 'package:certain/views/pages/search.dart';
+import 'package:certain/views/pages/matches.dart';
 import 'package:certain/views/pages/messages.dart';
 import 'package:certain/views/pages/parameters.dart';
 
@@ -19,7 +20,7 @@ class Tabs extends StatelessWidget {
         accentColor: Colors.white,
       ),
       child: DefaultTabController(
-        length: 3,
+        length: 4,
         child: Scaffold(
           appBar: PreferredSize(
             preferredSize: Size.fromHeight(kToolbarHeight),
@@ -32,6 +33,7 @@ class Tabs extends StatelessWidget {
                     TabBar(
                       tabs: <Widget>[
                         Tab(icon: Icon(Icons.search)),
+                        Tab(icon: Icon(Icons.people)),
                         Tab(icon: Icon(Icons.message)),
                         Tab(icon: Icon(Icons.supervised_user_circle)),
                       ],
@@ -44,6 +46,9 @@ class Tabs extends StatelessWidget {
           body: TabBarView(
             children: [
               Search(
+                userId: userId,
+              ),
+              Matches(
                 userId: userId,
               ),
               Messages(

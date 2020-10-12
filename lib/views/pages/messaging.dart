@@ -1,9 +1,6 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:file_picker/file_picker.dart';
 
 import 'package:certain/blocs/messaging/bloc.dart';
 import 'package:certain/blocs/messaging/messaging_bloc.dart';
@@ -29,12 +26,6 @@ class _MessagingState extends State<Messaging> {
   MessagingBloc _messagingBloc;
   bool isValid = false;
 
-//  bool get isPopulated => _messageTextController.text.isNotEmpty;
-//
-//  bool isSubmitButtonEnabled(MessagingState state) {
-//    return isPopulated;
-//  }
-
   @override
   void initState() {
     super.initState();
@@ -43,7 +34,7 @@ class _MessagingState extends State<Messaging> {
     _messageTextController.text = '';
     _messageTextController.addListener(() {
       setState(() {
-        isValid = (_messageTextController.text.isEmpty) ? false : true;
+        isValid = _messageTextController.text.isNotEmpty;
       });
     });
   }
@@ -138,8 +129,7 @@ class _MessagingState extends State<Messaging> {
                                 itemBuilder: (BuildContext context, int index) {
                                   return MessageWidget(
                                     currentUserId: widget.currentUser.uid,
-                                    messageId: snapshot
-                                        .data.docs[index].id,
+                                    messageId: snapshot.data.docs[index].id,
                                   );
                                 },
                                 itemCount: snapshot.data.docs.length,
@@ -165,33 +155,6 @@ class _MessagingState extends State<Messaging> {
                   color: backgroundColor,
                   child: Row(
                     children: <Widget>[
-                      GestureDetector(
-                        onTap: () async {
-                          FilePickerResult result = await FilePicker.platform.pickFiles(type: FileType.image);
-                          if (result != null) {
-                            File photo = File(result.files.single.path);
-                            _messagingBloc.add(
-                              SendMessageEvent(
-                                message: Message(
-                                    text: null,
-                                    senderName: widget.currentUser.name,
-                                    senderId: widget.currentUser.uid,
-                                    photo: photo,
-                                    selectedUserId: widget.selectedUser.uid),
-                              ),
-                            );
-                          }
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: size.height * 0.005),
-                          child: Icon(
-                            Icons.add,
-                            color: Colors.white,
-                            size: size.height * 0.04,
-                          ),
-                        ),
-                      ),
                       Expanded(
                         child: Container(
                           height: size.height * 0.05,
