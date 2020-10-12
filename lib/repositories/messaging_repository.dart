@@ -10,9 +10,9 @@ class MessagingRepository {
   String uuid = Uuid().v4();
 
   MessagingRepository(
-      {FirebaseStorage firebaseStorage, FirebaseFirestore firestore})
+      {FirebaseStorage firebaseStorage, FirebaseFirestore firebaseFirestore})
       : _firebaseStorage = firebaseStorage ?? FirebaseStorage.instance,
-        _firebaseFirestore = firestore ?? FirebaseFirestore.instance;
+        _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
 
   Future sendMessage({Message message}) async {
     StorageUploadTask storageUploadTask;
@@ -113,17 +113,19 @@ class MessagingRepository {
 
   Future<Message> getMessageDetail({messageId}) async {
     Message _message = Message();
+    var data;
 
     await _firebaseFirestore
         .collection('messages')
         .doc(messageId)
         .get()
         .then((message) {
-      _message.senderId = message.data()['senderId'];
-      _message.senderName = message.data()['senderName'];
-      _message.timestamp = message.data()['timestamp'];
-      _message.text = message.data()['text'];
-      _message.photoUrl = message.data()['photoUrl'];
+      data = message.data;
+      _message.senderId = data['senderId'];
+      _message.senderName = data['senderName'];
+      _message.timestamp = data['timestamp'];
+      _message.text = data['text'];
+      _message.photoUrl = data['photoUrl'];
     });
 
     return _message;

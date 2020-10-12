@@ -18,19 +18,9 @@ class SearchRepository {
     await _firebaseFirestore
         .collection('users')
         .doc(selectedUserId)
-        .collection('chosenList')
-        .doc(currentUserId)
-        .set({});
-
-    await _firebaseFirestore
-        .collection('users')
-        .doc(selectedUserId)
         .collection('selectedList')
         .doc(currentUserId)
-        .set({
-      'name': name,
-      'photoUrl': photoUrl,
-    });
+        .set({'name': name, 'photoUrl': photoUrl});
     return getUser(currentUserId);
   }
 
@@ -53,13 +43,16 @@ class SearchRepository {
 
   Future getUserInterests(userId) async {
     User currentUser = User();
+    var data;
 
     await _firebaseFirestore.collection('users').doc(userId).get().then((user) {
-      currentUser.name = user.data()['name'];
-      currentUser.photo = user.data()['photoUrl'];
-      currentUser.gender = user.data()['gender'];
-      currentUser.interestedIn = user.data()['interestedIn'];
+      data = user.data();
+      currentUser.name = data['name'];
+      currentUser.photo = data['photoUrl'];
+      currentUser.gender = data['gender'];
+      currentUser.interestedIn = data['interestedIn'];
     });
+
     return currentUser;
   }
 
@@ -84,20 +77,22 @@ class SearchRepository {
     User _user = User();
     List<String> chosenList = await getChosenList(userId);
     User currentUser = await getUserInterests(userId);
+    var data;
 
     await _firebaseFirestore.collection('users').get().then((users) {
       for (var user in users.docs) {
+        data = user.data();
         if ((!chosenList.contains(user.id)) &&
             (user.id != userId) &&
-            (currentUser.interestedIn == user.data()['gender']) &&
-            (user.data()['interestedIn'] == currentUser.gender)) {
+            (currentUser.interestedIn == data['gender']) &&
+            (data['interestedIn'] == currentUser.gender)) {
           _user.uid = user.id;
-          _user.name = user.data()['name'];
-          _user.photo = user.data()['photoUrl'];
-          _user.birthdate = user.data()['birthdate'];
-          _user.location = user.data()['location'];
-          _user.gender = user.data()['gender'];
-          _user.interestedIn = user.data()['interestedIn'];
+          _user.name = data['name'];
+          _user.photo = data['photoUrl'];
+          _user.birthdate = data['birthdate'];
+          _user.location = data['location'];
+          _user.gender = data['gender'];
+          _user.interestedIn = data['interestedIn'];
           break;
         }
       }
