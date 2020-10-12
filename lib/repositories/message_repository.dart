@@ -6,8 +6,8 @@ import 'package:certain/models/user.dart';
 class MessageRepository {
   final FirebaseFirestore _firebaseFirestore;
 
-  MessageRepository({FirebaseFirestore firestore})
-      : _firebaseFirestore = firestore ?? FirebaseFirestore.instance;
+  MessageRepository({FirebaseFirestore firebaseFirestore})
+      : _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
 
   Stream<QuerySnapshot> getChats({userId}) {
     return _firebaseFirestore
@@ -29,21 +29,24 @@ class MessageRepository {
 
   Future<User> getUserDetail({userId}) async {
     User _user = User();
+    var data;
 
     await _firebaseFirestore.collection('users').doc(userId).get().then((user) {
+      data = user.data();
       _user.uid = user.id;
-      _user.name = user.data()['name'];
-      _user.photo = user.data()['photoUrl'];
-      _user.birthdate = user.data()['birthdate'];
-      _user.location = user.data()['location'];
-      _user.gender = user.data()['gender'];
-      _user.interestedIn = user.data()['interestedIn'];
+      _user.name = data['name'];
+      _user.photo = data['photoUrl'];
+      _user.birthdate = data['birthdate'];
+      _user.location = data['location'];
+      _user.gender = data['gender'];
+      _user.interestedIn = data['interestedIn'];
     });
     return _user;
   }
 
   Future<Message> getLastMessage({currentUserId, selectedUserId}) async {
     Message _message = Message();
+    var data;
 
     await _firebaseFirestore
         .collection('users')
@@ -60,9 +63,10 @@ class MessageRepository {
           .doc(doc.docs.first.id)
           .get()
           .then((message) {
-        _message.text = message.data()['text'];
-        _message.photoUrl = message.data()['photoUrl'];
-        _message.timestamp = message.data()['timestamp'];
+        data = message.data();
+        _message.text = data['text'];
+        _message.photoUrl = data['photoUrl'];
+        _message.timestamp = data['timestamp'];
       });
     });
 
