@@ -204,15 +204,14 @@ class _ProfileFormState extends State<ProfileForm> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: <Widget>[
-                          genderWidget(
-                              FontAwesomeIcons.venus, "Female", size, gender,
-                              () {
+                          genderWidget(FontAwesomeIcons.venus, "Female", size,
+                              gender == "Female", () {
                             setState(() {
                               gender = "Female";
                             });
                           }),
-                          genderWidget(
-                              FontAwesomeIcons.mars, "Male", size, gender, () {
+                          genderWidget(FontAwesomeIcons.mars, "Male", size,
+                              gender == "Male", () {
                             setState(() {
                               gender = "Male";
                             });
@@ -221,7 +220,7 @@ class _ProfileFormState extends State<ProfileForm> {
                             FontAwesomeIcons.transgender,
                             "Transgender",
                             size,
-                            gender,
+                            gender == "Transgender",
                             () {
                               setState(
                                 () {
