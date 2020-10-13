@@ -11,7 +11,7 @@ import 'package:certain/blocs/authentication/authentication_bloc.dart';
 import 'package:certain/blocs/authentication/authentication_event.dart';
 import 'package:certain/blocs/profile/bloc.dart';
 
-import 'package:certain/views/constants.dart';
+import 'package:certain/helpers/constants.dart';
 import 'package:certain/views/widgets/gender_widget.dart';
 
 class ProfileForm extends StatefulWidget {

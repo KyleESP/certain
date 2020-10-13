@@ -6,7 +6,7 @@ import 'package:certain/blocs/profile/bloc.dart';
 import 'package:certain/repositories/user_repository.dart';
 
 import 'package:certain/views/widgets/profile_form_widget.dart';
-import 'package:certain/views/constants.dart';
+import 'package:certain/helpers/constants.dart';
 
 class Profile extends StatelessWidget {
   final _userRepository;

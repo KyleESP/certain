@@ -9,7 +9,7 @@ import 'package:certain/blocs/login/bloc.dart';
 import 'package:certain/repositories/user_repository.dart';
 
 import 'package:certain/views/pages/sign_up.dart';
-import 'package:certain/views/constants.dart';
+import 'package:certain/helpers/constants.dart';
 
 class LoginForm extends StatefulWidget {
   final UserRepository _userRepository;

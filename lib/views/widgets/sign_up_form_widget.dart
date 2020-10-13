@@ -5,7 +5,7 @@ import 'package:certain/blocs/authentication/authentication_bloc.dart';
 import 'package:certain/blocs/authentication/authentication_event.dart';
 import 'package:certain/blocs/sign_up/bloc.dart';
 
-import '../constants.dart';
+import 'package:certain/helpers/constants.dart';
 
 class SignUpForm extends StatefulWidget {
   @override
