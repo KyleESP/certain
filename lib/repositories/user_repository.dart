@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:certain/models/my_user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -40,11 +41,28 @@ class UserRepository {
     return await _firebaseAuth.signOut();
   }
 
-  Future<DocumentSnapshot> getUser() async {
-    return await _firebaseFirestore
+  Future<MyUser> getUser() async {
+    MyUser _user = MyUser();
+
+    await _firebaseFirestore
         .collection('users')
         .doc(_firebaseAuth.currentUser.uid)
-        .get();
+        .get()
+        .then((user) {
+      var data = user.data();
+      _user.uid = user.id;
+      _user.name = data['name'];
+      _user.photo = data['photoUrl'];
+      _user.birthdate = data['birthdate'];
+      _user.location = data['location'];
+      _user.gender = data['gender'];
+      _user.interestedIn = data['interestedIn'];
+      _user.maxDistance = data['maxDistance'];
+      _user.minAge = data['minAge'];
+      _user.maxAge = data['maxAge'];
+    });
+
+    return _user;
   }
 
   String getUserId() {

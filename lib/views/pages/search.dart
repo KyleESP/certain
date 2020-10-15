@@ -8,8 +8,9 @@ import 'package:geolocator/geolocator.dart';
 
 import 'package:certain/blocs/search/bloc.dart';
 
-import 'package:certain/models/user.dart';
+import 'package:certain/models/my_user.dart';
 import 'package:certain/repositories/search_repository.dart';
+import 'package:certain/repositories/user_repository.dart';
 
 import 'package:certain/views/widgets/icon_widget.dart';
 import 'package:certain/views/widgets/profile_widget.dart';
@@ -26,8 +27,9 @@ class Search extends StatefulWidget {
 
 class _SearchState extends State<Search> {
   final SearchRepository _searchRepository = SearchRepository();
+  final UserRepository _userRepository = UserRepository();
   SearchBloc _searchBloc;
-  User _user;
+  MyUser _user, _currentUser;
   int difference;
 
   getDifference(GeoPoint userLocation) async {
@@ -41,7 +43,7 @@ class _SearchState extends State<Search> {
 
   @override
   void initState() {
-    _searchBloc = SearchBloc(_searchRepository);
+    _searchBloc = SearchBloc(_searchRepository, _userRepository);
 
     super.initState();
   }
@@ -64,9 +66,23 @@ class _SearchState extends State<Search> {
         }
         if (state is LoadUserState) {
           _user = state.user;
+          _searchBloc.add(
+            LoadCurrentUserEvent(userId: widget.userId),
+          );
+        }
+        if (state is HasMatchedState) {
+          print("Tu as matché avec " +
+              _currentUser.name +
+              " (id = " +
+              _currentUser.uid +
+              ") et sa photo est " +
+              _currentUser.photo);
+        }
+        if (state is LoadCurrentUserState) {
+          _currentUser = state.currentUser;
 
-          getDifference(_user.location);
-          if (_user.location == null) {
+          getDifference(_currentUser.location);
+          if (_currentUser.location == null) {
             return Text(
               "Il n'y a aucune personne",
               style: TextStyle(
@@ -79,7 +95,7 @@ class _SearchState extends State<Search> {
               padding: size.height * 0.035,
               photoHeight: size.height * 0.824,
               photoWidth: size.width * 0.95,
-              photo: _user.photo,
+              photo: _currentUser.photo,
               clipRadius: size.height * 0.02,
               containerHeight: size.height * 0.3,
               containerWidth: size.width * 0.9,
@@ -93,14 +109,14 @@ class _SearchState extends State<Search> {
                     ),
                     Row(
                       children: <Widget>[
-                        userGender(_user.gender),
+                        userGender(_currentUser.gender),
                         Expanded(
                           child: Text(
                             " " +
-                                _user.name +
+                                _currentUser.name +
                                 ", " +
                                 (DateTime.now().year -
-                                        _user.birthdate.toDate().year)
+                                        _currentUser.birthdate.toDate().year)
                                     .toString(),
                             style: TextStyle(
                                 color: Colors.white,
@@ -131,19 +147,19 @@ class _SearchState extends State<Search> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
-                        iconWidget(EvaIcons.flash, () {}, size.height * 0.04,
-                            Colors.yellow),
                         iconWidget(Icons.clear, () {
-                          _searchBloc
-                              .add(PassUserEvent(widget.userId, _user.uid));
+                          _searchBloc.add(
+                              DislikeUserEvent(widget.userId, _currentUser.uid));
                         }, size.height * 0.08, Colors.blue),
                         iconWidget(FontAwesomeIcons.solidHeart, () {
-                          _searchBloc.add(SelectUserEvent(
+                          _searchBloc.add(LikeUserEvent(
                               currentUserId: widget.userId,
-                              selectedUserId: _user.uid));
-                        }, size.height * 0.06, Colors.red),
-                        iconWidget(EvaIcons.options2, () {}, size.height * 0.04,
-                            Colors.white)
+                              selectedUserId: _currentUser.uid,
+                              currentUserPhotoUrl: _user.photo,
+                              currentUserName: _user.name,
+                              selectedUserPhotoUrl: _currentUser.photo,
+                              selectedUserName: _currentUser.name));
+                        }, size.height * 0.06, Colors.red)
                       ],
                     )
                   ],

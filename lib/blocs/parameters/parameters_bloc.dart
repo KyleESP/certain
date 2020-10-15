@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:certain/models/my_user.dart';
 
 import 'bloc.dart';
 
@@ -30,7 +30,7 @@ class ParametersBloc extends Bloc<ParametersEvent, ParametersState> {
 
   Stream<ParametersState> _mapLoadUserToState() async* {
     yield LoadingState();
-    DocumentSnapshot user = await _userRepository.getUser();
+    MyUser user = await _userRepository.getUser();
 
     yield LoadUserState(user);
   }
@@ -61,7 +61,8 @@ class ParametersBloc extends Bloc<ParametersEvent, ParametersState> {
     }
   }
 
-  Stream<ParametersState> _mapAgeRangeChangedToState(int minAge, int maxAge) async* {
+  Stream<ParametersState> _mapAgeRangeChangedToState(
+      int minAge, int maxAge) async* {
     try {
       await _userRepository.update(minAge: minAge, maxAge: maxAge);
     } catch (_) {

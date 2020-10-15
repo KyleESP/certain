@@ -6,7 +6,7 @@ import 'package:geolocator/geolocator.dart';
 
 import 'package:certain/blocs/matches/bloc.dart';
 
-import 'package:certain/models/user.dart';
+import 'package:certain/models/my_user.dart';
 import 'package:certain/repositories/matches_repository.dart';
 
 import 'package:certain/views/widgets/icon_widget.dart';
@@ -84,9 +84,9 @@ class _MatchesState extends State<Matches> {
                         (BuildContext context, int index) {
                           return GestureDetector(
                             onTap: () async {
-                              User selectedUser = await matchesRepository
+                              MyUser selectedUser = await matchesRepository
                                   .getUserDetails(user[index].id);
-                              User currentUser = await matchesRepository
+                              MyUser currentUser = await matchesRepository
                                   .getUserDetails(widget.userId);
                               await getDifference(selectedUser.location);
                               showDialog(

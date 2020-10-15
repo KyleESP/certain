@@ -5,10 +5,10 @@ import 'package:certain/blocs/authentication/authentication_event.dart';
 import 'package:certain/blocs/parameters/parameters_bloc.dart';
 import 'package:certain/blocs/parameters/parameters_event.dart';
 import 'package:certain/blocs/parameters/parameters_state.dart';
+import 'package:certain/models/my_user.dart';
 import 'package:certain/repositories/user_repository.dart';
 import 'package:certain/views/widgets/gender_widget.dart';
 import 'package:certain/views/widgets/loader_widget.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,7 +28,7 @@ class Parameters extends StatefulWidget {
 class _ParametersState extends State<Parameters> {
   final UserRepository _userRepository = UserRepository();
   ParametersBloc _parametersBloc;
-  DocumentSnapshot _user;
+  MyUser _user;
   String _interestedIn;
   File photo;
   int _maxDistance;
@@ -85,10 +85,10 @@ class _ParametersState extends State<Parameters> {
             }
             if (state is LoadUserState) {
               _user = state.user;
-              _maxDistance ??= _user.get('maxDistance');
-              _ageRange ??= RangeValues(_user.get('minAge').toDouble(),
-                  _user.get('maxAge').toDouble());
-              _interestedIn ??= _user.get('interestedIn');
+              _maxDistance ??= _user.maxDistance;
+              _ageRange ??=
+                  RangeValues(_user.minAge.toDouble(), _user.maxAge.toDouble());
+              _interestedIn ??= _user.interestedIn;
               return SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: Container(
@@ -119,7 +119,7 @@ class _ParametersState extends State<Parameters> {
                               radius: size.width * 0.3,
                               backgroundImage: photo != null
                                   ? FileImage(photo)
-                                  : NetworkImage(_user.get('photoUrl')),
+                                  : NetworkImage(_user.photo),
                             ),
                           ),
                         ),
