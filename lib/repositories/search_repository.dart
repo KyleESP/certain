@@ -7,20 +7,33 @@ class SearchRepository {
   SearchRepository({FirebaseFirestore firebaseFirestore})
       : _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
 
-  Future<User> chooseUser(currentUserId, selectedUserId, name, photoUrl) async {
-    await _firebaseFirestore
-        .collection('users')
-        .doc(currentUserId)
-        .collection('chosenList')
-        .doc(selectedUserId)
-        .set({});
+  Future<User> likeUser(currentUserId, selectedUserId) async {
+    var usersCollection = _firebaseFirestore.collection('users');
+    var user = usersCollection.doc(currentUserId);
+    var selectedUser = usersCollection.doc(selectedUserId);
 
-    await _firebaseFirestore
-        .collection('users')
-        .doc(selectedUserId)
-        .collection('selectedList')
+    await user.collection('likeList').doc(selectedUserId).set({});
+
+    var selectedUserLiked = false;
+    await selectedUser
+        .collection('likeList')
         .doc(currentUserId)
-        .set({'name': name, 'photoUrl': photoUrl});
+        .get()
+        .then((value) {
+      selectedUserLiked = value.exists;
+    });
+
+    if (selectedUserLiked) {
+      await user.collection('matchList').doc(selectedUserId).set({});
+
+      await _firebaseFirestore
+          .collection('users')
+          .doc(selectedUserId)
+          .collection('matchList')
+          .doc(currentUserId)
+          .set({});
+    }
+
     return getUser(currentUserId);
   }
 
@@ -28,14 +41,14 @@ class SearchRepository {
     await _firebaseFirestore
         .collection('users')
         .doc(selectedUserId)
-        .collection('chosenList')
+        .collection('likeList')
         .doc(currentUserId)
         .set({});
 
     await _firebaseFirestore
         .collection('users')
         .doc(currentUserId)
-        .collection('chosenList')
+        .collection('likeList')
         .doc(selectedUserId)
         .set({});
     return getUser(currentUserId);
@@ -56,33 +69,33 @@ class SearchRepository {
     return currentUser;
   }
 
-  Future<List> getChosenList(userId) async {
-    List<String> chosenList = [];
+  Future<List> getLikeList(userId) async {
+    List<String> likeList = [];
     await _firebaseFirestore
         .collection('users')
         .doc(userId)
-        .collection('chosenList')
+        .collection('likeList')
         .get()
         .then((docs) {
       for (var doc in docs.docs) {
         if (docs.docs != null) {
-          chosenList.add(doc.id);
+          likeList.add(doc.id);
         }
       }
     });
-    return chosenList;
+    return likeList;
   }
 
   Future<User> getUser(userId) async {
     User _user = User();
-    List<String> chosenList = await getChosenList(userId);
+    List<String> likeList = await getLikeList(userId);
     User currentUser = await getUserInterests(userId);
     var data;
 
     await _firebaseFirestore.collection('users').get().then((users) {
       for (var user in users.docs) {
         data = user.data();
-        if ((!chosenList.contains(user.id)) &&
+        if ((!likeList.contains(user.id)) &&
             (user.id != userId) &&
             (currentUser.interestedIn == data['gender']) &&
             (data['interestedIn'] == currentUser.gender)) {

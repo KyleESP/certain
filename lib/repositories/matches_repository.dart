@@ -15,14 +15,6 @@ class MatchesRepository {
         .snapshots();
   }
 
-  Stream<QuerySnapshot> getSelectedList(userId) {
-    return _firestore
-        .collection('users')
-        .doc(userId)
-        .collection('selectedList')
-        .snapshots();
-  }
-
   Future<User> getUserDetails(userId) async {
     User _user = User();
     var data;

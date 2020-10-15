@@ -27,7 +27,7 @@ class Search extends StatefulWidget {
 class _SearchState extends State<Search> {
   final SearchRepository _searchRepository = SearchRepository();
   SearchBloc _searchBloc;
-  User _user, _currentUser;
+  User _user;
   int difference;
 
   getDifference(GeoPoint userLocation) async {
@@ -64,7 +64,6 @@ class _SearchState extends State<Search> {
         }
         if (state is LoadUserState) {
           _user = state.user;
-          _currentUser = state.currentUser;
 
           getDifference(_user.location);
           if (_user.location == null) {
@@ -139,13 +138,9 @@ class _SearchState extends State<Search> {
                               .add(PassUserEvent(widget.userId, _user.uid));
                         }, size.height * 0.08, Colors.blue),
                         iconWidget(FontAwesomeIcons.solidHeart, () {
-                          _searchBloc.add(
-                            SelectUserEvent(
-                                name: _currentUser.name,
-                                photoUrl: _currentUser.photo,
-                                currentUserId: widget.userId,
-                                selectedUserId: _user.uid),
-                          );
+                          _searchBloc.add(SelectUserEvent(
+                              currentUserId: widget.userId,
+                              selectedUserId: _user.uid));
                         }, size.height * 0.06, Colors.red),
                         iconWidget(EvaIcons.options2, () {}, size.height * 0.04,
                             Colors.white)

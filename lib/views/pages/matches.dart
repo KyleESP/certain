@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 
 import 'package:certain/blocs/matches/bloc.dart';
@@ -119,7 +118,8 @@ class _MatchesState extends State<Matches> {
                                                       selectedUser.name +
                                                       ", " +
                                                       (DateTime.now().year -
-                                                              selectedUser.birthdate
+                                                              selectedUser
+                                                                  .birthdate
                                                                   .toDate()
                                                                   .year)
                                                           .toString(),
@@ -214,193 +214,6 @@ class _MatchesState extends State<Matches> {
                       child: Container(),
                     );
                   }
-                },
-              ),
-              SliverAppBar(
-                backgroundColor: Colors.white,
-                pinned: true,
-                title: Text(
-                  "Someone Likes You",
-                  style: TextStyle(color: Colors.black, fontSize: 30),
-                ),
-              ),
-              StreamBuilder<QuerySnapshot>(
-                stream: state.selectedList,
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return SliverToBoxAdapter(
-                      child: Container(),
-                    );
-                  }
-                  if (snapshot.data.docs != null) {
-                    final user = snapshot.data.docs;
-                    return SliverGrid(
-                      delegate: SliverChildBuilderDelegate(
-                        (BuildContext context, int index) {
-                          return GestureDetector(
-                            onTap: () async {
-                              User selectedUser = await matchesRepository
-                                  .getUserDetails(user[index].id);
-                              User currentUser = await matchesRepository
-                                  .getUserDetails(widget.userId);
-
-                              await getDifference(selectedUser.location);
-                              // ignore: missing_return
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) => Dialog(
-                                  backgroundColor: Colors.transparent,
-                                  child: profileWidget(
-                                    padding: size.height * 0.01,
-                                    photo: selectedUser.photo,
-                                    photoHeight: size.height,
-                                    photoWidth: size.width,
-                                    clipRadius: size.height * 0.01,
-                                    containerWidth: size.width,
-                                    containerHeight: size.height * 0.2,
-                                    child: Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: size.height * 0.02),
-                                      child: Column(
-                                        children: <Widget>[
-                                          Expanded(
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: <Widget>[
-                                                SizedBox(
-                                                  height: size.height * 0.01,
-                                                ),
-                                                Row(
-                                                  children: <Widget>[
-                                                    userGender(
-                                                        selectedUser.gender),
-                                                    Expanded(
-                                                      child: Text(
-                                                        " " +
-                                                            selectedUser.name +
-                                                            ", " +
-                                                            (DateTime.now()
-                                                                        .year -
-                                                                    selectedUser
-                                                                        .birthdate
-                                                                        .toDate()
-                                                                        .year)
-                                                                .toString(),
-                                                        style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontSize:
-                                                                size.height *
-                                                                    0.05),
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
-                                                Row(
-                                                  children: <Widget>[
-                                                    Icon(
-                                                      Icons.location_on,
-                                                      color: Colors.white,
-                                                    ),
-                                                    Text(
-                                                      difference != null
-                                                          ? (difference / 1000)
-                                                                  .floor()
-                                                                  .toString() +
-                                                              " km away"
-                                                          : "away",
-                                                      style: TextStyle(
-                                                        color: Colors.white,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                SizedBox(
-                                                  height: size.height * 0.01,
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: <Widget>[
-                                                    iconWidget(Icons.clear, () {
-                                                      _matchesBloc.add(
-                                                        DeleteUserEvent(
-                                                            currentUser:
-                                                                currentUser.uid,
-                                                            selectedUser:
-                                                                selectedUser
-                                                                    .uid),
-                                                      );
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    }, size.height * 0.08,
-                                                        Colors.blue),
-                                                    SizedBox(
-                                                      width: size.width * 0.05,
-                                                    ),
-                                                    iconWidget(
-                                                        FontAwesomeIcons
-                                                            .solidHeart, () {
-                                                      _matchesBloc.add(
-                                                        AcceptUserEvent(
-                                                            selectedUser:
-                                                                selectedUser
-                                                                    .uid,
-                                                            currentUser:
-                                                                currentUser.uid,
-                                                            currentUserPhotoUrl:
-                                                                currentUser
-                                                                    .photo,
-                                                            currentUserName:
-                                                                currentUser
-                                                                    .name,
-                                                            selectedUserPhotoUrl:
-                                                                selectedUser
-                                                                    .photo,
-                                                            selectedUserName:
-                                                                selectedUser
-                                                                    .name),
-                                                      );
-                                                      Navigator.of(context)
-                                                          .pop();
-                                                    }, size.height * 0.06,
-                                                        Colors.red),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                            child: profileWidget(
-                              padding: size.height * 0.01,
-                              photo: user[index].data()['photoUrl'],
-                              photoWidth: size.width * 0.5,
-                              photoHeight: size.height * 0.3,
-                              clipRadius: size.height * 0.01,
-                              containerHeight: size.height * 0.03,
-                              containerWidth: size.width * 0.5,
-                              child: Text(
-                                "  " + user[index].data()['name'],
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          );
-                        },
-                        childCount: user.length,
-                      ),
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2),
-                    );
-                  } else
-                    return SliverToBoxAdapter(
-                      child: Container(),
-                    );
                 },
               ),
             ],

@@ -15,13 +15,12 @@ class LoadUserEvent extends SearchEvent {
 }
 
 class SelectUserEvent extends SearchEvent {
-  final String currentUserId, selectedUserId, name, photoUrl;
+  final String currentUserId, selectedUserId;
 
-  SelectUserEvent(
-      {this.currentUserId, this.name, this.photoUrl, this.selectedUserId});
+  SelectUserEvent({this.currentUserId, this.selectedUserId});
 
   @override
-  List<Object> get props => [currentUserId, selectedUserId, name, photoUrl];
+  List<Object> get props => [currentUserId, selectedUserId];
 }
 
 class PassUserEvent extends SearchEvent {

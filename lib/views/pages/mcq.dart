@@ -14,38 +14,6 @@ class _McqState extends State<Mcq> {
   Stream quizStream;
   QuestionsRepository questionsRepository = new QuestionsRepository();
 
-  Widget quizList() {
-    return Container(
-      child: Column(
-        children: [
-          StreamBuilder(
-            stream: quizStream,
-            builder: (context, snapshot) {
-              return snapshot.data == null
-                  ? Container()
-                  : ListView.builder(
-                      shrinkWrap: true,
-                      physics: ClampingScrollPhysics(),
-                      itemCount: snapshot.data.documents.length,
-                      itemBuilder: (context, index) {
-                        return QuizTile(
-                          noOfQuestions: snapshot.data.documents.length,
-                          imageUrl: snapshot.data.documents[index]
-                              .data()['quizImgUrl'],
-                          title: snapshot.data.documents[index]
-                              .data()['quizTitle'],
-                          description:
-                              snapshot.data.documents[index].data()['quizDesc'],
-                          id: snapshot.data.documents[index].documentID,
-                        );
-                      });
-            },
-          )
-        ],
-      ),
-    );
-  }
-
   @override
   void initState() {
     quizStream = questionsRepository.getQuizData();
@@ -56,14 +24,35 @@ class _McqState extends State<Mcq> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: Text("hey"),
-        brightness: Brightness.light,
-        elevation: 0.0,
-        backgroundColor: Colors.transparent,
-        //brightness: Brightness.li,
+      body: Container(
+        child: Column(
+          children: [
+            StreamBuilder(
+              stream: quizStream,
+              builder: (context, snapshot) {
+                return snapshot.data == null
+                    ? Container()
+                    : ListView.builder(
+                        shrinkWrap: true,
+                        physics: ClampingScrollPhysics(),
+                        itemCount: snapshot.data.documents.length,
+                        itemBuilder: (context, index) {
+                          return QuizTile(
+                            noOfQuestions: snapshot.data.documents.length,
+                            imageUrl: snapshot.data.documents[index]
+                                .data()['quizImgUrl'],
+                            title: snapshot.data.documents[index]
+                                .data()['quizTitle'],
+                            description: snapshot.data.documents[index]
+                                .data()['quizDesc'],
+                            id: snapshot.data.documents[index].documentID,
+                          );
+                        });
+              },
+            )
+          ],
+        ),
       ),
-      body: quizList(),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {

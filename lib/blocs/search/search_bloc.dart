@@ -18,9 +18,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     if (event is SelectUserEvent) {
       yield* _mapSelectToState(
           currentUserId: event.currentUserId,
-          selectedUserId: event.selectedUserId,
-          name: event.name,
-          photoUrl: event.photoUrl);
+          selectedUserId: event.selectedUserId);
     }
     if (event is PassUserEvent) {
       yield* _mapPassToState(
@@ -34,33 +32,28 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   }
 
   Stream<SearchState> _mapSelectToState(
-      {String currentUserId,
-      String selectedUserId,
-      String name,
-      String photoUrl}) async* {
+      {String currentUserId, String selectedUserId}) async* {
     yield LoadingState();
 
-    User user = await _searchRepository.chooseUser(
-        currentUserId, selectedUserId, name, photoUrl);
+    User user = await _searchRepository.likeUser(currentUserId, selectedUserId);
 
-    User currentUser = await _searchRepository.getUserInterests(currentUserId);
-    yield LoadUserState(user, currentUser);
+    yield LoadUserState(user);
   }
 
   Stream<SearchState> _mapPassToState(
       {String currentUserId, String selectedUserId}) async* {
     yield LoadingState();
-    User user = await _searchRepository.passUser(currentUserId, selectedUserId);
-    User currentUser = await _searchRepository.getUserInterests(currentUserId);
 
-    yield LoadUserState(user, currentUser);
+    User user = await _searchRepository.passUser(currentUserId, selectedUserId);
+
+    yield LoadUserState(user);
   }
 
   Stream<SearchState> _mapLoadUserToState({String currentUserId}) async* {
     yield LoadingState();
-    User user = await _searchRepository.getUser(currentUserId);
-    User currentUser = await _searchRepository.getUserInterests(currentUserId);
 
-    yield LoadUserState(user, currentUser);
+    User user = await _searchRepository.getUser(currentUserId);
+
+    yield LoadUserState(user);
   }
 }
