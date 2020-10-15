@@ -1,6 +1,6 @@
 import 'package:certain/models/chat.dart';
 import 'package:certain/models/message.dart';
-import 'package:certain/models/user.dart';
+import 'package:certain/models/my_user.dart';
 import 'package:certain/repositories/message_repository.dart';
 import 'package:certain/views/pages/messaging.dart';
 import 'package:certain/views/widgets/page_turn_widget.dart';
@@ -22,7 +22,7 @@ class ChatWidget extends StatefulWidget {
 class _ChatWidgetState extends State<ChatWidget> {
   MessageRepository messageRepository = MessageRepository();
   Chat chat;
-  User user;
+  MyUser user;
 
   getUserDetail() async {
     user = await messageRepository.getUserDetail(userId: widget.selectedUserId);
@@ -53,9 +53,9 @@ class _ChatWidgetState extends State<ChatWidget> {
   }
 
   openChat() async {
-    User currentUser =
+    MyUser currentUser =
         await messageRepository.getUserDetail(userId: widget.userId);
-    User selectedUser =
+    MyUser selectedUser =
         await messageRepository.getUserDetail(userId: widget.selectedUserId);
 
     try {

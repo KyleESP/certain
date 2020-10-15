@@ -1,4 +1,4 @@
-import 'package:certain/models/user.dart';
+import 'package:certain/models/my_user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MatchesRepository {
@@ -15,16 +15,8 @@ class MatchesRepository {
         .snapshots();
   }
 
-  Stream<QuerySnapshot> getSelectedList(userId) {
-    return _firestore
-        .collection('users')
-        .doc(userId)
-        .collection('selectedList')
-        .snapshots();
-  }
-
-  Future<User> getUserDetails(userId) async {
-    User _user = User();
+  Future<MyUser> getUserDetails(userId) async {
+    MyUser _user = MyUser();
     var data;
 
     await _firestore.collection('users').doc(userId).get().then((user) {

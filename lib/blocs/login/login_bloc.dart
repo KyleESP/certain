@@ -6,7 +6,7 @@ import 'package:rxdart/rxdart.dart';
 
 import 'package:certain/repositories/user_repository.dart';
 
-import 'package:certain/views/validators.dart';
+import 'package:certain/helpers/validators.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   UserRepository _userRepository;

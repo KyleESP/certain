@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class User {
+class MyUser {
   String uid;
   String name;
   String gender;
@@ -12,7 +12,7 @@ class User {
   int minAge;
   int maxAge;
 
-  User(
+  MyUser(
       {this.uid,
       this.name,
       this.gender,

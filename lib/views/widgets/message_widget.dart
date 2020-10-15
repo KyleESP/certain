@@ -4,7 +4,7 @@ import 'package:timeago/timeago.dart' as timeago;
 import 'package:certain/models/message.dart';
 import 'package:certain/repositories/messaging_repository.dart';
 
-import 'package:certain/views/constants.dart';
+import 'package:certain/helpers/constants.dart';
 import 'package:certain/views/widgets/photo_widget.dart';
 
 class MessageWidget extends StatefulWidget {

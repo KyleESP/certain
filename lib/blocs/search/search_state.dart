@@ -1,4 +1,4 @@
-import 'package:certain/models/user.dart';
+import 'package:certain/models/my_user.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class SearchState extends Equatable {
@@ -12,10 +12,18 @@ class InitialSearchState extends SearchState {}
 class LoadingState extends SearchState {}
 
 class LoadUserState extends SearchState {
-  final User user, currentUser;
+  final MyUser user;
 
-  LoadUserState(this.user, this.currentUser);
+  LoadUserState(this.user);
+}
+
+class LoadCurrentUserState extends SearchState {
+  final MyUser currentUser;
+
+  LoadCurrentUserState(this.currentUser);
 
   @override
-  List<Object> get props => [user, currentUser];
+  List<Object> get props => [currentUser];
 }
+
+class HasMatchedState extends SearchState {}

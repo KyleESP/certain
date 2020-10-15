@@ -45,10 +45,7 @@ class MatchesBloc extends Bloc<MatchesEvent, MatchesState> {
     Stream<QuerySnapshot> matchedList =
         _matchesRepository.getMatchedList(currentUserId);
 
-    Stream<QuerySnapshot> selectedList =
-        _matchesRepository.getSelectedList(currentUserId);
-
-    yield LoadUserState(matchedList: matchedList, selectedList: selectedList);
+    yield LoadUserState(matchedList: matchedList);
   }
 
   Stream<MatchesState> _mapDeleteUserToState(

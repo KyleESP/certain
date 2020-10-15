@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:certain/models/message.dart';
-import 'package:certain/models/user.dart';
+import 'package:certain/models/my_user.dart';
 
 class MessageRepository {
   final FirebaseFirestore _firebaseFirestore;
@@ -27,8 +27,8 @@ class MessageRepository {
         .delete();
   }
 
-  Future<User> getUserDetail({userId}) async {
-    User _user = User();
+  Future<MyUser> getUserDetail({userId}) async {
+    MyUser _user = MyUser();
     var data;
 
     await _firebaseFirestore.collection('users').doc(userId).get().then((user) {

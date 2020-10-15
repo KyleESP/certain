@@ -14,20 +14,46 @@ class LoadUserEvent extends SearchEvent {
   List<Object> get props => [userId];
 }
 
-class SelectUserEvent extends SearchEvent {
-  final String currentUserId, selectedUserId, name, photoUrl;
+class LoadCurrentUserEvent extends SearchEvent {
+  final String userId;
 
-  SelectUserEvent(
-      {this.currentUserId, this.name, this.photoUrl, this.selectedUserId});
+  LoadCurrentUserEvent({this.userId});
 
   @override
-  List<Object> get props => [currentUserId, selectedUserId, name, photoUrl];
+  List<Object> get props => [userId];
 }
 
-class PassUserEvent extends SearchEvent {
+class LikeUserEvent extends SearchEvent {
+  final String currentUserId,
+      selectedUserId,
+      selectedUserName,
+      selectedUserPhotoUrl,
+      currentUserName,
+      currentUserPhotoUrl;
+
+  LikeUserEvent(
+      {this.currentUserId,
+      this.selectedUserId,
+      this.selectedUserName,
+      this.selectedUserPhotoUrl,
+      this.currentUserName,
+      this.currentUserPhotoUrl});
+
+  @override
+  List<Object> get props => [
+        currentUserId,
+        selectedUserId,
+        selectedUserName,
+        selectedUserPhotoUrl,
+        currentUserName,
+        currentUserPhotoUrl
+      ];
+}
+
+class DislikeUserEvent extends SearchEvent {
   final String currentUserId, selectedUserId;
 
-  PassUserEvent(this.currentUserId, this.selectedUserId);
+  DislikeUserEvent(this.currentUserId, this.selectedUserId);
 
   @override
   List<Object> get props => [currentUserId, selectedUserId];

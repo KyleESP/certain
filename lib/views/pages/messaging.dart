@@ -5,14 +5,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:certain/blocs/messaging/bloc.dart';
 import 'package:certain/blocs/messaging/messaging_bloc.dart';
 import 'package:certain/models/message.dart';
-import 'package:certain/models/user.dart';
+import 'package:certain/models/my_user.dart';
 import 'package:certain/repositories/messaging_repository.dart';
-import 'package:certain/views/constants.dart';
+import 'package:certain/helpers/constants.dart';
 import 'package:certain/views/widgets/message_widget.dart';
 import 'package:certain/views/widgets/photo_widget.dart';
 
 class Messaging extends StatefulWidget {
-  final User currentUser, selectedUser;
+  final MyUser currentUser, selectedUser;
 
   const Messaging({this.currentUser, this.selectedUser});
 

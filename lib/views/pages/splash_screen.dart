@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../constants.dart';
+import 'package:certain/helpers/constants.dart';
 
 class Splash extends StatelessWidget {
   @override
