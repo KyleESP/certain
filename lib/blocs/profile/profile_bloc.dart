@@ -26,13 +26,11 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       yield* _mapLocationChangedToState(event.location);
     } else if (event is PhotoChanged) {
       yield* _mapPhotoChangedToState(event.photo);
-    } else if (event is Submitted) {
-      final uid = _userRepository.getUserId();
+    } else if (event is SubmittedEvent) {
       yield* _mapSubmittedToState(
           photo: event.photo,
           name: event.name,
           gender: event.gender,
-          userId: uid,
           birthdate: event.birthdate,
           location: event.location,
           interestedIn: event.interestedIn);
@@ -87,7 +85,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     yield ProfileState.loading();
     try {
       await _userRepository.createProfile(
-          photo, userId, name, gender, interestedIn, birthdate, location);
+          photo, name, gender, interestedIn, birthdate, location);
       yield ProfileState.success();
     } catch (_) {
       yield ProfileState.failure();

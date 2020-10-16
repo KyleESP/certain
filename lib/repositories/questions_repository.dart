@@ -1,46 +1,50 @@
+import 'package:certain/models/question.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class QuestionsRepository {
-  final String uid;
+  final FirebaseAuth _firebaseAuth;
+  final FirebaseFirestore _firebaseFirestore;
 
-  QuestionsRepository({this.uid});
+  QuestionsRepository(
+      {FirebaseAuth firebaseAuth, FirebaseFirestore firebaseFirestore})
+      : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
+        _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
 
-  Future<void> addData(userData) async {
-    FirebaseFirestore.instance
+  Future<List<Question>> getQuestions() async {
+    List<Question> questionList;
+    var data;
+    await _firebaseFirestore.collection("mcq").get().then((questions) {
+      for (var question in questions.docs) {
+        data = question.data();
+        questionList.add(new Question(
+            question: data['question'],
+            option1: data['option1'],
+            option2: data['option2'],
+            option3: data['option3']));
+      }
+    });
+
+    return questionList;
+  }
+
+  Future<void> addQuizData(Map quizData) async {
+    await _firebaseFirestore
         .collection("users")
-        .add(userData)
-        .catchError((e) {
-      print(e);
-    });
+        .doc(_firebaseAuth.currentUser.uid)
+        .set(quizData);
   }
 
-  getQuizData() {
-    return FirebaseFirestore.instance.collection("quiz").snapshots();
-  }
-
-  Future<void> addQuizData(Map quizData, String quizId) async {
-    await FirebaseFirestore.instance
-        .collection("quiz")
-        .doc(quizId)
-        .set(quizData)
-        .catchError((e) {
-      print(e);
-    });
-  }
-
-  Future<void> addQuestionData(quizData, String quizId) async {
-    await FirebaseFirestore.instance
+  Future<void> addQuestionData(quizData) async {
+    /*await _firebaseFirestore
         .collection("quiz")
         .doc(quizId)
         .collection("qna")
-        .add(quizData)
-        .catchError((e) {
-      print(e);
-    });
+        .add(quizData);*/
   }
 
   getQuestionData(String quizId) async {
-    return await FirebaseFirestore.instance
+    return await _firebaseFirestore
         .collection("quiz")
         .doc(quizId)
         .collection("qna")

@@ -55,14 +55,12 @@ class _QuizPlayState extends State<QuizPlay> {
     List<String> options = [
       questionSnapshot.data()["option1"],
       questionSnapshot.data()["option2"],
-      questionSnapshot.data()["option3"],
-      questionSnapshot.data()["option4"]
+      questionSnapshot.data()["option3"]
     ]..shuffle();
 
     questionModel.option1 = options[0];
     questionModel.option2 = options[1];
     questionModel.option3 = options[2];
-    questionModel.option4 = options[3];
     questionModel.correctOption = questionSnapshot.data()["option1"];
     questionModel.answered = false;
 
@@ -286,42 +284,7 @@ class _QuizPlayTileState extends State<QuizPlayTile> {
               correctAnswer: widget.questionModel.correctOption,
               optionSelected: optionSelected,
             ),
-          ),
-          SizedBox(
-            height: 4,
-          ),
-          GestureDetector(
-            onTap: () {
-              if (!widget.questionModel.answered) {
-                ///correct
-                if (widget.questionModel.option4 ==
-                    widget.questionModel.correctOption) {
-                  setState(() {
-                    optionSelected = widget.questionModel.option4;
-                    widget.questionModel.answered = true;
-                    _correct = _correct + 1;
-                    _notAttempted = _notAttempted + 1;
-                  });
-                } else {
-                  setState(() {
-                    optionSelected = widget.questionModel.option4;
-                    widget.questionModel.answered = true;
-                    _incorrect = _incorrect + 1;
-                    _notAttempted = _notAttempted - 1;
-                  });
-                }
-              }
-            },
-            child: OptionTile(
-              option: "D",
-              description: "${widget.questionModel.option4}",
-              correctAnswer: widget.questionModel.correctOption,
-              optionSelected: optionSelected,
-            ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
+          )
         ],
       ),
     );

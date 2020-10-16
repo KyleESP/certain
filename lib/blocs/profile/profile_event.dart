@@ -65,13 +65,13 @@ class LocationChanged extends ProfileEvent {
   List<Object> get props => [location];
 }
 
-class Submitted extends ProfileEvent {
+class SubmittedEvent extends ProfileEvent {
   final String name, gender, interestedIn;
   final DateTime birthdate;
   final GeoPoint location;
   final File photo;
 
-  Submitted(
+  SubmittedEvent(
       {@required this.name,
       @required this.gender,
       @required this.interestedIn,

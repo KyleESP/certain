@@ -19,9 +19,13 @@ class UserRepository {
         email: email, password: password);
   }
 
-  Future<bool> userExists(String userId) async {
+  Future<bool> userExists() async {
     bool userExists;
-    await _firebaseFirestore.collection('users').doc(userId).get().then((user) {
+    await _firebaseFirestore
+        .collection('users')
+        .doc(_firebaseAuth.currentUser.uid)
+        .get()
+        .then((user) {
       userExists = user.exists;
     });
 
@@ -69,28 +73,23 @@ class UserRepository {
     return _firebaseAuth.currentUser.uid;
   }
 
-  Future<void> createProfile(
-      File photo,
-      String userId,
-      String name,
-      String gender,
-      String interestedIn,
-      DateTime birthdate,
-      GeoPoint location) async {
+  Future<void> createProfile(File photo, String name, String gender,
+      String interestedIn, DateTime birthdate, GeoPoint location) async {
+    final uid = _firebaseAuth.currentUser.uid;
     StorageUploadTask storageUploadTask;
     storageUploadTask = FirebaseStorage.instance
         .ref()
         .child('userPhotos')
-        .child(userId)
-        .child(userId)
+        .child(uid)
+        .child(uid)
         .putFile(photo);
 
     final age = DateTime.now().year - birthdate.year;
 
     return await storageUploadTask.onComplete.then((ref) async {
       await ref.ref.getDownloadURL().then((url) async {
-        await _firebaseFirestore.collection('users').doc(userId).set({
-          'uid': userId,
+        await _firebaseFirestore.collection('users').doc(uid).set({
+          'uid': uid,
           'photoUrl': url,
           'name': name,
           'location': location,

@@ -2,7 +2,6 @@ import 'package:certain/views/widgets/loader_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -44,7 +43,6 @@ class _SearchState extends State<Search> {
   @override
   void initState() {
     _searchBloc = SearchBloc(_searchRepository, _userRepository);
-
     super.initState();
   }
 

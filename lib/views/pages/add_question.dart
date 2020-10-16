@@ -1,73 +1,47 @@
+import 'package:certain/blocs/questions/bloc.dart';
+import 'package:certain/views/widgets/loader_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:certain/repositories/questions_repository.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:certain/models/question.dart';
 
 class AddQuestion extends StatefulWidget {
-  final String quizId;
-  AddQuestion(this.quizId);
-
   @override
   _AddQuestionState createState() => _AddQuestionState();
 }
 
 class _AddQuestionState extends State<AddQuestion> {
-  QuestionsRepository questionsRepository = new QuestionsRepository();
+  QuestionsRepository _questionsRepository = new QuestionsRepository();
   final _formKey = GlobalKey<FormState>();
+  QuestionsBloc _questionsBloc;
 
   bool isLoading = false;
+  List<Question> _questionList;
+  String question = "", option1 = "", option2 = "", option3 = "";
 
-  String question = "", option1 = "", option2 = "", option3 = "", option4 = "";
-
-  uploadQuizData() {
-    if (_formKey.currentState.validate()) {
-      setState(() {
-        isLoading = true;
-      });
-
-      Map<String, String> questionMap = {
-        "question": question,
-        "option1": option1,
-        "option2": option2,
-        "option3": option3,
-        "option4": option4
-      };
-
-      print("${widget.quizId}");
-      questionsRepository.addQuestionData(questionMap, widget.quizId).then((value) {
-        question = "";
-        option1 = "";
-        option2 = "";
-        option3 = "";
-        option4 = "";
-        setState(() {
-          isLoading = false;
-        });
-      }).catchError((e) {
-        print(e);
-      });
-    } else {
-      print("error is happening ");
-    }
+  @override
+  void initState() {
+    _questionsBloc = QuestionsBloc(_questionsRepository);
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        leading: BackButton(
-          color: Colors.black54,
-        ),
-        title: Text("hey"),
-        brightness: Brightness.light,
-        elevation: 0.0,
-        backgroundColor: Colors.transparent,
-        //brightness: Brightness.li,
-      ),
-      body: isLoading
-          ? Container(
-              child: Center(child: CircularProgressIndicator()),
-            )
-          : Form(
+    return BlocBuilder<QuestionsBloc, QuestionsState>(
+        cubit: _questionsBloc,
+        builder: (context, state) {
+          if (state is QuestionsInitialState) {
+            _questionsBloc.add(
+              LoadQuestionsEvent(),
+            );
+            return loaderWidget();
+          }
+          if (state is LoadingState) {
+            return loaderWidget();
+          }
+          if (state is LoadQuestionsState) {
+            _questionList = state.questionList;
+            return Form(
               key: _formKey,
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 24),
@@ -114,16 +88,6 @@ class _AddQuestionState extends State<AddQuestion> {
                     SizedBox(
                       height: 8,
                     ),
-                    TextFormField(
-                      validator: (val) => val.isEmpty ? "Option4 " : null,
-                      decoration: InputDecoration(hintText: "Option4"),
-                      onChanged: (val) {
-                        option4 = val;
-                      },
-                    ),
-                    SizedBox(
-                      height: 8,
-                    ),
                     Spacer(),
                     Row(
                       children: [
@@ -151,7 +115,7 @@ class _AddQuestionState extends State<AddQuestion> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            uploadQuizData();
+                            _uploadQuizData();
                           },
                           child: Container(
                             alignment: Alignment.center,
@@ -176,7 +140,38 @@ class _AddQuestionState extends State<AddQuestion> {
                   ],
                 ),
               ),
-            ),
-    );
+            );
+          }
+          return loaderWidget();
+        });
+  }
+
+  _uploadQuizData() {
+    if (_formKey.currentState.validate()) {
+      setState(() {
+        isLoading = true;
+      });
+
+      Map<String, String> questionMap = {
+        "question": question,
+        "option1": option1,
+        "option2": option2,
+        "option3": option3
+      };
+
+      _questionsRepository.addQuestionData(questionMap).then((value) {
+        question = "";
+        option1 = "";
+        option2 = "";
+        option3 = "";
+        setState(() {
+          isLoading = false;
+        });
+      }).catchError((e) {
+        print(e);
+      });
+    } else {
+      print("error is happening ");
+    }
   }
 }
