@@ -23,7 +23,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  flutter_localizations:
+    sdk: flutter
   cupertino_icons: ^0.1.3
   eva_icons_flutter: ^2.0.1
   font_awesome_flutter: ^8.8.1
@@ -41,6 +42,8 @@ dependencies:
   timeago: ^2.0.27
   uuid: ^2.2.2
   random_string: ^2.1.0
+  intl: ^0.16.1
+  circle_button: ^1.0.1
 
 dev_dependencies:
   flutter_test:
@@ -60,6 +63,7 @@ flutter:
     - assets/profilephoto.png
     - assets/logo.png
     - assets/logoHeart.png
+    - assets/avatarphoto.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

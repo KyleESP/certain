@@ -189,7 +189,9 @@ class _ChatWidgetState extends State<ChatWidget> {
                         ),
                       ],
                     ),
-                    Text(timeago.format(chat.timestamp != null ? chat.timestamp.toDate() : widget.creationTime.toDate()))
+                    Text(timeago.format(chat.timestamp != null
+                        ? chat.timestamp.toDate()
+                        : widget.creationTime.toDate()))
                   ],
                 ),
               ),

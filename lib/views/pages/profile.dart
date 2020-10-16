@@ -6,7 +6,6 @@ import 'package:certain/blocs/profile/bloc.dart';
 import 'package:certain/repositories/user_repository.dart';
 
 import 'package:certain/views/widgets/profile_form_widget.dart';
-import 'package:certain/helpers/constants.dart';
 
 class Profile extends StatelessWidget {
   final _userRepository;
@@ -20,10 +19,12 @@ class Profile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: Text("Création du profil"),
+        title: Text("Création de votre profil",
+            style: TextStyle(color: Colors.white, fontSize: 20.0)),
         centerTitle: true,
-        backgroundColor: backgroundColor,
+        backgroundColor: Colors.transparent,
         elevation: 0,
       ),
       body: BlocProvider<ProfileBloc>(

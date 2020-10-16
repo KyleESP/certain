@@ -10,6 +10,8 @@ import 'package:certain/views/pages/profile.dart';
 import 'package:certain/views/pages/splash_screen.dart';
 import 'package:certain/views/widgets/tabs_widget.dart';
 
+import 'package:flutter_localizations/flutter_localizations.dart';
+
 import 'login.dart';
 
 class Home extends StatelessWidget {
@@ -22,6 +24,14 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale('fr', 'FR'),
+      ],
       theme: ThemeData(fontFamily: 'Montserrat'),
       debugShowCheckedModeBanner: false,
       home: BlocBuilder<AuthenticationBloc, AuthenticationState>(

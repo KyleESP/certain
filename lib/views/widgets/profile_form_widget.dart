@@ -1,20 +1,21 @@
 import 'dart:io';
 import 'package:certain/blocs/authentication/authentication_bloc.dart';
 import 'package:certain/blocs/authentication/authentication_event.dart';
-import 'package:certain/blocs/login/login_event.dart';
-import 'package:certain/views/pages/add_question.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:intl/intl.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:circle_button/circle_button.dart';
 
 import 'package:certain/blocs/profile/bloc.dart';
 
 import 'package:certain/helpers/constants.dart';
 import 'package:certain/views/widgets/gender_widget.dart';
+import 'package:certain/views/widgets/interestedIn_widget.dart';
 
 class ProfileForm extends StatefulWidget {
   @override
@@ -23,8 +24,9 @@ class ProfileForm extends StatefulWidget {
 
 class _ProfileFormState extends State<ProfileForm> {
   final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
 
-  String gender, interestedIn;
+  String gender = "Female", interestedIn = "Female";
   DateTime birthdate;
   File photo;
   GeoPoint location;
@@ -91,7 +93,7 @@ class _ProfileFormState extends State<ProfileForm> {
                 content: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text('Création...'),
+                    Text('Création du profil...'),
                     CircularProgressIndicator()
                   ],
                 ),
@@ -107,15 +109,16 @@ class _ProfileFormState extends State<ProfileForm> {
           return SingleChildScrollView(
             scrollDirection: Axis.vertical,
             child: Container(
-              color: backgroundColor,
+              decoration: BoxDecoration(gradient: gradient),
               width: size.width,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+              height: size.height,
+              child: Stack(
+                alignment: Alignment.bottomCenter,
                 children: <Widget>[
-                  Container(
-                    width: size.width,
+                  Positioned(
+                    top: size.height * 0.12,
                     child: CircleAvatar(
-                        radius: size.width * 0.3,
+                        radius: size.width * 0.20,
                         backgroundColor: Colors.transparent,
                         child: GestureDetector(
                             onTap: () async {
@@ -129,178 +132,308 @@ class _ProfileFormState extends State<ProfileForm> {
                                 });
                               }
                             },
-                            child: photo == null
-                                ? Image.asset('assets/profilephoto.png')
-                                : CircleAvatar(
-                                    radius: size.width * 0.3,
-                                    backgroundImage: FileImage(photo),
-                                  ))),
+                            child: CircleAvatar(
+                                radius: size.width * 0.20,
+                                backgroundColor: Colors.white,
+                                child: CircleAvatar(
+                                  radius: size.width * 0.19,
+                                  backgroundImage: photo == null
+                                      ? AssetImage('assets/avatarphoto.png')
+                                      : FileImage(photo),
+                                )))),
                   ),
-                  Padding(
-                    padding: EdgeInsets.all(size.height * 0.02),
-                    child: TextField(
-                      controller: _nameController,
-                      decoration: InputDecoration(
-                        labelText: "Nom",
-                        labelStyle: TextStyle(
-                            color: Colors.white, fontSize: size.height * 0.03),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.white, width: 1.0),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.white, width: 1.0),
-                        ),
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      DatePicker.showDatePicker(
-                        context,
-                        showTitleActions: true,
-                        minTime: DateTime(1900, 1, 1),
-                        maxTime: DateTime(DateTime.now().year - 19, 1, 1),
-                        onConfirm: (date) {
-                          setState(() {
-                            birthdate = date;
-                          });
-                        },
-                      );
-                    },
-                    child: Text(
-                      "Date d'anniversaire",
-                      style: TextStyle(
-                          color: Colors.white, fontSize: size.width * 0.09),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: size.height * 0.02),
-                        child: Text(
-                          "Tu es:",
-                          style: TextStyle(
-                              color: Colors.white, fontSize: size.width * 0.09),
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: <Widget>[
-                          genderWidget(FontAwesomeIcons.venus, "Female", size,
-                              gender == "Female", () {
-                            setState(() {
-                              gender = "Female";
-                            });
-                          }),
-                          genderWidget(FontAwesomeIcons.mars, "Male", size,
-                              gender == "Male", () {
-                            setState(() {
-                              gender = "Male";
-                            });
-                          }),
-                          genderWidget(
-                            FontAwesomeIcons.transgender,
-                            "Transgender",
-                            size,
-                            gender == "Transgender",
-                            () {
-                              setState(
-                                () {
-                                  gender = "Transgender";
-                                },
-                              );
-                            },
+                  Positioned(
+                    top: size.height * 0.13,
+                    left: size.width * 0.6,
+                    child: Container(
+                      width: size.width * 0.08,
+                      height: size.width * 0.09,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey[800],
+                            spreadRadius: 1,
+                            blurRadius: 10,
+                            offset: Offset(-0.5, 3.0),
                           ),
                         ],
                       ),
-                      SizedBox(
-                        height: size.height * 0.02,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: size.height * 0.02),
-                        child: Text(
-                          "Tu cherche:",
-                          style: TextStyle(
-                              color: Colors.white, fontSize: size.width * 0.09),
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: <Widget>[
-                          genderWidget(FontAwesomeIcons.venus, "Female", size,
-                              interestedIn == "Female", () {
-                            setState(() {
-                              interestedIn = "Female";
-                            });
-                          }),
-                          genderWidget(FontAwesomeIcons.mars, "Male", size,
-                              interestedIn == "Male", () {
-                            setState(() {
-                              interestedIn = "Male";
-                            });
-                          }),
-                          genderWidget(
-                            FontAwesomeIcons.transgender,
-                            "Transgender",
-                            size,
-                            interestedIn == "Transgender",
-                            () {
-                              setState(
-                                () {
-                                  interestedIn = "Transgender";
-                                },
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                    ],
+                    ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: size.height * 0.02),
-                    child: GestureDetector(
+                  Positioned(
+                    top: size.height * 0.13,
+                    left: size.width * 0.6,
+                    child: CircleButton(
                       onTap: () async {
-                        if (isButtonEnabled(state)) {
-                          await _getLocation();
-                          _profileBloc.add(
-                            SubmittedEvent(
-                                name: _nameController.text,
-                                birthdate: birthdate,
-                                location: location,
-                                gender: gender,
-                                interestedIn: interestedIn,
-                                photo: photo),
-                          );
-                        } else {}
+                        FilePickerResult result = await FilePicker.platform
+                            .pickFiles(type: FileType.image);
+                        if (result != null) {
+                          File getPic = File(result.files.single.path);
+                          setState(() {
+                            photo = getPic;
+                          });
+                        }
                       },
-                      child: Container(
-                        width: size.width * 0.8,
-                        height: size.height * 0.06,
-                        decoration: BoxDecoration(
-                          color: isButtonEnabled(state)
-                              ? Colors.white
-                              : Colors.grey,
-                          borderRadius:
-                              BorderRadius.circular(size.height * 0.05),
-                        ),
-                        child: Center(
-                            child: Text(
-                          "Enregistrer",
-                          style: TextStyle(
-                              fontSize: size.height * 0.025,
-                              color: Colors.blue),
-                        )),
+                      width: size.width * 0.1,
+                      height: size.width * 0.1,
+                      borderStyle: BorderStyle.none,
+                      backgroundColor: loginButtonColor,
+                      child: Icon(
+                        Icons.add,
+                        color: Colors.white,
                       ),
                     ),
-                  )
+                  ),
+                  Positioned(
+                    child: Container(
+                      margin: EdgeInsets.only(top: size.height * 0.04),
+                      height: size.height * 0.62,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(10.0),
+                            topRight: Radius.circular(10.0)),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey[700],
+                            spreadRadius: 4,
+                            blurRadius: 20,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  ClipRRect(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(10.0),
+                        topRight: Radius.circular(10.0)),
+                    child: Container(
+                      height: size.height * 0.63,
+                      width: double.infinity,
+                      color: Colors.white,
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            padding: EdgeInsets.only(
+                                top: size.height * 0.02,
+                                bottom: size.height * 0.02,
+                                left: size.height * 0.04,
+                                right: size.height * 0.04),
+                            child: TextFormField(
+                              controller: _nameController,
+                              cursorColor: Colors.grey[600],
+                              style: TextStyle(
+                                  color: Colors.grey[600],
+                                  fontSize: size.height * 0.02),
+                              decoration: InputDecoration(
+                                icon: Icon(
+                                  Icons.person,
+                                  color: backgroundColorRed,
+                                ),
+                                labelText: 'Votre prénom *',
+                                labelStyle: TextStyle(
+                                  color: Colors.grey[700],
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.grey[600],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.only(
+                              left: size.height * 0.04,
+                              right: size.height * 0.04,
+                              bottom: size.height * 0.04,
+                            ),
+                            child: TextFormField(
+                              controller: _dateController,
+                              cursorColor: Colors.grey[600],
+                              style: TextStyle(
+                                  color: Colors.grey[600],
+                                  fontSize: size.height * 0.02),
+                              decoration: InputDecoration(
+                                icon: Icon(
+                                  Icons.calendar_today,
+                                  color: backgroundColorRed,
+                                ),
+                                labelText: 'Votre date de naissance *',
+                                labelStyle: TextStyle(
+                                  color: Colors.grey[700],
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.grey[600],
+                                  ),
+                                ),
+                              ),
+                              onTap: () async {
+                                FocusScope.of(context)
+                                    .requestFocus(new FocusNode());
+                                await showDatePicker(
+                                  context: context,
+                                  locale: const Locale("fr", "FR"),
+                                  initialDate:
+                                      DateTime(DateTime.now().year - 19),
+                                  firstDate: DateTime(1900),
+                                  lastDate: DateTime(DateTime.now().year - 19),
+                                  builder:
+                                      (BuildContext context, Widget child) {
+                                    return Theme(
+                                      data: ThemeData(
+                                        colorScheme: ColorScheme(
+                                          primary: backgroundColorRed,
+                                          onPrimary: Colors.white,
+                                          primaryVariant: backgroundColorRed,
+                                          background: Colors.white,
+                                          onBackground: Colors.black,
+                                          secondary: backgroundColorRed,
+                                          onSecondary: Colors.white,
+                                          secondaryVariant: backgroundColorRed,
+                                          error: Colors.black,
+                                          onError: Colors.white,
+                                          surface: Colors.white,
+                                          onSurface: Colors.black,
+                                          brightness: Brightness.light,
+                                        ),
+                                      ),
+                                      child: child,
+                                    );
+                                  },
+                                ).then((date) {
+                                  setState(() {
+                                    birthdate = date;
+                                    _dateController.text =
+                                        DateFormat('dd/MM/yyyy').format(date);
+                                  });
+                                });
+                              },
+                            ),
+                          ),
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            padding: EdgeInsets.only(left: size.height * 0.04),
+                            child: Text(
+                              "Vous êtes :",
+                              style: TextStyle(
+                                  color: Colors.grey[700],
+                                  fontSize: size.width * 0.04),
+                            ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              genderWidget(FontAwesomeIcons.venus, "Female",
+                                  size.width, gender, () {
+                                setState(() {
+                                  gender = "Female";
+                                });
+                              }),
+                              genderWidget(FontAwesomeIcons.mars, "Male",
+                                  size.width, gender, () {
+                                setState(() {
+                                  gender = "Male";
+                                });
+                              }),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                "Femme",
+                                style: TextStyle(
+                                    color: Colors.grey[600],
+                                    fontSize: size.width * 0.04),
+                              ),
+                              SizedBox(
+                                width: size.width * 0.18,
+                              ),
+                              Text(
+                                "Homme",
+                                style: TextStyle(
+                                    color: Colors.grey[600],
+                                    fontSize: size.width * 0.04),
+                              ),
+                            ],
+                          ),
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            margin: EdgeInsets.only(top: size.height * 0.02),
+                            padding: EdgeInsets.only(left: size.height * 0.04),
+                            child: Text(
+                              "Vous cherchez :",
+                              style: TextStyle(
+                                  color: Colors.grey[700],
+                                  fontSize: size.width * 0.04),
+                            ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              interestedInWidget(
+                                  "Female", size.width, interestedIn, () {
+                                setState(() {
+                                  interestedIn = "Female";
+                                });
+                              }),
+                              interestedInWidget(
+                                  "Male", size.width, interestedIn, () {
+                                setState(() {
+                                  interestedIn = "Male";
+                                });
+                              }),
+                              interestedInWidget(
+                                  "Transgender", size.width, interestedIn, () {
+                                setState(() {
+                                  interestedIn = "Transgender";
+                                });
+                              }),
+                            ],
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: size.height * 0.03),
+                            child: GestureDetector(
+                              onTap: () async {
+                                if (isButtonEnabled(state)) {
+                                  await _getLocation();
+                                  _profileBloc.add(
+                                    SubmittedEvent(
+                                        name: _nameController.text,
+                                        birthdate: birthdate,
+                                        location: location,
+                                        gender: gender,
+                                        interestedIn: interestedIn,
+                                        photo: photo),
+                                  );
+                                }
+                              },
+                              child: Container(
+                                width: size.width * 0.4,
+                                height: size.height * 0.05,
+                                decoration: BoxDecoration(
+                                  color: isButtonEnabled(state)
+                                      ? loginButtonColor
+                                      : loginButtonColor.withOpacity(0.3),
+                                  borderRadius: BorderRadius.circular(20.0),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    "Enregistrer",
+                                    style: TextStyle(
+                                        fontSize: size.height * 0.02,
+                                        color: Colors.white),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
