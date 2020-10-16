@@ -1,4 +1,3 @@
-import 'package:certain/views/pages/mcq.dart';
 import 'package:flutter/material.dart';
 
 import 'package:certain/helpers/constants.dart';
@@ -21,7 +20,7 @@ class Tabs extends StatelessWidget {
         accentColor: Colors.white,
       ),
       child: DefaultTabController(
-        length: 5,
+        length: 4,
         child: Scaffold(
           appBar: PreferredSize(
             preferredSize: Size.fromHeight(kToolbarHeight),
@@ -36,8 +35,7 @@ class Tabs extends StatelessWidget {
                         Tab(icon: Icon(Icons.search)),
                         Tab(icon: Icon(Icons.people)),
                         Tab(icon: Icon(Icons.message)),
-                        Tab(icon: Icon(Icons.supervised_user_circle)),
-                        Tab(icon: Icon(Icons.question_answer))
+                        Tab(icon: Icon(Icons.supervised_user_circle))
                       ],
                     )
                   ],
@@ -58,8 +56,7 @@ class Tabs extends StatelessWidget {
               ),
               Parameters(
                 userId: userId,
-              ),
-              Mcq()
+              )
             ],
           ),
         ),

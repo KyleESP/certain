@@ -1,4 +1,8 @@
 import 'dart:io';
+import 'package:certain/blocs/authentication/authentication_bloc.dart';
+import 'package:certain/blocs/authentication/authentication_event.dart';
+import 'package:certain/blocs/login/login_event.dart';
+import 'package:certain/views/pages/add_question.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,8 +11,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:geolocator/geolocator.dart';
 
-import 'package:certain/blocs/authentication/authentication_bloc.dart';
-import 'package:certain/blocs/authentication/authentication_event.dart';
 import 'package:certain/blocs/profile/bloc.dart';
 
 import 'package:certain/helpers/constants.dart';
@@ -44,19 +46,6 @@ class _ProfileFormState extends State<ProfileForm> {
         await getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
 
     location = GeoPoint(position.latitude, position.longitude);
-  }
-
-  _onSubmitted() async {
-    await _getLocation();
-    _profileBloc.add(
-      Submitted(
-          name: _nameController.text,
-          birthdate: birthdate,
-          location: location,
-          gender: gender,
-          interestedIn: interestedIn,
-          photo: photo),
-    );
   }
 
   @override
@@ -278,9 +267,18 @@ class _ProfileFormState extends State<ProfileForm> {
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: size.height * 0.02),
                     child: GestureDetector(
-                      onTap: () {
+                      onTap: () async {
                         if (isButtonEnabled(state)) {
-                          _onSubmitted();
+                          await _getLocation();
+                          _profileBloc.add(
+                            SubmittedEvent(
+                                name: _nameController.text,
+                                birthdate: birthdate,
+                                location: location,
+                                gender: gender,
+                                interestedIn: interestedIn,
+                                photo: photo),
+                          );
                         } else {}
                       },
                       child: Container(
