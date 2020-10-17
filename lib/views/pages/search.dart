@@ -7,7 +7,7 @@ import 'package:geolocator/geolocator.dart';
 
 import 'package:certain/blocs/search/bloc.dart';
 
-import 'package:certain/models/my_user.dart';
+import 'package:certain/models/user_model.dart';
 import 'package:certain/repositories/search_repository.dart';
 import 'package:certain/repositories/user_repository.dart';
 
@@ -28,7 +28,7 @@ class _SearchState extends State<Search> {
   final SearchRepository _searchRepository = SearchRepository();
   final UserRepository _userRepository = UserRepository();
   SearchBloc _searchBloc;
-  MyUser _user, _currentUser;
+  UserModel _user, _currentUser;
   int difference;
 
   getDifference(GeoPoint userLocation) async {
@@ -78,9 +78,7 @@ class _SearchState extends State<Search> {
         }
         if (state is LoadCurrentUserState) {
           _currentUser = state.currentUser;
-
-          getDifference(_currentUser.location);
-          if (_currentUser.location == null) {
+          if (_currentUser == null || _currentUser.location == null) {
             return Text(
               "Il n'y a aucune personne",
               style: TextStyle(
@@ -88,7 +86,8 @@ class _SearchState extends State<Search> {
                   fontWeight: FontWeight.bold,
                   color: Colors.black),
             );
-          } else
+          } else {
+            getDifference(_currentUser.location);
             return profileWidget(
               padding: size.height * 0.035,
               photoHeight: size.height * 0.824,
@@ -146,8 +145,8 @@ class _SearchState extends State<Search> {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
                         iconWidget(Icons.clear, () {
-                          _searchBloc.add(
-                              DislikeUserEvent(widget.userId, _currentUser.uid));
+                          _searchBloc.add(DislikeUserEvent(
+                              widget.userId, _currentUser.uid));
                         }, size.height * 0.08, Colors.blue),
                         iconWidget(FontAwesomeIcons.solidHeart, () {
                           _searchBloc.add(LikeUserEvent(
@@ -164,6 +163,7 @@ class _SearchState extends State<Search> {
                 ),
               ),
             );
+          }
         } else
           return Container();
       },

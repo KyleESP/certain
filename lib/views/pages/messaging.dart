@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 import 'package:certain/blocs/messaging/bloc.dart';
 import 'package:certain/blocs/messaging/messaging_bloc.dart';
-import 'package:certain/models/message.dart';
-import 'package:certain/models/my_user.dart';
+
+import 'package:certain/models/message_model.dart';
+import 'package:certain/models/user_model.dart';
 import 'package:certain/repositories/messaging_repository.dart';
-import 'package:certain/helpers/constants.dart';
-import 'package:certain/views/widgets/message_widget.dart';
+
 import 'package:certain/views/widgets/photo_widget.dart';
 
+import 'package:certain/helpers/constants.dart';
+
 class Messaging extends StatefulWidget {
-  final MyUser currentUser, selectedUser;
+  final UserModel currentUser, selectedUser;
 
   const Messaging({this.currentUser, this.selectedUser});
 
@@ -48,7 +51,7 @@ class _MessagingState extends State<Messaging> {
   void _onFormSubmitted() {
     _messagingBloc.add(
       SendMessageEvent(
-        message: Message(
+        message: MessageModel(
           text: _messageTextController.text,
           senderId: widget.currentUser.uid,
           senderName: widget.currentUser.name,
@@ -198,6 +201,162 @@ class _MessagingState extends State<Messaging> {
           return Container();
         },
       ),
+    );
+  }
+}
+
+class MessageWidget extends StatefulWidget {
+  final String messageId, currentUserId;
+
+  const MessageWidget({this.messageId, this.currentUserId});
+
+  @override
+  _MessageWidgetState createState() => _MessageWidgetState();
+}
+
+class _MessageWidgetState extends State<MessageWidget> {
+  MessagingRepository _messagingRepository = MessagingRepository();
+
+  MessageModel _message;
+
+  Future getDetails() async {
+    _message = await _messagingRepository.getMessageDetail(
+        messageId: widget.messageId);
+
+    return _message;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
+    return FutureBuilder(
+      future: getDetails(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Container();
+        } else {
+          _message = snapshot.data;
+          return Column(
+            crossAxisAlignment: _message.senderId == widget.currentUserId
+                ? CrossAxisAlignment.end
+                : CrossAxisAlignment.start,
+            children: <Widget>[
+              _message.text != null
+                  ? Wrap(
+                crossAxisAlignment: WrapCrossAlignment.start,
+                direction: Axis.horizontal,
+                children: <Widget>[
+                  _message.senderId == widget.currentUserId
+                      ? Padding(
+                    padding: EdgeInsets.symmetric(
+                        vertical: size.height * 0.01),
+                    child: Text(
+                      timeago.format(
+                        _message.timestamp.toDate(),
+                      ),
+                    ),
+                  )
+                      : Container(),
+                  Padding(
+                    padding: EdgeInsets.all(size.height * 0.01),
+                    child: ConstrainedBox(
+                      constraints:
+                      BoxConstraints(maxWidth: size.width * 0.7),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: _message.senderId == widget.currentUserId
+                              ? backgroundColor
+                              : Colors.grey[400],
+                          borderRadius: _message.senderId ==
+                              widget.currentUserId
+                              ? BorderRadius.only(
+                            topLeft:
+                            Radius.circular(size.height * 0.02),
+                            topRight:
+                            Radius.circular(size.height * 0.02),
+                            bottomLeft:
+                            Radius.circular(size.height * 0.02),
+                          )
+                              : BorderRadius.only(
+                            topLeft:
+                            Radius.circular(size.height * 0.02),
+                            topRight:
+                            Radius.circular(size.height * 0.02),
+                            bottomRight:
+                            Radius.circular(size.height * 0.02),
+                          ),
+                        ),
+                        padding: EdgeInsets.all(size.height * 0.01),
+                        child: Text(
+                          _message.text,
+                          style: TextStyle(
+                              color: _message.senderId ==
+                                  widget.currentUserId
+                                  ? Colors.white
+                                  : Colors.black),
+                        ),
+                      ),
+                    ),
+                  ),
+                  _message.senderId == widget.currentUserId
+                      ? SizedBox()
+                      : Padding(
+                    padding: EdgeInsets.symmetric(
+                        vertical: size.height * 0.01),
+                    child: Text(timeago
+                        .format(_message.timestamp.toDate())),
+                  )
+                ],
+              )
+                  : Wrap(
+                crossAxisAlignment: WrapCrossAlignment.start,
+                direction: Axis.horizontal,
+                children: <Widget>[
+                  _message.senderId == widget.currentUserId
+                      ? Padding(
+                    padding: EdgeInsets.symmetric(
+                        vertical: size.height * 0.01),
+                    child: Text(timeago
+                        .format(_message.timestamp.toDate())),
+                  )
+                      : Container(),
+                  Padding(
+                    padding: EdgeInsets.all(size.height * 0.01),
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                          maxWidth: size.width * 0.7,
+                          maxHeight: size.width * 0.8),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(color: backgroundColor),
+                          borderRadius:
+                          BorderRadius.circular(size.height * 0.02),
+                        ),
+                        child: ClipRRect(
+                          borderRadius:
+                          BorderRadius.circular(size.height * 0.02),
+                          child: PhotoWidget(
+                            photoLink: _message.photoUrl,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  _message.senderId == widget.currentUserId
+                      ? SizedBox()
+                      : Padding(
+                    padding: EdgeInsets.symmetric(
+                        vertical: size.height * 0.01),
+                    child: Text(timeago
+                        .format(_message.timestamp.toDate())),
+                  )
+                ],
+              )
+            ],
+          );
+        }
+      },
     );
   }
 }

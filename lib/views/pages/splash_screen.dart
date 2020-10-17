@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:certain/helpers/constants.dart';
 
-class Splash extends StatelessWidget {
+class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;

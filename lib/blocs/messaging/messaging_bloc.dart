@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 
-import 'package:certain/models/message.dart';
+import 'package:certain/models/message_model.dart';
 import 'package:certain/repositories/messaging_repository.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -35,7 +35,7 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
     yield MessagingLoadedState(messageStream: messageStream);
   }
 
-  Stream<MessagingState> _mapSendMessageToState({Message message}) async* {
+  Stream<MessagingState> _mapSendMessageToState({MessageModel message}) async* {
     await _messagingRepository.sendMessage(message: message);
   }
 }

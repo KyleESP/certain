@@ -44,6 +44,7 @@ dependencies:
   random_string: ^2.1.0
   intl: ^0.16.1
   circle_button: ^1.0.1
+  dropdown_search: ^0.4.4
 
 dev_dependencies:
   flutter_test:

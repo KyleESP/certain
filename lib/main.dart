@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'blocs/authentication/authentication_bloc.dart';
 import 'blocs/authentication/authentication_event.dart';
-import 'blocs/my_bloc_observer.dart';
+import 'blocs/simple_bloc_observer.dart';
 
 import 'repositories/user_repository.dart';
 
@@ -13,7 +13,7 @@ import 'views/pages/home.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  Bloc.observer = MyBlocObserver();
+  Bloc.observer = SimpleBlocObserver();
   final UserRepository userRepository = UserRepository();
 
   runApp(BlocProvider(

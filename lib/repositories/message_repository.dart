@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'package:certain/models/message.dart';
-import 'package:certain/models/my_user.dart';
+import 'package:certain/models/message_model.dart';
+import 'package:certain/models/user_model.dart';
 
 class MessageRepository {
   final FirebaseFirestore _firebaseFirestore;
@@ -27,8 +27,8 @@ class MessageRepository {
         .delete();
   }
 
-  Future<MyUser> getUserDetail({userId}) async {
-    MyUser _user = MyUser();
+  Future<UserModel> getUserDetail({userId}) async {
+    UserModel _user = UserModel();
     var data;
 
     await _firebaseFirestore.collection('users').doc(userId).get().then((user) {
@@ -44,8 +44,8 @@ class MessageRepository {
     return _user;
   }
 
-  Future<Message> getLastMessage({currentUserId, selectedUserId}) async {
-    Message _message = Message();
+  Future<MessageModel> getLastMessage({currentUserId, selectedUserId}) async {
+    MessageModel _message = MessageModel();
     var data;
 
     await _firebaseFirestore

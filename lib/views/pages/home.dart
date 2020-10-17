@@ -8,11 +8,12 @@ import 'package:certain/repositories/user_repository.dart';
 
 import 'package:certain/views/pages/profile.dart';
 import 'package:certain/views/pages/splash_screen.dart';
-import 'package:certain/views/widgets/tabs_widget.dart';
+import 'file:///C:/Users/espky/AndroidStudioProjects/certain/lib/views/pages/tabs.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'login.dart';
+import 'mcq.dart';
 
 class Home extends StatelessWidget {
   final UserRepository _userRepository;
@@ -37,14 +38,17 @@ class Home extends StatelessWidget {
       home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
         builder: (context, state) {
           if (state is Uninitialized) {
-            return Splash();
+            return SplashScreen();
           }
           if (state is Authenticated) {
             return Tabs(
               userId: state.userId,
             );
           }
-          if (state is AuthenticatedButNotSet) {
+          if (state is AuthenticatedButMcqNotSet) {
+            return Mcq();
+          }
+          if (state is AuthenticatedButProfileNotSet) {
             return Profile(
               userRepository: _userRepository,
               userId: state.userId,

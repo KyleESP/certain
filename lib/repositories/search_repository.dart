@@ -1,4 +1,4 @@
-import 'package:certain/models/my_user.dart';
+import 'package:certain/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SearchRepository {
@@ -56,7 +56,7 @@ class SearchRepository {
   }
 
   Future getUserInterests(userId) async {
-    MyUser currentUser = MyUser();
+    UserModel currentUser = UserModel();
     var data;
 
     await _firebaseFirestore.collection('users').doc(userId).get().then((user) {
@@ -70,10 +70,10 @@ class SearchRepository {
     return currentUser;
   }
 
-  Future<MyUser> getCurrentUser(userId) async {
-    MyUser _user = MyUser();
+  Future<UserModel> getCurrentUser(userId) async {
+    UserModel _user;
     List<String> usersNotToShowList = await _getUsersNotToShowList(userId);
-    MyUser currentUser = await getUserInterests(userId);
+    UserModel currentUser = await getUserInterests(userId);
     var data;
 
     await _firebaseFirestore.collection('users').get().then((users) {
@@ -83,6 +83,7 @@ class SearchRepository {
             (user.id != userId) &&
             (currentUser.interestedIn == data['gender']) &&
             (data['interestedIn'] == currentUser.gender)) {
+          _user = new UserModel();
           _user.uid = user.id;
           _user.name = data['name'];
           _user.photo = data['photoUrl'];

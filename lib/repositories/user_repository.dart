@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:certain/models/my_user.dart';
+import 'package:certain/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -20,7 +20,7 @@ class UserRepository {
   }
 
   Future<bool> userExists() async {
-    bool userExists;
+    bool userExists = false;
     await _firebaseFirestore
         .collection('users')
         .doc(_firebaseAuth.currentUser.uid)
@@ -30,6 +30,20 @@ class UserRepository {
     });
 
     return userExists;
+  }
+
+  Future<bool> userMcqExists() async {
+    bool mcqExists = false;
+    await _firebaseFirestore
+        .collection('users')
+        .doc(_firebaseAuth.currentUser.uid)
+        .collection('mcq')
+        .get()
+        .then((mcq) {
+      mcqExists = mcq.docs.isNotEmpty;
+    });
+
+    return mcqExists;
   }
 
   Future<void> signInWithEmail(String email, String password) {
@@ -45,8 +59,8 @@ class UserRepository {
     return await _firebaseAuth.signOut();
   }
 
-  Future<MyUser> getUser() async {
-    MyUser _user = MyUser();
+  Future<UserModel> getUser() async {
+    UserModel _user = UserModel();
 
     await _firebaseFirestore
         .collection('users')

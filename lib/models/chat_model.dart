@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Chat {
+class ChatModel {
   String name, photoUrl, lastMessagePhoto, lastMessage;
   Timestamp timestamp;
 
-  Chat(
+  ChatModel(
       {this.name,
       this.photoUrl,
       this.lastMessagePhoto,
