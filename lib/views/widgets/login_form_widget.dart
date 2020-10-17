@@ -1,3 +1,4 @@
+import 'package:certain/helpers/functions.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -80,41 +81,18 @@ class _LoginFormState extends State<LoginForm> {
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
         if (state.isFailure) {
-          Scaffold.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(
-                content: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text("Connexion échouée"),
-                    Icon(Icons.error),
-                  ],
-                ),
-              ),
-            );
+          scaffoldLoading(context, "Connexion échouée", Icon(Icons.error));
         }
-
         if (state.isSubmitting) {
-          Scaffold.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(
-                content: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text("Connexion..."),
-                    CircularProgressIndicator(
-                      backgroundColor: loginButtonColor,
-                      valueColor:
-                          AlwaysStoppedAnimation<Color>(backgroundColorOrange),
-                    ),
-                  ],
-                ),
-              ),
-            );
+          scaffoldLoading(
+              context,
+              "Connexion...",
+              CircularProgressIndicator(
+                backgroundColor: loginButtonColor,
+                valueColor:
+                    AlwaysStoppedAnimation<Color>(backgroundColorOrange),
+              ));
         }
-
         if (state.isSuccess) {
           BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
         }
@@ -246,7 +224,6 @@ class _LoginFormState extends State<LoginForm> {
                       ],
                     ),
                   ),
-
                   Container(
                     padding: EdgeInsets.all(size.height * 0.02),
                     margin: EdgeInsets.only(top: size.height * 0.1),
@@ -256,16 +233,16 @@ class _LoginFormState extends State<LoginForm> {
                           TextSpan(
                             text: 'Vous n\'êtes pas encore inscrit ? ',
                             style: TextStyle(
-                                color: Colors.white,
-                                fontSize: size.height * 0.02,
+                              color: Colors.white,
+                              fontSize: size.height * 0.02,
                             ),
                           ),
                           TextSpan(
                             text: 'Inscrivez-vous',
                             style: TextStyle(
-                                decoration: TextDecoration.underline,
-                                color: loginButtonColor,
-                                fontSize: size.height * 0.02,
+                              decoration: TextDecoration.underline,
+                              color: loginButtonColor,
+                              fontSize: size.height * 0.02,
                             ),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {

@@ -29,10 +29,13 @@ class AuthenticationBloc
       final isSignedIn = await _userRepository.isSignedIn();
       if (isSignedIn) {
         final uid = _userRepository.getUserId();
-        final isFirstTime = await _userRepository.userExists();
+        final userExists = await _userRepository.userExists();
+        final mcqExists = await _userRepository.userMcqExists();
 
-        if (!isFirstTime) {
-          yield AuthenticatedButNotSet(uid);
+        if (!userExists) {
+          yield AuthenticatedButProfileNotSet(uid);
+        } else if (!mcqExists) {
+          yield AuthenticatedButMcqNotSet();
         } else {
           yield Authenticated(uid);
         }
@@ -46,9 +49,12 @@ class AuthenticationBloc
 
   Stream<AuthenticationState> _mapLoggedInToState() async* {
     final userExists = await _userRepository.userExists();
+    final mcqExists = await _userRepository.userMcqExists();
 
     if (!userExists) {
-      yield AuthenticatedButNotSet(_userRepository.getUserId());
+      yield AuthenticatedButProfileNotSet(_userRepository.getUserId());
+    } else if (!mcqExists) {
+      yield AuthenticatedButMcqNotSet();
     } else {
       yield Authenticated(_userRepository.getUserId());
     }

@@ -5,6 +5,7 @@ import 'package:certain/blocs/authentication/authentication_event.dart';
 import 'package:certain/blocs/parameters/parameters_bloc.dart';
 import 'package:certain/blocs/parameters/parameters_event.dart';
 import 'package:certain/blocs/parameters/parameters_state.dart';
+import 'package:certain/helpers/functions.dart';
 import 'package:certain/models/my_user.dart';
 import 'package:certain/repositories/user_repository.dart';
 import 'package:certain/views/widgets/gender_widget.dart';
@@ -56,19 +57,7 @@ class _ParametersState extends State<Parameters> {
         cubit: _parametersBloc,
         listener: (context, state) {
           if (state.isFailure) {
-            Scaffold.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar(
-                SnackBar(
-                  content: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text('Erreur lors de la mise à jour.'),
-                      Icon(Icons.error)
-                    ],
-                  ),
-                ),
-              );
+            scaffoldLoading(context, "Mise à jour échouée", Icon(Icons.error));
           }
         },
         child: BlocBuilder<ParametersBloc, ParametersState>(

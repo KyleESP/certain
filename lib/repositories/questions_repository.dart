@@ -12,42 +12,35 @@ class QuestionsRepository {
         _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
 
   Future<List<Question>> getQuestions() async {
-    List<Question> questionList;
+    List<Question> questionList = [];
     var data;
-    await _firebaseFirestore.collection("mcq").get().then((questions) {
+    await _firebaseFirestore.collection("questions").get().then((questions) {
       for (var question in questions.docs) {
         data = question.data();
         questionList.add(new Question(
+            id: question.id,
             question: data['question'],
-            option1: data['option1'],
-            option2: data['option2'],
-            option3: data['option3']));
+            option1: data['option_1'],
+            option2: data['option_2'],
+            option3: data['option_3']));
       }
     });
 
     return questionList;
   }
 
-  Future<void> addQuizData(Map quizData) async {
-    await _firebaseFirestore
-        .collection("users")
-        .doc(_firebaseAuth.currentUser.uid)
-        .set(quizData);
-  }
-
-  Future<void> addQuestionData(quizData) async {
-    /*await _firebaseFirestore
-        .collection("quiz")
-        .doc(quizId)
-        .collection("qna")
-        .add(quizData);*/
+  createMcq(Map<String, Map<String, dynamic>> mcq) async {
+    await Future.forEach(mcq.entries, (MapEntry entry) async {
+      await _firebaseFirestore
+          .collection("users")
+          .doc(_firebaseAuth.currentUser.uid)
+          .collection("mcq")
+          .doc(entry.key)
+          .set(entry.value);
+    });
   }
 
   getQuestionData(String quizId) async {
-    return await _firebaseFirestore
-        .collection("quiz")
-        .doc(quizId)
-        .collection("qna")
-        .get();
+    return null;
   }
 }

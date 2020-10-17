@@ -1,6 +1,6 @@
 import 'dart:io';
-import 'package:certain/blocs/authentication/authentication_bloc.dart';
-import 'package:certain/blocs/authentication/authentication_event.dart';
+
+import 'package:certain/helpers/functions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -10,10 +10,12 @@ import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:circle_button/circle_button.dart';
+import 'package:certain/helpers/constants.dart';
 
+import 'package:certain/blocs/authentication/authentication_bloc.dart';
+import 'package:certain/blocs/authentication/authentication_event.dart';
 import 'package:certain/blocs/profile/bloc.dart';
 
-import 'package:certain/helpers/constants.dart';
 import 'package:certain/views/widgets/gender_widget.dart';
 import 'package:certain/views/widgets/interestedIn_widget.dart';
 
@@ -26,7 +28,7 @@ class _ProfileFormState extends State<ProfileForm> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
 
-  String gender = "Female", interestedIn = "Female";
+  String gender = "Male", interestedIn = "Female";
   DateTime birthdate;
   File photo;
   GeoPoint location;
@@ -68,37 +70,20 @@ class _ProfileFormState extends State<ProfileForm> {
     Size size = MediaQuery.of(context).size;
 
     return BlocListener<ProfileBloc, ProfileState>(
-      //cubit: _profileBloc,
       listener: (context, state) {
         if (state.isFailure) {
-          Scaffold.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(
-                content: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text('Création du profil échoué'),
-                    Icon(Icons.error)
-                  ],
-                ),
-              ),
-            );
+          scaffoldLoading(
+              context, "Création du profil échouée", Icon(Icons.error));
         }
         if (state.isSubmitting) {
-          Scaffold.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(
-                content: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text('Création du profil...'),
-                    CircularProgressIndicator()
-                  ],
-                ),
-              ),
-            );
+          scaffoldLoading(
+              context,
+              "Création du profil...",
+              CircularProgressIndicator(
+                backgroundColor: loginButtonColor,
+                valueColor:
+                    AlwaysStoppedAnimation<Color>(backgroundColorOrange),
+              ));
         }
         if (state.isSuccess) {
           BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());

@@ -13,6 +13,7 @@ import 'package:certain/views/widgets/tabs_widget.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'login.dart';
+import 'mcq.dart';
 
 class Home extends StatelessWidget {
   final UserRepository _userRepository;
@@ -44,7 +45,10 @@ class Home extends StatelessWidget {
               userId: state.userId,
             );
           }
-          if (state is AuthenticatedButNotSet) {
+          if (state is AuthenticatedButMcqNotSet) {
+            return Mcq();
+          }
+          if (state is AuthenticatedButProfileNotSet) {
             return Profile(
               userRepository: _userRepository,
               userId: state.userId,

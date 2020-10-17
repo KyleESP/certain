@@ -20,7 +20,7 @@ class UserRepository {
   }
 
   Future<bool> userExists() async {
-    bool userExists;
+    bool userExists = false;
     await _firebaseFirestore
         .collection('users')
         .doc(_firebaseAuth.currentUser.uid)
@@ -30,6 +30,20 @@ class UserRepository {
     });
 
     return userExists;
+  }
+
+  Future<bool> userMcqExists() async {
+    bool mcqExists = false;
+    await _firebaseFirestore
+        .collection('users')
+        .doc(_firebaseAuth.currentUser.uid)
+        .collection('mcq')
+        .get()
+        .then((mcq) {
+      mcqExists = mcq.docs.isNotEmpty;
+    });
+
+    return mcqExists;
   }
 
   Future<void> signInWithEmail(String email, String password) {

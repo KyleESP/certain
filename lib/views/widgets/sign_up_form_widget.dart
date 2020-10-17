@@ -1,3 +1,4 @@
+import 'package:certain/helpers/functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -49,33 +50,18 @@ class _SignUpFormState extends State<SignUpForm> {
     return BlocListener<SignUpBloc, SignUpState>(
       listener: (BuildContext context, SignUpState state) {
         if (state.isFailure) {
-          Scaffold.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(
-                content: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text("Création échouée"),
-                    Icon(Icons.error),
-                  ],
-                ),
-              ),
-            );
+          scaffoldLoading(
+              context, "Création du compte échouée", Icon(Icons.error));
         }
         if (state.isSubmitting) {
-          Scaffold.of(context)
-            ..showSnackBar(
-              SnackBar(
-                content: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text("Création de votre compte..."),
-                    CircularProgressIndicator(),
-                  ],
-                ),
-              ),
-            );
+          scaffoldLoading(
+              context,
+              "Création du compte...",
+              CircularProgressIndicator(
+                backgroundColor: loginButtonColor,
+                valueColor:
+                    AlwaysStoppedAnimation<Color>(backgroundColorOrange),
+              ));
         }
         if (state.isSuccess) {
           BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
