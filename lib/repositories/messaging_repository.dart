@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:uuid/uuid.dart';
 
-import 'package:certain/models/message.dart';
+import 'package:certain/models/message_model.dart';
 
 class MessagingRepository {
   final FirebaseFirestore _firebaseFirestore;
@@ -14,7 +14,7 @@ class MessagingRepository {
       : _firebaseStorage = firebaseStorage ?? FirebaseStorage.instance,
         _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
 
-  Future sendMessage({Message message}) async {
+  Future sendMessage({MessageModel message}) async {
     StorageUploadTask storageUploadTask;
     DocumentReference messageRef =
         _firebaseFirestore.collection('messages').doc();
@@ -111,8 +111,8 @@ class MessagingRepository {
         .snapshots();
   }
 
-  Future<Message> getMessageDetail({messageId}) async {
-    Message _message = Message();
+  Future<MessageModel> getMessageDetail({messageId}) async {
+    MessageModel _message = MessageModel();
     var data;
 
     await _firebaseFirestore

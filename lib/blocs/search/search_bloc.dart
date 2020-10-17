@@ -5,7 +5,7 @@ import 'bloc.dart';
 
 import 'package:bloc/bloc.dart';
 
-import 'package:certain/models/my_user.dart';
+import 'package:certain/models/user_model.dart';
 import 'package:certain/repositories/search_repository.dart';
 
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
@@ -41,7 +41,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   Stream<SearchState> _mapLoadUserToState() async* {
     yield LoadingState();
 
-    MyUser user = await _userRepository.getUser();
+    UserModel user = await _userRepository.getUser();
 
     yield LoadUserState(user);
   }
@@ -67,7 +67,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       yield HasMatchedState();
     }
 
-    MyUser currentUser = await _searchRepository.getCurrentUser(currentUserId);
+    UserModel currentUser = await _searchRepository.getCurrentUser(currentUserId);
 
     yield LoadCurrentUserState(currentUser);
   }
@@ -76,7 +76,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       {String currentUserId, String selectedUserId}) async* {
     yield LoadingState();
 
-    MyUser currentUser =
+    UserModel currentUser =
         await _searchRepository.dislikeUser(currentUserId, selectedUserId);
 
     yield LoadCurrentUserState(currentUser);
@@ -86,7 +86,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       {String currentUserId}) async* {
     yield LoadingState();
 
-    MyUser currentUser = await _searchRepository.getCurrentUser(currentUserId);
+    UserModel currentUser = await _searchRepository.getCurrentUser(currentUserId);
 
     yield LoadCurrentUserState(currentUser);
   }

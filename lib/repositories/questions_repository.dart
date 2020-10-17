@@ -1,4 +1,4 @@
-import 'package:certain/models/question.dart';
+import 'package:certain/models/question_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -11,13 +11,13 @@ class QuestionsRepository {
       : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
         _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
 
-  Future<List<Question>> getQuestions() async {
-    List<Question> questionList = [];
+  Future<List<QuestionModel>> getQuestions() async {
+    List<QuestionModel> questionList = [];
     var data;
     await _firebaseFirestore.collection("questions").get().then((questions) {
       for (var question in questions.docs) {
         data = question.data();
-        questionList.add(new Question(
+        questionList.add(new QuestionModel(
             id: question.id,
             question: data['question'],
             option1: data['option_1'],

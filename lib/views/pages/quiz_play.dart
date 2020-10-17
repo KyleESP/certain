@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'package:certain/models/question.dart';
+import 'package:certain/models/question_model.dart';
 import 'package:certain/repositories/questions_repository.dart';
 import 'package:certain/views/widgets/quiz_play_widgets.dart';
 
@@ -46,8 +46,8 @@ class _QuizPlayState extends State<QuizPlay> {
     super.initState();
   }
 
-  Question getQuestionModelFromDatasnapshot(DocumentSnapshot questionSnapshot) {
-    Question questionModel = new Question();
+  QuestionModel getQuestionModelFromDatasnapshot(DocumentSnapshot questionSnapshot) {
+    QuestionModel questionModel = new QuestionModel();
 
     questionModel.question = questionSnapshot.data()["question"];
 
@@ -163,7 +163,7 @@ class _InfoHeaderState extends State<InfoHeader> {
 }
 
 class QuizPlayTile extends StatefulWidget {
-  final Question questionModel;
+  final QuestionModel questionModel;
   final int index;
 
   QuizPlayTile({@required this.questionModel, @required this.index});
@@ -290,3 +290,4 @@ class _QuizPlayTileState extends State<QuizPlayTile> {
     );
   }
 }
+

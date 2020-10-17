@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:certain/models/my_user.dart';
+import 'package:certain/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -59,8 +59,8 @@ class UserRepository {
     return await _firebaseAuth.signOut();
   }
 
-  Future<MyUser> getUser() async {
-    MyUser _user = MyUser();
+  Future<UserModel> getUser() async {
+    UserModel _user = UserModel();
 
     await _firebaseFirestore
         .collection('users')

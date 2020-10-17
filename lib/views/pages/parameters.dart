@@ -6,7 +6,7 @@ import 'package:certain/blocs/parameters/parameters_bloc.dart';
 import 'package:certain/blocs/parameters/parameters_event.dart';
 import 'package:certain/blocs/parameters/parameters_state.dart';
 import 'package:certain/helpers/functions.dart';
-import 'package:certain/models/my_user.dart';
+import 'package:certain/models/user_model.dart';
 import 'package:certain/repositories/user_repository.dart';
 import 'package:certain/views/widgets/gender_widget.dart';
 import 'package:certain/views/widgets/loader_widget.dart';
@@ -29,7 +29,7 @@ class Parameters extends StatefulWidget {
 class _ParametersState extends State<Parameters> {
   final UserRepository _userRepository = UserRepository();
   ParametersBloc _parametersBloc;
-  MyUser _user;
+  UserModel _user;
   String _interestedIn;
   File photo;
   int _maxDistance;
@@ -57,7 +57,7 @@ class _ParametersState extends State<Parameters> {
         cubit: _parametersBloc,
         listener: (context, state) {
           if (state.isFailure) {
-            scaffoldLoading(context, "Mise à jour échouée", Icon(Icons.error));
+            scaffoldInfo(context, "Mise à jour échouée", Icon(Icons.error));
           }
         },
         child: BlocBuilder<ParametersBloc, ParametersState>(

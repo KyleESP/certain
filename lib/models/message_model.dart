@@ -2,12 +2,12 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Message {
+class MessageModel {
   String senderName, senderId, selectedUserId, text, photoUrl;
   File photo;
   Timestamp timestamp;
 
-  Message(
+  MessageModel(
       {this.senderName,
       this.senderId,
       this.selectedUserId,

@@ -1,4 +1,4 @@
-import 'package:certain/models/question.dart';
+import 'package:certain/models/question_model.dart';
 import 'package:flutter/cupertino.dart';
 
 @immutable
@@ -39,7 +39,7 @@ class QuestionsInitialState extends QuestionsState {}
 class LoadingState extends QuestionsState {}
 
 class LoadQuestionsState extends QuestionsState {
-  final List<Question> questionList;
+  final List<QuestionModel> questionList;
 
   LoadQuestionsState(this.questionList);
 }

@@ -1,4 +1,4 @@
-class Question {
+class QuestionModel {
   String id;
   String question;
   String option1;
@@ -7,7 +7,7 @@ class Question {
   String correctOption;
   bool answered;
 
-  Question({this.id, this.question, this.option1, this.option2, this.option3}) {
+  QuestionModel({this.id, this.question, this.option1, this.option2, this.option3}) {
     answered = false;
     correctOption = option1;
   }
@@ -16,7 +16,7 @@ class Question {
     return '#${this.id} ${this.question}';
   }
 
-  bool isEqual(Question model) {
+  bool isEqual(QuestionModel model) {
     return this?.id == model?.id;
   }
 

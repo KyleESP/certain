@@ -6,11 +6,10 @@ import 'package:geolocator/geolocator.dart';
 
 import 'package:certain/blocs/matches/bloc.dart';
 
-import 'package:certain/models/my_user.dart';
+import 'package:certain/models/user_model.dart';
 import 'package:certain/repositories/matches_repository.dart';
 
 import 'package:certain/views/widgets/icon_widget.dart';
-import 'package:certain/views/widgets/page_turn_widget.dart';
 import 'package:certain/views/widgets/profile_widget.dart';
 import 'package:certain/views/widgets/user_gender_widget.dart';
 
@@ -84,9 +83,9 @@ class _MatchesState extends State<Matches> {
                         (BuildContext context, int index) {
                           return GestureDetector(
                             onTap: () async {
-                              MyUser selectedUser = await matchesRepository
+                              UserModel selectedUser = await matchesRepository
                                   .getUserDetails(user[index].id);
-                              MyUser currentUser = await matchesRepository
+                              UserModel currentUser = await matchesRepository
                                   .getUserDetails(widget.userId);
                               await getDifference(selectedUser.location);
                               showDialog(
@@ -169,13 +168,18 @@ class _MatchesState extends State<Matches> {
                                                         selectedUser:
                                                             selectedUser.uid),
                                                   );
-                                                  pageTurn(
-                                                      Messaging(
-                                                          currentUser:
-                                                              currentUser,
-                                                          selectedUser:
-                                                              selectedUser),
-                                                      context);
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) {
+                                                        return Messaging(
+                                                            currentUser:
+                                                                currentUser,
+                                                            selectedUser:
+                                                                selectedUser);
+                                                      },
+                                                    ),
+                                                  );
                                                 }, size.height * 0.04,
                                                     Colors.white),
                                               ),

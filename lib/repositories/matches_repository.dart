@@ -1,4 +1,4 @@
-import 'package:certain/models/my_user.dart';
+import 'package:certain/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MatchesRepository {
@@ -15,8 +15,8 @@ class MatchesRepository {
         .snapshots();
   }
 
-  Future<MyUser> getUserDetails(userId) async {
-    MyUser _user = MyUser();
+  Future<UserModel> getUserDetails(userId) async {
+    UserModel _user = UserModel();
     var data;
 
     await _firestore.collection('users').doc(userId).get().then((user) {

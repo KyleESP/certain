@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:certain/models/my_user.dart';
+import 'package:certain/models/user_model.dart';
 
 import 'bloc.dart';
 
@@ -30,7 +30,7 @@ class ParametersBloc extends Bloc<ParametersEvent, ParametersState> {
 
   Stream<ParametersState> _mapLoadUserToState() async* {
     yield LoadingState();
-    MyUser user = await _userRepository.getUser();
+    UserModel user = await _userRepository.getUser();
 
     yield LoadUserState(user);
   }

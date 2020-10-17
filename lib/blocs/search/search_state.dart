@@ -1,4 +1,4 @@
-import 'package:certain/models/my_user.dart';
+import 'package:certain/models/user_model.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class SearchState extends Equatable {
@@ -12,13 +12,13 @@ class InitialSearchState extends SearchState {}
 class LoadingState extends SearchState {}
 
 class LoadUserState extends SearchState {
-  final MyUser user;
+  final UserModel user;
 
   LoadUserState(this.user);
 }
 
 class LoadCurrentUserState extends SearchState {
-  final MyUser currentUser;
+  final UserModel currentUser;
 
   LoadCurrentUserState(this.currentUser);
 

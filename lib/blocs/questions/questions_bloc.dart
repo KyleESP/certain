@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:certain/models/question.dart';
+import 'package:certain/models/question_model.dart';
 import 'package:certain/repositories/questions_repository.dart';
 
 import 'bloc.dart';
@@ -25,7 +25,7 @@ class QuestionsBloc extends Bloc<QuestionsEvent, QuestionsState> {
   Stream<QuestionsState> _mapLoadQuestionsToState() async* {
     yield LoadingState();
 
-    List<Question> questionList = await _questionsRepository.getQuestions();
+    List<QuestionModel> questionList = await _questionsRepository.getQuestions();
 
     yield LoadQuestionsState(questionList);
   }

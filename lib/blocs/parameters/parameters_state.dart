@@ -1,4 +1,4 @@
-import 'package:certain/models/my_user.dart';
+import 'package:certain/models/user_model.dart';
 import 'package:flutter/cupertino.dart';
 
 @immutable
@@ -19,7 +19,7 @@ class ParametersInitialState extends ParametersState {}
 class LoadingState extends ParametersState {}
 
 class LoadUserState extends ParametersState {
-  final MyUser user;
+  final UserModel user;
 
   LoadUserState(this.user);
 }

@@ -1,4 +1,4 @@
-import 'package:certain/models/message.dart';
+import 'package:certain/models/message_model.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class MessagingEvent extends Equatable {
@@ -9,7 +9,7 @@ abstract class MessagingEvent extends Equatable {
 }
 
 class SendMessageEvent extends MessagingEvent {
-  final Message message;
+  final MessageModel message;
 
   SendMessageEvent({this.message});
 
