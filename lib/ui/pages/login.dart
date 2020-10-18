@@ -8,7 +8,7 @@ import 'package:certain/blocs/login/bloc.dart';
 
 import 'package:certain/repositories/user_repository.dart';
 
-import 'package:certain/views/pages/sign_up.dart';
+import 'package:certain/ui/pages/sign_up.dart';
 
 import 'package:certain/helpers/functions.dart';
 import 'package:certain/helpers/constants.dart';

@@ -1,19 +1,18 @@
+import 'package:certain/helpers/functions.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:geolocator/geolocator.dart';
 
 import 'package:certain/blocs/matches/bloc.dart';
 
 import 'package:certain/models/user_model.dart';
 import 'package:certain/repositories/matches_repository.dart';
 
-import 'package:certain/views/widgets/icon_widget.dart';
-import 'package:certain/views/widgets/profile_widget.dart';
-import 'package:certain/views/widgets/user_gender_widget.dart';
-
-import 'messaging.dart';
+import 'package:certain/ui/widgets/icon_widget.dart';
+import 'package:certain/ui/widgets/profile_widget.dart';
+import 'package:certain/ui/widgets/user_gender_widget.dart';
+import 'package:certain/ui/pages/play_mcq.dart';
 
 class Matches extends StatefulWidget {
   final String userId;
@@ -27,17 +26,7 @@ class Matches extends StatefulWidget {
 class _MatchesState extends State<Matches> {
   MatchesRepository matchesRepository = MatchesRepository();
   MatchesBloc _matchesBloc;
-
   int difference;
-
-  getDifference(GeoPoint userLocation) async {
-    Position position = await getCurrentPosition();
-
-    double location = distanceBetween(userLocation.latitude,
-        userLocation.longitude, position.latitude, position.longitude);
-
-    difference = location.toInt();
-  }
 
   @override
   void initState() {
@@ -87,7 +76,8 @@ class _MatchesState extends State<Matches> {
                                   .getUserDetails(user[index].id);
                               UserModel currentUser = await matchesRepository
                                   .getUserDetails(widget.userId);
-                              await getDifference(selectedUser.location);
+                              difference =
+                                  await getDifference(selectedUser.location);
                               showDialog(
                                 context: context,
                                 builder: (BuildContext context) => Dialog(
@@ -161,25 +151,15 @@ class _MatchesState extends State<Matches> {
                                                     size.height * 0.02),
                                                 child: iconWidget(Icons.message,
                                                     () {
-                                                  _matchesBloc.add(
-                                                    OpenChatEvent(
-                                                        currentUser:
-                                                            widget.userId,
-                                                        selectedUser:
-                                                            selectedUser.uid),
-                                                  );
-                                                  Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) {
-                                                        return Messaging(
-                                                            currentUser:
-                                                                currentUser,
-                                                            selectedUser:
-                                                                selectedUser);
-                                                      },
-                                                    ),
-                                                  );
+                                                  Navigator.push(context,
+                                                      MaterialPageRoute(
+                                                    builder: (context) {
+                                                      return PlayMcq(
+                                                          user: currentUser,
+                                                          selectedUser:
+                                                              selectedUser);
+                                                    },
+                                                  ));
                                                 }, size.height * 0.04,
                                                     Colors.white),
                                               ),

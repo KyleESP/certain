@@ -19,23 +19,13 @@ class MatchesBloc extends Bloc<MatchesEvent, MatchesState> {
     if (event is LoadListsEvent) {
       yield* _mapLoadListToState(currentUserId: event.userId);
     }
-    if (event is DeleteUserEvent) {
-      yield* _mapDeleteUserToState(
+    if (event is RemoveMatchEvent) {
+      yield* _mapRemoveMatchToState(
           currentUserId: event.currentUser, selectedUserId: event.selectedUser);
     }
     if (event is OpenChatEvent) {
       yield* _mapOpenChatToState(
           currentUserId: event.currentUser, selectedUserId: event.selectedUser);
-    }
-    if (event is AcceptUserEvent) {
-      yield* _mapAcceptUserToState(
-        currentUserId: event.currentUser,
-        selectedUserId: event.selectedUser,
-        currentUserName: event.currentUserName,
-        currentUserPhotoUrl: event.currentUserPhotoUrl,
-        selectedUserName: event.selectedUserName,
-        selectedUserPhotoUrl: event.selectedUserPhotoUrl,
-      );
     }
   }
 
@@ -43,35 +33,19 @@ class MatchesBloc extends Bloc<MatchesEvent, MatchesState> {
     yield LoadingState();
 
     Stream<QuerySnapshot> matchedList =
-        _matchesRepository.getMatchedList(currentUserId);
+        _matchesRepository.getMatchList(currentUserId);
 
     yield LoadUserState(matchedList: matchedList);
   }
 
-  Stream<MatchesState> _mapDeleteUserToState(
+  Stream<MatchesState> _mapRemoveMatchToState(
       {String currentUserId, String selectedUserId}) async* {
-    _matchesRepository.deleteUser(currentUserId, selectedUserId);
+    _matchesRepository.removeMatch(currentUserId, selectedUserId);
   }
 
   Stream<MatchesState> _mapOpenChatToState(
       {String currentUserId, String selectedUserId}) async* {
     _matchesRepository.openChat(
         currentUserId: currentUserId, selectedUserId: selectedUserId);
-  }
-
-  Stream<MatchesState> _mapAcceptUserToState(
-      {String currentUserId,
-      String selectedUserId,
-      String currentUserName,
-      String currentUserPhotoUrl,
-      String selectedUserName,
-      String selectedUserPhotoUrl}) async* {
-    await _matchesRepository.selectUser(
-        currentUserId,
-        selectedUserId,
-        currentUserName,
-        currentUserPhotoUrl,
-        selectedUserName,
-        selectedUserPhotoUrl);
   }
 }

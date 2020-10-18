@@ -11,6 +11,7 @@ class UserModel {
   int maxDistance;
   int minAge;
   int maxAge;
+  List<dynamic> mcq;
 
   UserModel(
       {this.uid,
@@ -22,5 +23,6 @@ class UserModel {
       this.location,
       this.maxDistance,
       this.minAge,
-      this.maxAge});
+      this.maxAge,
+      this.mcq});
 }

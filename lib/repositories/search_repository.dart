@@ -115,6 +115,12 @@ class SearchRepository {
       }
     });
 
+    await usersCollection.collection('chats').get().then((docs) {
+      for (var doc in docs.docs) {
+        usersNotToShowList.add(doc.id);
+      }
+    });
+
     await usersCollection.collection('dislikeList').get().then((docs) {
       for (var doc in docs.docs) {
         usersNotToShowList.add(doc.id);
@@ -129,5 +135,4 @@ class SearchRepository {
 
     return usersNotToShowList;
   }
-
 }

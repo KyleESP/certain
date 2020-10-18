@@ -1,9 +1,7 @@
-import 'package:certain/views/widgets/loader_widget.dart';
+import 'package:certain/ui/widgets/loader_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:geolocator/geolocator.dart';
 
 import 'package:certain/blocs/search/bloc.dart';
 
@@ -11,9 +9,9 @@ import 'package:certain/models/user_model.dart';
 import 'package:certain/repositories/search_repository.dart';
 import 'package:certain/repositories/user_repository.dart';
 
-import 'package:certain/views/widgets/icon_widget.dart';
-import 'package:certain/views/widgets/profile_widget.dart';
-import 'package:certain/views/widgets/user_gender_widget.dart';
+import 'package:certain/ui/widgets/icon_widget.dart';
+import 'package:certain/ui/widgets/profile_widget.dart';
+import 'package:certain/ui/widgets/user_gender_widget.dart';
 
 class Search extends StatefulWidget {
   final String userId;
@@ -30,15 +28,6 @@ class _SearchState extends State<Search> {
   SearchBloc _searchBloc;
   UserModel _user, _currentUser;
   int difference;
-
-  getDifference(GeoPoint userLocation) async {
-    Position position = await getCurrentPosition();
-
-    double location = distanceBetween(userLocation.latitude,
-        userLocation.longitude, position.latitude, position.longitude);
-
-    difference = location.toInt();
-  }
 
   @override
   void initState() {
@@ -78,7 +67,8 @@ class _SearchState extends State<Search> {
         }
         if (state is LoadCurrentUserState) {
           _currentUser = state.currentUser;
-          if (_currentUser == null || _currentUser.location == null) {
+          difference = state.difference;
+          if (_currentUser == null) {
             return Text(
               "Il n'y a aucune personne",
               style: TextStyle(
@@ -87,7 +77,6 @@ class _SearchState extends State<Search> {
                   color: Colors.black),
             );
           } else {
-            getDifference(_currentUser.location);
             return profileWidget(
               padding: size.height * 0.035,
               photoHeight: size.height * 0.824,

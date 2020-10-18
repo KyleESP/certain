@@ -1,4 +1,4 @@
-import 'package:certain/views/widgets/photo_widget.dart';
+import 'package:certain/ui/widgets/photo_widget.dart';
 import 'package:flutter/material.dart';
 
 Widget profileWidget(

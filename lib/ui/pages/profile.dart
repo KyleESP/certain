@@ -18,17 +18,15 @@ import 'package:certain/blocs/profile/bloc.dart';
 
 import 'package:certain/repositories/user_repository.dart';
 
-import 'package:certain/views/widgets/gender_widget.dart';
-import 'package:certain/views/widgets/interestedIn_widget.dart';
+import 'package:certain/ui/widgets/gender_widget.dart';
+import 'package:certain/ui/widgets/interestedIn_widget.dart';
 
 class Profile extends StatelessWidget {
   final _userRepository;
-  final userId;
 
   Profile({@required UserRepository userRepository, String userId})
-      : assert(userRepository != null && userId != null),
-        _userRepository = userRepository,
-        userId = userId;
+      : assert(userRepository != null),
+        _userRepository = userRepository;
 
   @override
   Widget build(BuildContext context) {

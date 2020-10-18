@@ -37,10 +37,9 @@ class UserRepository {
     await _firebaseFirestore
         .collection('users')
         .doc(_firebaseAuth.currentUser.uid)
-        .collection('mcq')
         .get()
-        .then((mcq) {
-      mcqExists = mcq.docs.isNotEmpty;
+        .then((user) {
+      mcqExists = user.data().containsKey('mcq');
     });
 
     return mcqExists;
@@ -78,6 +77,7 @@ class UserRepository {
       _user.maxDistance = data['maxDistance'];
       _user.minAge = data['minAge'];
       _user.maxAge = data['maxAge'];
+      _user.mcq = data['mcq'];
     });
 
     return _user;

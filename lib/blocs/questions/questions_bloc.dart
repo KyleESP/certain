@@ -25,7 +25,8 @@ class QuestionsBloc extends Bloc<QuestionsEvent, QuestionsState> {
   Stream<QuestionsState> _mapLoadQuestionsToState() async* {
     yield LoadingState();
 
-    List<QuestionModel> questionList = await _questionsRepository.getQuestions();
+    List<QuestionModel> questionList =
+        await _questionsRepository.getQuestions();
 
     yield LoadQuestionsState(questionList);
   }
@@ -35,7 +36,7 @@ class QuestionsBloc extends Bloc<QuestionsEvent, QuestionsState> {
   }
 
   Stream<QuestionsState> _mapSubmittedMcqToState(
-      Map<String, Map<String, dynamic>> userQuestions) async* {
+      List<Map<String, String>> userQuestions) async* {
     yield QuestionsState.loading();
 
     try {

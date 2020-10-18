@@ -8,7 +8,7 @@ import 'blocs/simple_bloc_observer.dart';
 
 import 'repositories/user_repository.dart';
 
-import 'views/pages/home.dart';
+import 'ui/pages/home.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

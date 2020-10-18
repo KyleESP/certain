@@ -1,3 +1,4 @@
+import 'package:certain/models/question_model.dart';
 import 'package:certain/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -7,11 +8,11 @@ class MatchesRepository {
   MatchesRepository({FirebaseFirestore firebaseFirestore})
       : _firestore = firebaseFirestore ?? FirebaseFirestore.instance;
 
-  Stream<QuerySnapshot> getMatchedList(userId) {
+  Stream<QuerySnapshot> getMatchList(userId) {
     return _firestore
         .collection('users')
         .doc(userId)
-        .collection('matchedList')
+        .collection('matchList')
         .snapshots();
   }
 
@@ -28,72 +29,48 @@ class MatchesRepository {
       _user.location = data['location'];
       _user.gender = data['gender'];
       _user.interestedIn = data['interestedIn'];
+      List<QuestionModel> mcq = [];
+      for (var question in data['mcq']) {
+        mcq.add(new QuestionModel(
+            question: question['question'],
+            option1: question['correct_answer'],
+            option2: question['option_2'],
+            option3: question['option_3']));
+      }
+      _user.mcq = mcq;
     });
 
     return _user;
   }
 
-  Future openChat({currentUserId, selectedUserId}) async {
-    await _firestore
-        .collection('users')
-        .doc(currentUserId)
+  openChat({currentUserId, selectedUserId}) async {
+    var _usersCollection = _firestore.collection('users');
+    var currentUserDoc = _usersCollection.doc(currentUserId);
+    var selectedUserDoc = _usersCollection.doc(selectedUserId);
+    var timestampField = {'timestamp': DateTime.now()};
+
+    await currentUserDoc
         .collection('chats')
         .doc(selectedUserId)
-        .set({'timestamp': DateTime.now()});
+        .set(timestampField);
+    await currentUserDoc.collection('matchList').doc(selectedUserId).delete();
 
-    await _firestore
-        .collection('users')
-        .doc(selectedUserId)
+    await selectedUserDoc
         .collection('chats')
         .doc(currentUserId)
-        .set({'timestamp': DateTime.now()});
-
-    await _firestore
-        .collection('users')
-        .doc(currentUserId)
-        .collection('matchedList')
-        .doc(selectedUserId)
-        .delete();
-
-    await _firestore
-        .collection('users')
-        .doc(selectedUserId)
-        .collection('matchedList')
-        .doc(currentUserId)
-        .delete();
+        .set(timestampField);
+    await selectedUserDoc.collection('matchList').doc(currentUserId).delete();
   }
 
-  void deleteUser(currentUserId, selectedUserId) async {
-    return await _firestore
-        .collection('users')
-        .doc(currentUserId)
-        .collection('selectedList')
-        .doc(selectedUserId)
-        .delete();
-  }
+  removeMatch(currentUserId, selectedUserId) async {
+    var usersCollection = _firestore.collection('users');
+    var currentUserDoc = usersCollection.doc(currentUserId);
+    var selectedUserDoc = usersCollection.doc(selectedUserId);
 
-  Future selectUser(currentUserId, selectedUserId, currentUserName,
-      currentUserPhotoUrl, selectedUserName, selectedUserPhotoUrl) async {
-    deleteUser(currentUserId, selectedUserId);
+    await currentUserDoc.collection('matchList').doc(selectedUserId).delete();
+    await currentUserDoc.collection('dislikedList').doc(selectedUserId).set({});
 
-    await _firestore
-        .collection('users')
-        .doc(currentUserId)
-        .collection('matchedList')
-        .doc(selectedUserId)
-        .set({
-      'name': selectedUserName,
-      'photoUrl': selectedUserPhotoUrl,
-    });
-
-    return await _firestore
-        .collection('users')
-        .doc(selectedUserId)
-        .collection('matchedList')
-        .doc(currentUserId)
-        .set({
-      'name': currentUserName,
-      'photoUrl': currentUserPhotoUrl,
-    });
+    await selectedUserDoc.collection('matchList').doc(currentUserId).delete();
+    await selectedUserDoc.collection('dislikeList').doc(currentUserId).set({});
   }
 }

@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 
 import 'package:certain/helpers/constants.dart';
 
-import 'package:certain/views/pages/search.dart';
-import 'package:certain/views/pages/matches.dart';
-import 'package:certain/views/pages/messages.dart';
-import 'package:certain/views/pages/parameters.dart';
+import 'package:certain/ui/pages/search.dart';
+import 'package:certain/ui/pages/matches.dart';
+import 'package:certain/ui/pages/messages.dart';
+import 'package:certain/ui/pages/parameters.dart';
 
 class Tabs extends StatelessWidget {
   final userId;
 
-  const Tabs({this.userId});
+  const Tabs(this.userId);
 
   @override
   Widget build(BuildContext context) {

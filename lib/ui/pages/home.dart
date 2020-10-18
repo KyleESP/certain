@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'package:certain/blocs/authentication/authentication_bloc.dart';
 import 'package:certain/blocs/authentication/authentication_state.dart';
 
 import 'package:certain/repositories/user_repository.dart';
 
-import 'package:certain/views/pages/profile.dart';
-import 'package:certain/views/pages/splash_screen.dart';
-import 'file:///C:/Users/espky/AndroidStudioProjects/certain/lib/views/pages/tabs.dart';
-
-import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:certain/ui/pages/profile.dart';
+import 'package:certain/ui/pages/splash_screen.dart';
+import 'package:certain/ui/pages/tabs.dart';
 
 import 'login.dart';
-import 'mcq.dart';
+import 'create_mcq.dart';
 
 class Home extends StatelessWidget {
   final UserRepository _userRepository;
@@ -41,18 +40,13 @@ class Home extends StatelessWidget {
             return SplashScreen();
           }
           if (state is Authenticated) {
-            return Tabs(
-              userId: state.userId,
-            );
+            return Tabs(state.userId);
           }
           if (state is AuthenticatedButMcqNotSet) {
-            return Mcq();
+            return CreateMcq();
           }
           if (state is AuthenticatedButProfileNotSet) {
-            return Profile(
-              userRepository: _userRepository,
-              userId: state.userId,
-            );
+            return Profile(userRepository: _userRepository);
           }
           if (state is Unauthenticated) {
             return Login(

@@ -4,13 +4,9 @@ class QuestionModel {
   String option1;
   String option2;
   String option3;
-  String correctOption;
-  bool answered;
 
-  QuestionModel({this.id, this.question, this.option1, this.option2, this.option3}) {
-    answered = false;
-    correctOption = option1;
-  }
+  QuestionModel(
+      {this.id, this.question, this.option1, this.option2, this.option3});
 
   String questionAsString() {
     return '#${this.id} ${this.question}';
