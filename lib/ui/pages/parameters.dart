@@ -158,22 +158,22 @@ class _ParametersState extends State<Parameters> {
                             children: <Widget>[
                               genderWidget(
                                   FontAwesomeIcons.venus,
-                                  "Female",
+                                  "f",
                                   size.width,
                                   _interestedIn,
-                                  _onTapInterestedIn("Female")),
+                                  _onTapInterestedIn("f")),
                               genderWidget(
                                   FontAwesomeIcons.mars,
-                                  "Male",
+                                  "m",
                                   size.width,
                                   _interestedIn,
-                                  _onTapInterestedIn("Male")),
+                                  _onTapInterestedIn("m")),
                               genderWidget(
                                   FontAwesomeIcons.transgender,
-                                  "Transgender",
+                                  "b",
                                   size.width,
                                   _interestedIn,
-                                  _onTapInterestedIn("Transgender")),
+                                  _onTapInterestedIn("b")),
                             ],
                           ),
                         ],

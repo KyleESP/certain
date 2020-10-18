@@ -42,13 +42,13 @@ Widget interestedInWidget(text, size, selected, onTap) {
 
 String interestedInGender(gender) {
   switch (gender) {
-    case 'Male':
+    case 'm':
       return "Homme";
       break;
-    case 'Female':
+    case 'f':
       return "Femme";
       break;
-    case 'Transgender':
+    case 'b':
       return "Les deux";
       break;
     default:

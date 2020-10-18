@@ -77,7 +77,6 @@ class UserRepository {
       _user.maxDistance = data['maxDistance'];
       _user.minAge = data['minAge'];
       _user.maxAge = data['maxAge'];
-      _user.mcq = data['mcq'];
     });
 
     return _user;

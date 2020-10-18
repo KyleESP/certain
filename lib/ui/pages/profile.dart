@@ -56,7 +56,7 @@ class _ProfileFormState extends State<ProfileForm> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
 
-  String gender = "Male", interestedIn = "Female";
+  String gender = "m", interestedIn = "f";
   DateTime birthdate;
   File photo;
   GeoPoint location;
@@ -338,16 +338,16 @@ class _ProfileFormState extends State<ProfileForm> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              genderWidget(FontAwesomeIcons.venus, "Female",
+                              genderWidget(FontAwesomeIcons.venus, "f",
                                   size.width, gender, () {
                                 setState(() {
-                                  gender = "Female";
+                                  gender = "f";
                                 });
                               }),
-                              genderWidget(FontAwesomeIcons.mars, "Male",
+                              genderWidget(FontAwesomeIcons.mars, "m",
                                   size.width, gender, () {
                                 setState(() {
-                                  gender = "Male";
+                                  gender = "m";
                                 });
                               }),
                             ],
@@ -386,22 +386,22 @@ class _ProfileFormState extends State<ProfileForm> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              interestedInWidget(
-                                  "Female", size.width, interestedIn, () {
+                              interestedInWidget("f", size.width, interestedIn,
+                                  () {
                                 setState(() {
-                                  interestedIn = "Female";
+                                  interestedIn = "f";
                                 });
                               }),
-                              interestedInWidget(
-                                  "Male", size.width, interestedIn, () {
+                              interestedInWidget("m", size.width, interestedIn,
+                                  () {
                                 setState(() {
-                                  interestedIn = "Male";
+                                  interestedIn = "m";
                                 });
                               }),
-                              interestedInWidget(
-                                  "Transgender", size.width, interestedIn, () {
+                              interestedInWidget("b", size.width, interestedIn,
+                                  () {
                                 setState(() {
-                                  interestedIn = "Transgender";
+                                  interestedIn = "b";
                                 });
                               }),
                             ],

@@ -12,19 +12,15 @@ class InitialSearchState extends SearchState {}
 class LoadingState extends SearchState {}
 
 class LoadUserState extends SearchState {
+  final List<UserModel> usersToShow;
   final UserModel user;
 
-  LoadUserState(this.user);
+  LoadUserState(this.user, this.usersToShow);
 }
 
 class LoadCurrentUserState extends SearchState {
-  final UserModel currentUser;
-  final int difference;
-
-  LoadCurrentUserState(this.currentUser, this.difference);
-
   @override
-  List<Object> get props => [currentUser, difference];
+  List<Object> get props => [];
 }
 
 class HasMatchedState extends SearchState {}

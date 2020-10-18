@@ -77,7 +77,7 @@ class _MatchesState extends State<Matches> {
                               UserModel currentUser = await matchesRepository
                                   .getUserDetails(widget.userId);
                               difference =
-                                  await getDifference(selectedUser.location);
+                                  await getDistance(selectedUser.location);
                               showDialog(
                                 context: context,
                                 builder: (BuildContext context) => Dialog(
@@ -106,11 +106,7 @@ class _MatchesState extends State<Matches> {
                                                   " " +
                                                       selectedUser.name +
                                                       ", " +
-                                                      (DateTime.now().year -
-                                                              selectedUser
-                                                                  .birthdate
-                                                                  .toDate()
-                                                                  .year)
+                                                      selectedUser.age
                                                           .toString(),
                                                   style: TextStyle(
                                                       color: Colors.white,
