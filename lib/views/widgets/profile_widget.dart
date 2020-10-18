@@ -10,8 +10,8 @@ Widget profileWidget(
     containerHeight,
     containerWidth,
     child}) {
-  return Padding(
-    padding: EdgeInsets.all(padding),
+  return Align(
+    alignment: Alignment(0.0,-0.2),
     child: Container(
       decoration: BoxDecoration(
         boxShadow: [
