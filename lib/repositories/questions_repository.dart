@@ -29,15 +29,11 @@ class QuestionsRepository {
     return questionList;
   }
 
-  createMcq(Map<String, Map<String, dynamic>> mcq) async {
-    await Future.forEach(mcq.entries, (MapEntry entry) async {
-      await _firebaseFirestore
-          .collection("users")
-          .doc(_firebaseAuth.currentUser.uid)
-          .collection("mcq")
-          .doc(entry.key)
-          .set(entry.value);
-    });
+  createMcq(List<Map<String, String>> mcq) async {
+    await _firebaseFirestore
+        .collection("users")
+        .doc(_firebaseAuth.currentUser.uid)
+        .update({"mcq": mcq});
   }
 
   getQuestionData(String quizId) async {

@@ -16,37 +16,10 @@ class LoadListsEvent extends MatchesEvent {
   List<Object> get props => [userId];
 }
 
-class AcceptUserEvent extends MatchesEvent {
-  final String currentUser,
-      selectedUser,
-      selectedUserName,
-      selectedUserPhotoUrl,
-      currentUserName,
-      currentUserPhotoUrl;
-
-  AcceptUserEvent(
-      {this.currentUser,
-      this.selectedUser,
-      this.selectedUserName,
-      this.selectedUserPhotoUrl,
-      this.currentUserName,
-      this.currentUserPhotoUrl});
-
-  @override
-  List<Object> get props => [
-        currentUser,
-        selectedUser,
-        selectedUserName,
-        selectedUserPhotoUrl,
-        currentUserName,
-        currentUserPhotoUrl
-      ];
-}
-
-class DeleteUserEvent extends MatchesEvent {
+class RemoveMatchEvent extends MatchesEvent {
   final String currentUser, selectedUser;
 
-  DeleteUserEvent({this.currentUser, this.selectedUser});
+  RemoveMatchEvent({this.currentUser, this.selectedUser});
 
   @override
   List<Object> get props => [

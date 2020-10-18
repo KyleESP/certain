@@ -10,7 +10,7 @@ import 'package:certain/models/message_model.dart';
 import 'package:certain/models/user_model.dart';
 import 'package:certain/repositories/messaging_repository.dart';
 
-import 'package:certain/views/widgets/photo_widget.dart';
+import 'package:certain/ui/widgets/photo_widget.dart';
 
 import 'package:certain/helpers/constants.dart';
 

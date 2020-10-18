@@ -11,13 +11,13 @@ import 'package:certain/blocs/questions/bloc.dart';
 import 'package:certain/models/question_model.dart';
 import 'package:certain/repositories/questions_repository.dart';
 
-import 'package:certain/views/widgets/quiz_play_widgets.dart';
-import 'package:certain/views/widgets/loader_widget.dart';
+import 'package:certain/ui/widgets/play_qcm_widgets.dart';
+import 'package:certain/ui/widgets/loader_widget.dart';
 
 import 'package:certain/helpers/constants.dart';
 import 'package:certain/helpers/functions.dart';
 
-class Mcq extends StatelessWidget {
+class CreateMcq extends StatelessWidget {
   final _questionsRepository = new QuestionsRepository();
 
   @override
@@ -25,31 +25,33 @@ class Mcq extends StatelessWidget {
     return Scaffold(
       body: BlocProvider<QuestionsBloc>(
         create: (context) => QuestionsBloc(_questionsRepository),
-        child: McqForm(),
+        child: CreateMcqForm(),
       ),
     );
   }
 }
 
-class McqForm extends StatefulWidget {
+class CreateMcqForm extends StatefulWidget {
   @override
-  _McqFormState createState() => _McqFormState();
+  _CreateMcqFormState createState() => _CreateMcqFormState();
 }
 
-class _McqFormState extends State<McqForm> {
+class _CreateMcqFormState extends State<CreateMcqForm> {
   QuestionsBloc _questionsBloc;
   List<QuestionModel> _questionList;
-  String _optionSelected = "";
+  String _optionSelected;
   QuestionModel _questionSelected;
-  Map<String, Map<String, dynamic>> _userQuestions = Map();
+  List<Map<String, String>> _userQuestions = [];
 
-  bool get isValid =>
-      _questionSelected != null &&
-      _optionSelected != null &&
-      _userQuestions.length >= 0;
+  bool get isQuestionCompleted =>
+      _questionSelected != null && _optionSelected != null;
 
-  bool isButtonEnabled(QuestionsState state) {
-    return isValid && (state.isSubmitting == null || !state.isSubmitting);
+  bool get isValid => isQuestionCompleted && _userQuestions.length >= 0;
+
+  bool get canNext => _questionList.length > 1 && _userQuestions.length < 10;
+
+  bool isButtonEnabled(bool condition, QuestionsState state) {
+    return condition && (state.isSubmitting == null || !state.isSubmitting);
   }
 
   @override
@@ -155,19 +157,20 @@ class _McqFormState extends State<McqForm> {
                         children: [
                           GestureDetector(
                             onTap: () {
-                              if (isButtonEnabled(state)) {
+                              if (isButtonEnabled(isValid, state)) {
                                 var optionsRemaining = [
                                   _questionSelected.option1,
                                   _questionSelected.option2,
                                   _questionSelected.option3
                                 ]..remove(_optionSelected);
 
-                                _userQuestions[_questionSelected.id] = {
+                                _userQuestions.add({
                                   "question": _questionSelected.question,
                                   "correct_answer": _optionSelected,
                                   "option_2": optionsRemaining[0],
                                   "option_3": optionsRemaining[1],
-                                };
+                                });
+
                                 _questionsBloc.add(
                                   SubmittedMcqEvent(
                                       userQuestions: _userQuestions),
@@ -180,7 +183,7 @@ class _McqFormState extends State<McqForm> {
                               padding: EdgeInsets.symmetric(
                                   horizontal: 24, vertical: 20),
                               decoration: BoxDecoration(
-                                  color: isButtonEnabled(state)
+                                  color: isButtonEnabled(isValid, state)
                                       ? loginButtonColor
                                       : loginButtonColor.withOpacity(0.3),
                                   borderRadius: BorderRadius.circular(30)),
@@ -194,28 +197,29 @@ class _McqFormState extends State<McqForm> {
                           SizedBox(
                             width: 8,
                           ),
-                          if (_questionList.length > 1 &&
-                              _userQuestions.length < 10)
+                          if (isButtonEnabled(canNext, state))
                             GestureDetector(
                               onTap: () {
-                                var optionsRemaining = [
-                                  _questionSelected.option1,
-                                  _questionSelected.option2,
-                                  _questionSelected.option3
-                                ]..remove(_optionSelected);
+                                if (isButtonEnabled(isQuestionCompleted, state)) {
+                                  var optionsRemaining = [
+                                    _questionSelected.option1,
+                                    _questionSelected.option2,
+                                    _questionSelected.option3
+                                  ]..remove(_optionSelected);
 
-                                setState(() {
-                                  _userQuestions[_questionSelected.id] = {
-                                    "question": _questionSelected.question,
-                                    "correct_answer": _optionSelected,
-                                    "option_2": optionsRemaining[0],
-                                    "option_3": optionsRemaining[1],
-                                  };
+                                  setState(() {
+                                    _userQuestions.add({
+                                      "question": _questionSelected.question,
+                                      "correct_answer": _optionSelected,
+                                      "option_2": optionsRemaining[0],
+                                      "option_3": optionsRemaining[1],
+                                    });
 
-                                  _questionList.remove(_questionSelected);
-                                  _questionSelected = _questionList[0];
-                                  _optionSelected = null;
-                                });
+                                    _questionList.remove(_questionSelected);
+                                    _questionSelected = _questionList[0];
+                                    _optionSelected = null;
+                                  });
+                                }
                               },
                               child: Container(
                                 alignment: Alignment.center,
@@ -224,7 +228,9 @@ class _McqFormState extends State<McqForm> {
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 24, vertical: 20),
                                 decoration: BoxDecoration(
-                                    color: loginButtonColor,
+                                    color: isButtonEnabled(isQuestionCompleted, state)
+                                        ? loginButtonColor
+                                        : loginButtonColor.withOpacity(0.3),
                                     borderRadius: BorderRadius.circular(30)),
                                 child: Text(
                                   "Ajouter une autre question",

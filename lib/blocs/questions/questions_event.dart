@@ -25,7 +25,7 @@ class LoadQuestionEvent extends QuestionsEvent {
 }
 
 class SubmittedMcqEvent extends QuestionsEvent {
-  final Map<String, Map<String, dynamic>> userQuestions;
+  final List<Map<String, String>> userQuestions;
 
   SubmittedMcqEvent({this.userQuestions});
 
