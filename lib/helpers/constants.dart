@@ -16,3 +16,5 @@ LinearGradient gradientWhite = LinearGradient(
     end: Alignment.bottomLeft,
     stops: [0.3, 0.6, 1.0],
     colors: [Colors.white, Colors.white, Colors.white]);
+Color likeButton = Color(0xFF8DDACA);
+Color dislikeButton = Color(0xFFE04A5A);

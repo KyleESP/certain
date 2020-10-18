@@ -1,5 +1,5 @@
-import 'package:certain/ui/widgets/loader_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:certain/helpers/constants.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -12,6 +12,7 @@ import 'package:certain/repositories/user_repository.dart';
 import 'package:certain/ui/widgets/icon_widget.dart';
 import 'package:certain/ui/widgets/profile_widget.dart';
 import 'package:certain/ui/widgets/user_gender_widget.dart';
+import 'package:certain/ui/widgets/loader_widget.dart';
 
 class Search extends StatefulWidget {
   final String userId;
@@ -77,81 +78,129 @@ class _SearchState extends State<Search> {
                   color: Colors.black),
             );
           } else {
-            return profileWidget(
-              padding: size.height * 0.035,
-              photoHeight: size.height * 0.824,
-              photoWidth: size.width * 0.95,
-              photo: _currentUser.photo,
-              clipRadius: size.height * 0.02,
-              containerHeight: size.height * 0.3,
-              containerWidth: size.width * 0.9,
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: size.width * 0.02),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    SizedBox(
-                      height: size.height * 0.06,
+            return Stack(children: <Widget>[
+              Positioned(
+                top: 0,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.elliptical(200.0, 140.0),
+                      bottomRight: Radius.elliptical(200.0, 140.0)),
+                  child: Container(
+                    height: size.height * 0.35,
+                    width: size.width,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.rectangle,
+                      gradient: gradient,
                     ),
-                    Row(
-                      children: <Widget>[
-                        userGender(_currentUser.gender),
-                        Expanded(
-                          child: Text(
-                            " " +
-                                _currentUser.name +
-                                ", " +
-                                (DateTime.now().year -
-                                        _currentUser.birthdate.toDate().year)
-                                    .toString(),
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: size.height * 0.05),
-                          ),
-                        )
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Icon(
-                          Icons.location_on,
-                          color: Colors.white,
-                        ),
-                        Text(
-                          difference != null
-                              ? "A " +
-                                  (difference / 1000).floor().toString() +
-                                  " km"
-                              : "Distance inconnue",
-                          style: TextStyle(color: Colors.white),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: size.height * 0.05,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: <Widget>[
-                        iconWidget(Icons.clear, () {
-                          _searchBloc.add(DislikeUserEvent(
-                              widget.userId, _currentUser.uid));
-                        }, size.height * 0.08, Colors.blue),
-                        iconWidget(FontAwesomeIcons.solidHeart, () {
-                          _searchBloc.add(LikeUserEvent(
-                              currentUserId: widget.userId,
-                              selectedUserId: _currentUser.uid,
-                              currentUserPhotoUrl: _user.photo,
-                              currentUserName: _user.name,
-                              selectedUserPhotoUrl: _currentUser.photo,
-                              selectedUserName: _currentUser.name));
-                        }, size.height * 0.06, Colors.red)
-                      ],
-                    )
-                  ],
+                  ),
                 ),
               ),
-            );
+              profileWidget(
+                padding: size.height * 0.035,
+                photoHeight: size.height * 0.63,
+                photoWidth: size.width * 0.85,
+                photo: _currentUser.photo,
+                clipRadius: size.height * 0.02,
+                containerHeight: size.height * 0.25,
+                containerWidth: size.width * 0.85,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: size.width * 0.02),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      SizedBox(
+                        height: size.height * 0.06,
+                      ),
+                      Row(
+                        children: <Widget>[
+                          userGender(_currentUser.gender),
+                          Expanded(
+                            child: Text(
+                              " " +
+                                  _currentUser.name +
+                                  ", " +
+                                  (DateTime.now().year -
+                                          _currentUser.birthdate.toDate().year)
+                                      .toString(),
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: size.height * 0.03),
+                            ),
+                          )
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Icon(
+                            Icons.location_on,
+                            color: Colors.white,
+                          ),
+                          Text(
+                            difference != null
+                                ? "A " +
+                                    (difference / 1000).floor().toString() +
+                                    " km"
+                                : "Distance inconnue",
+                            style: TextStyle(color: Colors.white),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Align(
+                alignment: Alignment(0.0, 0.9),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Container(
+                      padding: EdgeInsets.all(size.width * 0.01),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey[300],
+                            spreadRadius: 1,
+                            blurRadius: 5,
+                            offset: Offset(5.0, 5.0),
+                          ),
+                        ],
+                      ),
+                      child: iconWidget(Icons.clear, () {
+                        _searchBloc.add(
+                            DislikeUserEvent(widget.userId, _currentUser.uid));
+                      }, size.height * 0.07, dislikeButton),
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(size.width * 0.03),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey[300],
+                            spreadRadius: 1,
+                            blurRadius: 5,
+                            offset: Offset(5.0, 5.0),
+                          ),
+                        ],
+                      ),
+                      child: iconWidget(FontAwesomeIcons.solidHeart, () {
+                        _searchBloc.add(LikeUserEvent(
+                            currentUserId: widget.userId,
+                            selectedUserId: _currentUser.uid,
+                            currentUserPhotoUrl: _user.photo,
+                            currentUserName: _user.name,
+                            selectedUserPhotoUrl: _currentUser.photo,
+                            selectedUserName: _currentUser.name));
+                      }, size.height * 0.05, likeButton),
+                    ),
+                  ],
+                ),
+              )
+            ]);
           }
         } else
           return Container();
