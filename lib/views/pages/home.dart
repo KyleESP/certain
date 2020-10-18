@@ -8,7 +8,7 @@ import 'package:certain/repositories/user_repository.dart';
 
 import 'package:certain/views/pages/profile.dart';
 import 'package:certain/views/pages/splash_screen.dart';
-import 'file:///C:/Users/espky/AndroidStudioProjects/certain/lib/views/pages/tabs.dart';
+import 'package:certain/views/pages/tabs.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -41,9 +41,7 @@ class Home extends StatelessWidget {
             return SplashScreen();
           }
           if (state is Authenticated) {
-            return Tabs(
-              userId: state.userId,
-            );
+            return BottomTab(userId : state.userId,);
           }
           if (state is AuthenticatedButMcqNotSet) {
             return Mcq();
