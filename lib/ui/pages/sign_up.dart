@@ -120,7 +120,7 @@ class _SignUpFormState extends State<SignUpForm> {
                 children: <Widget>[
                   Center(
                     heightFactor: 2,
-                    child: Image.asset('assets/logoHeart.png',
+                    child: Image.asset('assets/images/logoHeart.png',
                         height: 150, width: 150),
                   ),
                   Container(

@@ -151,7 +151,7 @@ class _ProfileFormState extends State<ProfileForm> {
                                 child: CircleAvatar(
                                   radius: size.width * 0.19,
                                   backgroundImage: photo == null
-                                      ? AssetImage('assets/avatarphoto.png')
+                                      ? AssetImage('assets/images/avatarPhoto.png')
                                       : FileImage(photo),
                                 )))),
                   ),
