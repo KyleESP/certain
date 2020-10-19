@@ -27,6 +27,7 @@ class _MatchesState extends State<Matches> {
   MatchesRepository matchesRepository = MatchesRepository();
   MatchesBloc _matchesBloc;
   double distance;
+  UserModel currentUser;
 
   @override
   void initState() {
@@ -42,6 +43,11 @@ class _MatchesState extends State<Matches> {
       cubit: _matchesBloc,
       builder: (BuildContext context, MatchesState state) {
         if (state is LoadingState) {
+          _matchesBloc.add(LoadCurrentUserEvent(userId: widget.userId));
+          return CircularProgressIndicator();
+        }
+        if (state is LoadCurrentUserState) {
+          currentUser = state.currentUser;
           _matchesBloc.add(LoadListsEvent(userId: widget.userId));
           return CircularProgressIndicator();
         }
@@ -74,8 +80,6 @@ class _MatchesState extends State<Matches> {
                             onTap: () async {
                               UserModel selectedUser = await matchesRepository
                                   .getUserDetails(user[index].id);
-                              UserModel currentUser = await matchesRepository
-                                  .getUserDetails(widget.userId);
                               distance =
                                   await getDistance(selectedUser.location);
                               showDialog(
