@@ -74,10 +74,13 @@ class _ParametersState extends State<Parameters> {
             }
             if (state is LoadUserState) {
               _user = state.user;
-              _maxDistance ??= _user.maxDistance;
-              _ageRange ??=
+              _maxDistance = _user.maxDistance;
+              _ageRange =
                   RangeValues(_user.minAge.toDouble(), _user.maxAge.toDouble());
-              _interestedIn ??= _user.interestedIn;
+              _interestedIn = _user.interestedIn;
+              _parametersBloc.add(LoadParametersEvent());
+            }
+            if (state is LoadParametersToState) {
               return SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: Container(

@@ -25,6 +25,8 @@ class ParametersBloc extends Bloc<ParametersEvent, ParametersState> {
       yield* _mapAgeRangeChangedToState(event.minAge, event.maxAge);
     } else if (event is LoadUserEvent) {
       yield* _mapLoadUserToState();
+    } else if (event is LoadParametersEvent) {
+      yield* _mapLoadParametersToState();
     }
   }
 
@@ -33,6 +35,10 @@ class ParametersBloc extends Bloc<ParametersEvent, ParametersState> {
     UserModel user = await _userRepository.getUser();
 
     yield LoadUserState(user);
+  }
+
+  Stream<ParametersState> _mapLoadParametersToState() async* {
+    yield LoadParametersToState();
   }
 
   Stream<ParametersState> _mapPhotoChangedToState(File photo) async* {

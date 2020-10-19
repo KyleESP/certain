@@ -20,6 +20,13 @@ class LoadUserEvent extends ParametersEvent {
   List<Object> get props => [userId];
 }
 
+class LoadParametersEvent extends ParametersEvent {
+  LoadParametersEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
 class PhotoChanged extends ParametersEvent {
   final File photo;
 
@@ -46,7 +53,6 @@ class MaxDistanceChanged extends ParametersEvent {
   @override
   List<Object> get props => [maxDistance];
 }
-
 
 class AgeRangeChanged extends ParametersEvent {
   final int minAge;

@@ -18,6 +18,8 @@ class ParametersInitialState extends ParametersState {}
 
 class LoadingState extends ParametersState {}
 
+class LoadParametersToState extends ParametersState {}
+
 class LoadUserState extends ParametersState {
   final UserModel user;
 
