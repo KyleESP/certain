@@ -16,6 +16,16 @@ class LoadListsEvent extends MatchesEvent {
   List<Object> get props => [userId];
 }
 
+class LoadCurrentUserEvent extends MatchesEvent {
+  final String userId;
+
+  LoadCurrentUserEvent({this.userId});
+
+  @override
+  List<Object> get props => [userId];
+}
+
+
 class RemoveMatchEvent extends MatchesEvent {
   final String currentUser, selectedUser;
 
