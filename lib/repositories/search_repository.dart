@@ -81,7 +81,7 @@ class SearchRepository {
     UserModel currentUser = await getUserInterests(uid);
     var data;
     int userAge;
-    int distance;
+    double distance;
 
     await _firebaseFirestore.collection('users').get().then((users) async {
       for (var user in users.docs) {

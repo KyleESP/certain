@@ -144,7 +144,7 @@ class _LoginFormState extends State<LoginForm> {
                 children: <Widget>[
                   Container(
                     margin: EdgeInsets.only(top: size.height * 0.1),
-                    child: Image.asset('assets/logo.png'),
+                    child: Image.asset('assets/images/logo.png'),
                   ),
                   Container(
                     padding: EdgeInsets.all(size.height * 0.02),
