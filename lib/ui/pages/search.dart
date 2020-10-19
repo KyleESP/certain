@@ -27,8 +27,8 @@ class _SearchState extends State<Search> {
   final SearchRepository _searchRepository = SearchRepository();
   final UserRepository _userRepository = UserRepository();
   SearchBloc _searchBloc;
+  List<UserModel> _usersToShow = [];
   UserModel _user, _currentUser;
-  int difference;
 
   @override
   void initState() {
@@ -45,7 +45,7 @@ class _SearchState extends State<Search> {
       builder: (context, state) {
         if (state is InitialSearchState) {
           _searchBloc.add(
-            LoadUserEvent(userId: widget.userId),
+            LoadUserEvent(),
           );
           return loaderWidget();
         }
@@ -54,8 +54,12 @@ class _SearchState extends State<Search> {
         }
         if (state is LoadUserState) {
           _user = state.user;
+          _usersToShow = state.usersToShow;
+          if (_usersToShow.isNotEmpty) {
+            _currentUser = _usersToShow[0];
+          }
           _searchBloc.add(
-            LoadCurrentUserEvent(userId: widget.userId),
+            LoadCurrentUserEvent(),
           );
         }
         if (state is HasMatchedState) {
@@ -67,9 +71,7 @@ class _SearchState extends State<Search> {
               _currentUser.photo);
         }
         if (state is LoadCurrentUserState) {
-          _currentUser = state.currentUser;
-          difference = state.difference;
-          if (_currentUser == null) {
+          if (_usersToShow.isEmpty) {
             return Text(
               "Il n'y a aucune personne",
               style: TextStyle(
@@ -78,6 +80,7 @@ class _SearchState extends State<Search> {
                   color: Colors.black),
             );
           } else {
+            _currentUser = _usersToShow[0];
             return Stack(children: <Widget>[
               Positioned(
                 top: 0,
@@ -119,9 +122,7 @@ class _SearchState extends State<Search> {
                               " " +
                                   _currentUser.name +
                                   ", " +
-                                  (DateTime.now().year -
-                                          _currentUser.birthdate.toDate().year)
-                                      .toString(),
+                                  _currentUser.age.toString(),
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: size.height * 0.03),
@@ -136,9 +137,11 @@ class _SearchState extends State<Search> {
                             color: Colors.white,
                           ),
                           Text(
-                            difference != null
+                            _currentUser.distance != null
                                 ? "A " +
-                                    (difference / 1000).floor().toString() +
+                                    (_currentUser.distance / 1000)
+                                        .floor()
+                                        .toString() +
                                     " km"
                                 : "Distance inconnue",
                             style: TextStyle(color: Colors.white),
@@ -169,6 +172,7 @@ class _SearchState extends State<Search> {
                         ],
                       ),
                       child: iconWidget(Icons.clear, () {
+                        _usersToShow.remove(_currentUser);
                         _searchBloc.add(
                             DislikeUserEvent(widget.userId, _currentUser.uid));
                       }, size.height * 0.07, dislikeButton),
@@ -188,6 +192,7 @@ class _SearchState extends State<Search> {
                         ],
                       ),
                       child: iconWidget(FontAwesomeIcons.solidHeart, () {
+                        _usersToShow.remove(_currentUser);
                         _searchBloc.add(LikeUserEvent(
                             currentUserId: widget.userId,
                             selectedUserId: _currentUser.uid,

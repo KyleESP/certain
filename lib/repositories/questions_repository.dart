@@ -35,8 +35,4 @@ class QuestionsRepository {
         .doc(_firebaseAuth.currentUser.uid)
         .update({"mcq": mcq});
   }
-
-  getQuestionData(String quizId) async {
-    return null;
-  }
 }
