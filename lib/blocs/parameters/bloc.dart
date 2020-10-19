@@ -1,3 +1,3 @@
-export 'parameters_bloc.dart';
-export 'parameters_event.dart';
-export 'parameters_state.dart';
+export 'settings_bloc.dart';
+export 'settings_event.dart';
+export 'settings_state.dart';

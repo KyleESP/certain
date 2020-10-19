@@ -5,7 +5,7 @@ import 'package:certain/helpers/constants.dart';
 import 'package:certain/ui/pages/search.dart';
 import 'package:certain/ui/pages/matches.dart';
 import 'package:certain/ui/pages/messages.dart';
-import 'package:certain/ui/pages/parameters.dart';
+import 'package:certain/ui/pages/settings.dart';
 
 class BottomTab extends StatefulWidget {
   final userId;
@@ -28,7 +28,7 @@ class _BottomTabState extends State<BottomTab> {
       case 2:
         return Messages(userId: widget.userId);
       case 3:
-        return Parameters(userId: widget.userId);
+        return Settings(userId: widget.userId);
       default:
         return new Text("");
     }

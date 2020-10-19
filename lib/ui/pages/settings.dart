@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:certain/blocs/authentication/authentication_bloc.dart';
 import 'package:certain/blocs/authentication/authentication_event.dart';
-import 'package:certain/blocs/parameters/parameters_bloc.dart';
-import 'package:certain/blocs/parameters/parameters_event.dart';
-import 'package:certain/blocs/parameters/parameters_state.dart';
+import 'package:certain/blocs/parameters/settings_bloc.dart';
+import 'package:certain/blocs/parameters/settings_event.dart';
+import 'package:certain/blocs/parameters/settings_state.dart';
 import 'package:certain/helpers/functions.dart';
 import 'package:certain/models/user_model.dart';
 import 'package:certain/repositories/user_repository.dart';
@@ -17,18 +17,18 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:certain/helpers/constants.dart';
 
-class Parameters extends StatefulWidget {
+class Settings extends StatefulWidget {
   final String userId;
 
-  const Parameters({this.userId});
+  const Settings({this.userId});
 
   @override
-  _ParametersState createState() => _ParametersState();
+  _SettingsState createState() => _SettingsState();
 }
 
-class _ParametersState extends State<Parameters> {
+class _SettingsState extends State<Settings> {
   final UserRepository _userRepository = UserRepository();
-  ParametersBloc _parametersBloc;
+  SettingsBloc _parametersBloc;
   UserModel _user;
   String _interestedIn;
   File photo;
@@ -37,7 +37,7 @@ class _ParametersState extends State<Parameters> {
 
   @override
   void initState() {
-    _parametersBloc = ParametersBloc(_userRepository);
+    _parametersBloc = SettingsBloc(_userRepository);
     super.initState();
   }
 
@@ -53,17 +53,17 @@ class _ParametersState extends State<Parameters> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    return BlocListener<ParametersBloc, ParametersState>(
+    return BlocListener<SettingsBloc, SettingsState>(
         cubit: _parametersBloc,
         listener: (context, state) {
           if (state.isFailure) {
             scaffoldInfo(context, "Mise à jour échouée", Icon(Icons.error));
           }
         },
-        child: BlocBuilder<ParametersBloc, ParametersState>(
+        child: BlocBuilder<SettingsBloc, SettingsState>(
           cubit: _parametersBloc,
           builder: (context, state) {
-            if (state is ParametersInitialState) {
+            if (state is SettingsInitialState) {
               _parametersBloc.add(
                 LoadUserEvent(userId: widget.userId),
               );
@@ -78,9 +78,9 @@ class _ParametersState extends State<Parameters> {
               _ageRange =
                   RangeValues(_user.minAge.toDouble(), _user.maxAge.toDouble());
               _interestedIn = _user.interestedIn;
-              _parametersBloc.add(LoadParametersEvent());
+              _parametersBloc.add(LoadSettingsEvent());
             }
-            if (state is LoadParametersToState) {
+            if (state is LoadSettingsToState) {
               return SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: Container(
