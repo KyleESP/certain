@@ -7,7 +7,10 @@ class QuestionsState {
   final bool isSubmitting;
   final bool isFailure;
 
-  QuestionsState({@required this.isSuccess, @required this.isFailure, @required this.isSubmitting});
+  QuestionsState(
+      {this.isSuccess = false,
+      this.isFailure = false,
+      this.isSubmitting = false});
 
   factory QuestionsState.success() {
     return QuestionsState(
