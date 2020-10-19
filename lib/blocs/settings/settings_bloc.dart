@@ -25,8 +25,6 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       yield* _mapAgeRangeChangedToState(event.minAge, event.maxAge);
     } else if (event is LoadUserEvent) {
       yield* _mapLoadUserToState();
-    } else if (event is LoadSettingsEvent) {
-      yield* _mapLoadSettingsToState();
     }
   }
 
@@ -37,13 +35,13 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     yield LoadUserState(user);
   }
 
-  Stream<SettingsState> _mapLoadSettingsToState() async* {
-    yield LoadSettingsToState();
-  }
-
   Stream<SettingsState> _mapPhotoChangedToState(File photo) async* {
+    yield SettingsState.submitting();
+
     try {
       await _userRepository.update(photo: photo);
+
+      yield SettingsState.success();
     } catch (_) {
       yield SettingsState.failure();
     }
@@ -51,17 +49,24 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
 
   Stream<SettingsState> _mapInterestedInChangedToState(
       String interestedIn) async* {
+    yield SettingsState.submitting();
+
     try {
       await _userRepository.update(interestedIn: interestedIn);
+
+      yield SettingsState.success();
     } catch (_) {
       yield SettingsState.failure();
     }
   }
 
-  Stream<SettingsState> _mapMaxDistanceChangedToState(
-      int maxDistance) async* {
+  Stream<SettingsState> _mapMaxDistanceChangedToState(int maxDistance) async* {
+    yield SettingsState.submitting();
+
     try {
       await _userRepository.update(maxDistance: maxDistance);
+
+      yield SettingsState.success();
     } catch (_) {
       yield SettingsState.failure();
     }
@@ -69,8 +74,12 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
 
   Stream<SettingsState> _mapAgeRangeChangedToState(
       int minAge, int maxAge) async* {
+    yield SettingsState.submitting();
+
     try {
       await _userRepository.update(minAge: minAge, maxAge: maxAge);
+
+      yield SettingsState.success();
     } catch (_) {
       yield SettingsState.failure();
     }

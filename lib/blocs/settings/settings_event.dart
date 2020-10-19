@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 abstract class SettingsEvent extends Equatable {
@@ -18,13 +17,6 @@ class LoadUserEvent extends SettingsEvent {
 
   @override
   List<Object> get props => [userId];
-}
-
-class LoadSettingsEvent extends SettingsEvent {
-  LoadSettingsEvent();
-
-  @override
-  List<Object> get props => [];
 }
 
 class PhotoChanged extends SettingsEvent {
