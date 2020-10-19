@@ -138,11 +138,7 @@ class _SearchState extends State<Search> {
                           ),
                           Text(
                             _currentUser.distance != null
-                                ? "A " +
-                                    (_currentUser.distance / 1000)
-                                        .floor()
-                                        .toString() +
-                                    " km"
+                                ? _currentUser.distance.toString() + " km"
                                 : "Distance inconnue",
                             style: TextStyle(color: Colors.white),
                           )

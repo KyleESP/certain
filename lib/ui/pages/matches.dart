@@ -26,7 +26,7 @@ class Matches extends StatefulWidget {
 class _MatchesState extends State<Matches> {
   MatchesRepository matchesRepository = MatchesRepository();
   MatchesBloc _matchesBloc;
-  int difference;
+  double distance;
 
   @override
   void initState() {
@@ -76,7 +76,7 @@ class _MatchesState extends State<Matches> {
                                   .getUserDetails(user[index].id);
                               UserModel currentUser = await matchesRepository
                                   .getUserDetails(widget.userId);
-                              difference =
+                              distance =
                                   await getDistance(selectedUser.location);
                               showDialog(
                                 context: context,
@@ -123,12 +123,10 @@ class _MatchesState extends State<Matches> {
                                                 color: Colors.white,
                                               ),
                                               Text(
-                                                difference != null
-                                                    ? (difference / 1000)
-                                                            .floor()
-                                                            .toString() +
-                                                        " km away"
-                                                    : "away",
+                                                distance != null
+                                                    ? distance.toString() +
+                                                        " km"
+                                                    : "Distance inconnue",
                                                 style: TextStyle(
                                                   color: Colors.white,
                                                 ),

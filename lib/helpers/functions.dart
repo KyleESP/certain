@@ -1,4 +1,3 @@
-import 'package:certain/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,11 +16,15 @@ void scaffoldInfo(BuildContext context, String text, Widget sideWidget) {
     );
 }
 
-Future<int> getDistance(GeoPoint userLocation) async {
-  Position position = await getCurrentPosition();
+Future<double> getDistance(GeoPoint userLocation) async {
+  Position position =
+      await getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
 
   double location = distanceBetween(userLocation.latitude,
-      userLocation.longitude, position.latitude, position.longitude);
+          userLocation.longitude, position.latitude, position.longitude) /
+      1000;
 
-  return location.toInt();
+  location = double.parse(location.toStringAsFixed(2));
+
+  return location;
 }
