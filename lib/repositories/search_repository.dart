@@ -46,14 +46,17 @@ class SearchRepository {
 
   dislikeUser(currentUserId, selectedUserId) async {
     var usersCollection = _firebaseFirestore.collection('users');
-    var user = usersCollection.doc(currentUserId);
-    var selectedUser = usersCollection.doc(selectedUserId);
 
-    await user.collection('dislikeList').doc(selectedUserId).set({});
-    await user.collection('notToShowList').doc(selectedUserId).set({});
-
-    await selectedUser.collection('dislikedByList').doc(currentUserId).set({});
-    await selectedUser.collection('notToShowList').doc(currentUserId).set({});
+    await usersCollection
+        .doc(currentUserId)
+        .collection('notToShowList')
+        .doc(selectedUserId)
+        .set({});
+    await usersCollection
+        .doc(selectedUserId)
+        .collection('notToShowList')
+        .doc(currentUserId)
+        .set({});
   }
 
   Future getUserInterests(userId) async {
