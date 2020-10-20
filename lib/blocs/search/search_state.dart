@@ -23,9 +23,4 @@ class LoadUserState extends SearchState {
   LoadUserState(this.user, this.usersToShow);
 }
 
-class LoadCurrentUserState extends SearchState {
-  @override
-  List<Object> get props => [];
-}
-
-class HasMatchedState extends SearchState {}
+class LoadCurrentUserState extends SearchState {}
