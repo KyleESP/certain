@@ -152,45 +152,46 @@ class _CreateMcqFormState extends State<CreateMcqForm> {
                     ],
                     Row(
                       children: [
-                        GestureDetector(
-                          onTap: () {
-                            if (isButtonEnabled(isValid, state)) {
-                              var optionsRemaining = [
-                                _questionSelected.option1,
-                                _questionSelected.option2,
-                                _questionSelected.option3
-                              ]..remove(_optionSelected);
+                        if (_userQuestions.length >= 4)
+                          GestureDetector(
+                            onTap: () {
+                              if (isButtonEnabled(isValid, state)) {
+                                var optionsRemaining = [
+                                  _questionSelected.option1,
+                                  _questionSelected.option2,
+                                  _questionSelected.option3
+                                ]..remove(_optionSelected);
 
-                              _userQuestions.add({
-                                "question": _questionSelected.question,
-                                "correct_answer": _optionSelected,
-                                "option_2": optionsRemaining[0],
-                                "option_3": optionsRemaining[1],
-                              });
+                                _userQuestions.add({
+                                  "question": _questionSelected.question,
+                                  "correct_answer": _optionSelected,
+                                  "option_2": optionsRemaining[0],
+                                  "option_3": optionsRemaining[1],
+                                });
 
-                              _questionsBloc.add(
-                                SubmittedMcqEvent(
-                                    userQuestions: _userQuestions),
-                              );
-                            }
-                          },
-                          child: Container(
-                            alignment: Alignment.center,
-                            width: MediaQuery.of(context).size.width / 2 - 20,
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 24, vertical: 20),
-                            decoration: BoxDecoration(
-                                color: isButtonEnabled(isValid, state)
-                                    ? loginButtonColor
-                                    : loginButtonColor.withOpacity(0.3),
-                                borderRadius: BorderRadius.circular(30)),
-                            child: Text(
-                              "Créér le QCM",
-                              style:
-                                  TextStyle(fontSize: 16, color: Colors.white),
+                                _questionsBloc.add(
+                                  SubmittedMcqEvent(
+                                      userQuestions: _userQuestions),
+                                );
+                              }
+                            },
+                            child: Container(
+                              alignment: Alignment.center,
+                              width: MediaQuery.of(context).size.width / 2 - 20,
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 24, vertical: 20),
+                              decoration: BoxDecoration(
+                                  color: isButtonEnabled(isValid, state)
+                                      ? loginButtonColor
+                                      : loginButtonColor.withOpacity(0.3),
+                                  borderRadius: BorderRadius.circular(30)),
+                              child: Text(
+                                "Créér le QCM",
+                                style: TextStyle(
+                                    fontSize: 16, color: Colors.white),
+                              ),
                             ),
                           ),
-                        ),
                         SizedBox(
                           width: 8,
                         ),
