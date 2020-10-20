@@ -23,6 +23,8 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       yield* _mapMaxDistanceChangedToState(event.maxDistance);
     } else if (event is AgeRangeChanged) {
       yield* _mapAgeRangeChangedToState(event.minAge, event.maxAge);
+    } else if (event is BioChanged) {
+      yield* _mapBioToState(event.bio);
     } else if (event is LoadUserEvent) {
       yield* _mapLoadUserToState();
     }
@@ -78,6 +80,18 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
 
     try {
       await _userRepository.update(minAge: minAge, maxAge: maxAge);
+
+      yield SettingsState.success();
+    } catch (_) {
+      yield SettingsState.failure();
+    }
+  }
+
+  Stream<SettingsState> _mapBioToState(String bio) async* {
+    yield SettingsState.submitting();
+
+    try {
+      await _userRepository.update(bio: bio);
 
       yield SettingsState.success();
     } catch (_) {

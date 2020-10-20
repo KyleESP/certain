@@ -65,8 +65,9 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         selectedUserPhotoUrl);
 
     if (hasMatched) {
-      yield HasMatchedState();
+      yield SearchState.matched();
     }
+
     yield LoadCurrentUserState();
   }
 

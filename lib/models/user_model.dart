@@ -13,6 +13,7 @@ class UserModel {
   int minAge;
   int maxAge;
   double distance;
+  String bio;
   List<QuestionModel> mcq;
 
   int get age => (DateTime.now().year - birthdate.toDate().year);
@@ -29,5 +30,6 @@ class UserModel {
       this.minAge,
       this.maxAge,
       this.distance,
+      this.bio,
       this.mcq});
 }

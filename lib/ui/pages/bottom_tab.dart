@@ -30,7 +30,7 @@ class _BottomTabState extends State<BottomTab> {
       case 3:
         return Settings(userId: widget.userId);
       default:
-        return new Text("");
+        return Container();
     }
   }
 
@@ -56,19 +56,19 @@ class _BottomTabState extends State<BottomTab> {
           color: Colors.grey[400],
         ),
         items: [
-          new BottomNavigationBarItem(
+          BottomNavigationBarItem(
             icon: Icon(Icons.search),
             title: Text('Recherche'),
           ),
-          new BottomNavigationBarItem(
+          BottomNavigationBarItem(
             icon: Icon(Icons.favorite),
             title: Text('Matchs'),
           ),
-          new BottomNavigationBarItem(
+          BottomNavigationBarItem(
             icon: Icon(Icons.message),
             title: Text('Chat'),
           ),
-          new BottomNavigationBarItem(
+          BottomNavigationBarItem(
             icon: Icon(Icons.supervised_user_circle),
             title: Text('Paramètres'),
           )

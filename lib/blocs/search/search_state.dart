@@ -1,10 +1,15 @@
 import 'package:certain/models/user_model.dart';
-import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 
-abstract class SearchState extends Equatable {
-  const SearchState();
-  @override
-  List<Object> get props => [];
+@immutable
+class SearchState {
+  final bool hasMatched;
+
+  SearchState({this.hasMatched = false});
+
+  factory SearchState.matched() {
+    return SearchState(hasMatched: true);
+  }
 }
 
 class InitialSearchState extends SearchState {}
@@ -18,9 +23,4 @@ class LoadUserState extends SearchState {
   LoadUserState(this.user, this.usersToShow);
 }
 
-class LoadCurrentUserState extends SearchState {
-  @override
-  List<Object> get props => [];
-}
-
-class HasMatchedState extends SearchState {}
+class LoadCurrentUserState extends SearchState {}
