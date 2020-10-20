@@ -106,6 +106,7 @@ class SearchRepository {
                 location: data['location'],
                 gender: data['gender'],
                 interestedIn: data['interestedIn'],
+                bio: data['bio'],
                 distance: distance));
           }
         }

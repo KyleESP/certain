@@ -28,8 +28,9 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
+  final TextEditingController _bioController = TextEditingController();
   final UserRepository _userRepository = UserRepository();
-  SettingsBloc _parametersBloc;
+  SettingsBloc _settingsBloc;
   UserModel _user;
   String _interestedIn;
   File photo;
@@ -38,8 +39,14 @@ class _SettingsState extends State<Settings> {
 
   @override
   void initState() {
-    _parametersBloc = SettingsBloc(_userRepository);
+    _settingsBloc = SettingsBloc(_userRepository);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _bioController.dispose();
+    super.dispose();
   }
 
   _onTapInterestedIn(interestedIn) {
@@ -47,7 +54,7 @@ class _SettingsState extends State<Settings> {
       setState(() {
         this._interestedIn = interestedIn;
       });
-      _parametersBloc.add(InterestedInChanged(interestedIn: _interestedIn));
+      _settingsBloc.add(InterestedInChanged(interestedIn: _interestedIn));
     };
   }
 
@@ -55,7 +62,7 @@ class _SettingsState extends State<Settings> {
     Size size = MediaQuery.of(context).size;
 
     return BlocListener<SettingsBloc, SettingsState>(
-        cubit: _parametersBloc,
+        cubit: _settingsBloc,
         listener: (context, state) {
           if (state.isFailure) {
             scaffoldInfo(context, "Mise à jour échouée", Icon(Icons.error));
@@ -75,10 +82,10 @@ class _SettingsState extends State<Settings> {
           }
         },
         child: BlocBuilder<SettingsBloc, SettingsState>(
-          cubit: _parametersBloc,
+          cubit: _settingsBloc,
           builder: (context, state) {
             if (state is SettingsInitialState) {
-              _parametersBloc.add(
+              _settingsBloc.add(
                 LoadUserEvent(userId: widget.userId),
               );
               return loaderWidget();
@@ -92,6 +99,7 @@ class _SettingsState extends State<Settings> {
               _ageRange =
                   RangeValues(_user.minAge.toDouble(), _user.maxAge.toDouble());
               _interestedIn = _user.interestedIn;
+              _bioController.text = _user.bio;
             }
             return SingleChildScrollView(
               scrollDirection: Axis.vertical,
@@ -140,7 +148,7 @@ class _SettingsState extends State<Settings> {
                               setState(() {
                                 photo = getPic;
                               });
-                              _parametersBloc.add(PhotoChanged(photo: photo));
+                              _settingsBloc.add(PhotoChanged(photo: photo));
                             }
                           },
                           child: CircleAvatar(
@@ -208,7 +216,41 @@ class _SettingsState extends State<Settings> {
                         ),
                         Row(
                           children: <Widget>[
-                            Spacer(),
+                            Container(
+                                width: size.width,
+                                child: TextFormField(
+                                  controller: _bioController,
+                                  keyboardType: TextInputType.multiline,
+                                  maxLines: null,
+                                  maxLength: 300,
+                                  cursorColor: Colors.grey[600],
+                                  style: TextStyle(
+                                      color: Colors.grey[600],
+                                      fontSize: size.height * 0.02),
+                                  decoration: InputDecoration(
+                                    icon: Icon(
+                                      Icons.person,
+                                      color: backgroundColorRed,
+                                    ),
+                                    suffixIcon: IconButton(
+                                      onPressed: () {
+                                        _settingsBloc.add(BioChanged(
+                                            bio: _bioController.text));
+                                      },
+                                      icon: Icon(Icons.update),
+                                    ),
+                                    labelText: 'Votre bio',
+                                    labelStyle: TextStyle(
+                                      color: Colors.grey[700],
+                                    ),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Colors.grey[600],
+                                      ),
+                                    ),
+                                  ),
+                                )),
+                            Spacer(flex: 7),
                             Text(
                               "Âge :",
                               style: TextStyle(
@@ -246,7 +288,7 @@ class _SettingsState extends State<Settings> {
                               });
                             },
                             onChangeEnd: (RangeValues endValues) {
-                              _parametersBloc.add(AgeRangeChanged(
+                              _settingsBloc.add(AgeRangeChanged(
                                   minAge: endValues.start.toInt(),
                                   maxAge: endValues.end.toInt()));
                             },
@@ -290,7 +332,7 @@ class _SettingsState extends State<Settings> {
                               });
                             },
                             onChangeEnd: (double newValue) {
-                              _parametersBloc.add(MaxDistanceChanged(
+                              _settingsBloc.add(MaxDistanceChanged(
                                   maxDistance: newValue.toInt()));
                             },
                           ),

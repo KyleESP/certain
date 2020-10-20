@@ -171,6 +171,19 @@ class _SearchState extends State<Search> {
                               )
                             ],
                           ),
+                          if (_currentUser.bio.isNotEmpty)
+                            Row(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.description,
+                                  color: Colors.white,
+                                ),
+                                Text(
+                                  _currentUser.bio,
+                                  style: TextStyle(color: Colors.white),
+                                )
+                              ],
+                            )
                         ],
                       ),
                     ),

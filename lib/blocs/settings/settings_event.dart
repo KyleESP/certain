@@ -28,6 +28,15 @@ class PhotoChanged extends SettingsEvent {
   List<Object> get props => [photo];
 }
 
+class BioChanged extends SettingsEvent {
+  final String bio;
+
+  BioChanged({@required this.bio});
+
+  @override
+  List<Object> get props => [bio];
+}
+
 class InterestedInChanged extends SettingsEvent {
   final String interestedIn;
 
