@@ -18,3 +18,4 @@ LinearGradient gradientWhite = LinearGradient(
     colors: [Colors.white, Colors.white, Colors.white]);
 Color likeButton = Color(0xFF8DDACA);
 Color dislikeButton = Color(0xFFE04A5A);
+Color logoutButton = Color(0xFFEE9189);
