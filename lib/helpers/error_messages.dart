@@ -3,5 +3,6 @@ const firebaseErrors = {
   'email-already-in-use': 'Cet email existe déjà',
   'invalid-password': 'Mot de passe invalide',
   'wrong-password': 'Mot de passe incorrect',
-  'weak-password': 'Le mot de passe doit contenir au moins 6 caractères'
+  'weak-password': 'Le mot de passe doit contenir au moins 6 caractères',
+  'invalid-email': "L'email est mal formatté"
 };

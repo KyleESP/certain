@@ -143,10 +143,9 @@ class _SignInFormState extends State<SignInForm> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Container(
-                    margin: EdgeInsets.only(
-                        top: size.height * 0.1, bottom: size.height * 0.02),
+                    margin: EdgeInsets.only(top: size.height * 0.15),
                     child: Image.asset('assets/images/logo.png',
-                        height: 250, width: 250),
+                        height: 200, width: 200),
                   ),
                   Container(
                     padding: EdgeInsets.all(size.height * 0.02),
