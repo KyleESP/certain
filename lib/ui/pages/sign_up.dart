@@ -88,8 +88,7 @@ class _SignUpFormState extends State<SignUpForm> {
     return BlocListener<SignUpBloc, SignUpState>(
       listener: (BuildContext context, SignUpState state) {
         if (state.isFailure) {
-          scaffoldInfo(
-              context, "Création du compte échouée", Icon(Icons.error));
+          scaffoldInfo(context, state.errorMessage, Icon(Icons.error));
         }
         if (state.isSubmitting) {
           scaffoldInfo(
@@ -119,9 +118,9 @@ class _SignUpFormState extends State<SignUpForm> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Center(
-                    heightFactor: 2,
-                    child: Image.asset('assets/images/logoHeart.png',
-                        height: 150, width: 150),
+                    heightFactor: 1.6,
+                    child: Image.asset('assets/images/logo_add.png',
+                        height: 200, width: 200),
                   ),
                   Container(
                     child: Text(

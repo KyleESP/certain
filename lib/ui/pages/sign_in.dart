@@ -4,7 +4,7 @@ import 'package:flutter/gestures.dart';
 
 import 'package:certain/blocs/authentication/authentication_bloc.dart';
 import 'package:certain/blocs/authentication/authentication_event.dart';
-import 'package:certain/blocs/login/bloc.dart';
+import 'package:certain/blocs/sign_in/bloc.dart';
 
 import 'package:certain/repositories/user_repository.dart';
 
@@ -13,19 +13,19 @@ import 'package:certain/ui/pages/sign_up.dart';
 import 'package:certain/helpers/functions.dart';
 import 'package:certain/helpers/constants.dart';
 
-class Login extends StatelessWidget {
+class SignIn extends StatelessWidget {
   final UserRepository _userRepository;
 
-  Login({@required UserRepository userRepository})
+  SignIn({@required UserRepository userRepository})
       : assert(userRepository != null),
         _userRepository = userRepository;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocProvider<LoginBloc>(
-        create: (context) => LoginBloc(_userRepository),
-        child: LoginForm(
+      body: BlocProvider<SignInBloc>(
+        create: (context) => SignInBloc(_userRepository),
+        child: SignInForm(
           userRepository: _userRepository,
         ),
       ),
@@ -33,34 +33,34 @@ class Login extends StatelessWidget {
   }
 }
 
-class LoginForm extends StatefulWidget {
+class SignInForm extends StatefulWidget {
   final UserRepository _userRepository;
 
-  LoginForm({@required UserRepository userRepository})
+  SignInForm({@required UserRepository userRepository})
       : assert(userRepository != null),
         _userRepository = userRepository;
 
   @override
-  _LoginFormState createState() => _LoginFormState();
+  _SignInFormState createState() => _SignInFormState();
 }
 
-class _LoginFormState extends State<LoginForm> {
+class _SignInFormState extends State<SignInForm> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  LoginBloc _loginBloc;
+  SignInBloc _loginBloc;
 
   UserRepository get _userRepository => widget._userRepository;
 
   bool get isPopulated =>
       _emailController.text.isNotEmpty && _passwordController.text.isNotEmpty;
 
-  bool isLoginButtonEnabled(LoginState state) {
+  bool isLoginButtonEnabled(SignInState state) {
     return isPopulated && !state.isSubmitting;
   }
 
   @override
   void initState() {
-    _loginBloc = BlocProvider.of<LoginBloc>(context);
+    _loginBloc = BlocProvider.of<SignInBloc>(context);
 
     _emailController.addListener(_onEmailChanged);
     _passwordController.addListener(_onPasswordChanged);
@@ -99,10 +99,10 @@ class _LoginFormState extends State<LoginForm> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    return BlocListener<LoginBloc, LoginState>(
+    return BlocListener<SignInBloc, SignInState>(
       listener: (context, state) {
         if (state.isFailure) {
-          scaffoldInfo(context, "Connexion échouée", Icon(Icons.error));
+          scaffoldInfo(context, state.errorMessage, Icon(Icons.error));
         }
         if (state.isSubmitting) {
           scaffoldInfo(
@@ -118,7 +118,7 @@ class _LoginFormState extends State<LoginForm> {
           BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
         }
       },
-      child: BlocBuilder<LoginBloc, LoginState>(
+      child: BlocBuilder<SignInBloc, SignInState>(
         builder: (context, state) {
           return SingleChildScrollView(
             child: Container(
@@ -143,8 +143,9 @@ class _LoginFormState extends State<LoginForm> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Container(
-                    margin: EdgeInsets.only(top: size.height * 0.1),
-                    child: Image.asset('assets/images/logo.png'),
+                    margin: EdgeInsets.only(top: size.height * 0.15),
+                    child: Image.asset('assets/images/logo.png',
+                        height: 200, width: 200),
                   ),
                   Container(
                     padding: EdgeInsets.all(size.height * 0.02),
@@ -247,7 +248,7 @@ class _LoginFormState extends State<LoginForm> {
                   ),
                   Container(
                     padding: EdgeInsets.all(size.height * 0.02),
-                    margin: EdgeInsets.only(top: size.height * 0.1),
+                    margin: EdgeInsets.only(top: size.height * 0.18),
                     child: RichText(
                       text: TextSpan(
                         children: [

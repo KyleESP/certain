@@ -2,14 +2,14 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 
 @immutable
-abstract class LoginEvent extends Equatable {
-  const LoginEvent();
+abstract class SignInEvent extends Equatable {
+  const SignInEvent();
 
   @override
   List<Object> get props => [];
 }
 
-class EmailChanged extends LoginEvent {
+class EmailChanged extends SignInEvent {
   final String email;
 
   EmailChanged({@required this.email});
@@ -21,7 +21,7 @@ class EmailChanged extends LoginEvent {
   String toString() => 'Email changé {email: $email}';
 }
 
-class PasswordChanged extends LoginEvent {
+class PasswordChanged extends SignInEvent {
   final String password;
 
   PasswordChanged({@required this.password});
@@ -33,7 +33,7 @@ class PasswordChanged extends LoginEvent {
   String toString() => 'Mot de passe changé {password: $password}';
 }
 
-class Submitted extends LoginEvent {
+class Submitted extends SignInEvent {
   final String email;
   final String password;
 
@@ -43,7 +43,7 @@ class Submitted extends LoginEvent {
   List<Object> get props => [email, password];
 }
 
-class LoginWithCredentialsPressed extends LoginEvent {
+class LoginWithCredentialsPressed extends SignInEvent {
   final String email;
   final String password;
 

@@ -49,7 +49,7 @@ dependencies:
 flutter_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/images/logoHeart.png"
+  image_path: "assets/images/logo_launcher.png"
 
 dev_dependencies:
   flutter_test:
@@ -67,8 +67,9 @@ flutter:
 
   assets:
     - assets/images/logo.png
-    - assets/images/logoHeart.png
-    - assets/images/avatarPhoto.png
+    - assets/images/logo_add.png
+    - assets/images/logo_launcher.png
+    - assets/images/avatar_photo.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
