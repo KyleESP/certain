@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:certain/models/user_model.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -19,6 +20,9 @@ class MatchesBloc extends Bloc<MatchesEvent, MatchesState> {
     if (event is LoadListsEvent) {
       yield* _mapLoadListToState(currentUserId: event.userId);
     }
+    if (event is LoadCurrentUserEvent) {
+      yield* _mapLoadCurrentUserToState(currentUserId: event.userId);
+    }
     if (event is RemoveMatchEvent) {
       yield* _mapRemoveMatchToState(
           currentUserId: event.currentUser, selectedUserId: event.selectedUser);
@@ -27,6 +31,14 @@ class MatchesBloc extends Bloc<MatchesEvent, MatchesState> {
       yield* _mapOpenChatToState(
           currentUserId: event.currentUser, selectedUserId: event.selectedUser);
     }
+  }
+
+  Stream<MatchesState> _mapLoadCurrentUserToState(
+      {String currentUserId}) async* {
+    UserModel currentUser =
+        await _matchesRepository.getUserDetails(currentUserId);
+
+    yield LoadCurrentUserState(currentUser: currentUser);
   }
 
   Stream<MatchesState> _mapLoadListToState({String currentUserId}) async* {

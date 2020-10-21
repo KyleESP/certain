@@ -32,6 +32,7 @@ dependencies:
   firebase_core: ^0.5.0
   firebase_storage: ^4.0.0
   firebase_auth: ^0.18.0+1
+  flutter_launcher_icons: ^0.8.1
   flutter_bloc: ^6.0.5
   rxdart: ^0.24.1
   geolocator: ^6.0.0+4
@@ -41,10 +42,14 @@ dependencies:
   equatable: ^1.2.5
   timeago: ^2.0.27
   uuid: ^2.2.2
-  random_string: ^2.1.0
   intl: ^0.16.1
   circle_button: ^1.0.1
   dropdown_search: ^0.4.4
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/logo_launcher.png"
 
 dev_dependencies:
   flutter_test:
@@ -61,10 +66,10 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/profilephoto.png
-    - assets/logo.png
-    - assets/logoHeart.png
-    - assets/avatarphoto.png
+    - assets/images/logo.png
+    - assets/images/logo_add.png
+    - assets/images/logo_launcher.png
+    - assets/images/avatar_photo.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

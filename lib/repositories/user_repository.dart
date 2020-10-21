@@ -77,7 +77,7 @@ class UserRepository {
       _user.maxDistance = data['maxDistance'];
       _user.minAge = data['minAge'];
       _user.maxAge = data['maxAge'];
-      _user.mcq = data['mcq'];
+      _user.bio = data['bio'];
     });
 
     return _user;
@@ -93,7 +93,7 @@ class UserRepository {
     StorageUploadTask storageUploadTask;
     storageUploadTask = FirebaseStorage.instance
         .ref()
-        .child('userPhotos')
+        .child('user_photos')
         .child(uid)
         .child(uid)
         .putFile(photo);
@@ -112,7 +112,8 @@ class UserRepository {
           'birthdate': birthdate,
           'maxDistance': 30,
           'minAge': age,
-          'maxAge': age + 1
+          'maxAge': age + 1,
+          'bio': ''
         });
       });
     });
@@ -123,14 +124,15 @@ class UserRepository {
       int maxDistance,
       int minAge,
       int maxAge,
-      String interestedIn}) async {
+      String interestedIn,
+      String bio}) async {
     Map<String, dynamic> params = {};
     final uid = _firebaseAuth.currentUser.uid;
     if (photo != null) {
       StorageUploadTask storageUploadTask;
       storageUploadTask = FirebaseStorage.instance
           .ref()
-          .child('userPhotos')
+          .child('user_photos')
           .child(uid)
           .child(uid)
           .putFile(photo);
@@ -152,6 +154,9 @@ class UserRepository {
     }
     if (interestedIn != null) {
       params['interestedIn'] = interestedIn;
+    }
+    if (bio != null) {
+      params['bio'] = bio;
     }
     return await _firebaseFirestore.collection('users').doc(uid).update(params);
   }

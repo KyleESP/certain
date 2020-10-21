@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'bloc.dart';
 
 import 'package:rxdart/rxdart.dart';
@@ -8,6 +9,7 @@ import 'package:bloc/bloc.dart';
 import 'package:certain/repositories/user_repository.dart';
 
 import 'package:certain/helpers/validators.dart';
+import 'package:certain/helpers/error_messages.dart';
 
 class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
   UserRepository _userRepository;
@@ -68,8 +70,9 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
       await _userRepository.signUpWithEmailAndPassword(email, password);
 
       yield SignUpState.success();
-    } catch (_) {
-      SignUpState.failure();
+    } catch (e) {
+      var errorMessage = firebaseErrors[e.code] ?? e.message;
+      yield SignUpState.failure(errorMessage);
     }
   }
 }

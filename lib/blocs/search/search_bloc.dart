@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:certain/helpers/functions.dart';
 import 'package:certain/repositories/user_repository.dart';
 
 import 'bloc.dart';
@@ -43,8 +42,9 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     yield LoadingState();
 
     UserModel user = await _userRepository.getUser();
+    List<UserModel> usersToShow = await _searchRepository.getUsersToShow();
 
-    yield LoadUserState(user);
+    yield LoadUserState(user, usersToShow);
   }
 
   Stream<SearchState> _mapLikeToState(
@@ -65,44 +65,23 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         selectedUserPhotoUrl);
 
     if (hasMatched) {
-      yield HasMatchedState();
+      yield SearchState.matched();
     }
 
-    int difference;
-    UserModel currentUser =
-        await _searchRepository.getCurrentUser(currentUserId);
-    if (currentUser != null) {
-      difference = await getDifference(currentUser.location);
-    }
-
-    yield LoadCurrentUserState(currentUser, difference);
+    yield LoadCurrentUserState();
   }
 
   Stream<SearchState> _mapDislikeToState(
       {String currentUserId, String selectedUserId}) async* {
     yield LoadingState();
 
-    int difference;
-    UserModel currentUser =
-        await _searchRepository.dislikeUser(currentUserId, selectedUserId);
-    if (currentUser != null) {
-      difference = await getDifference(currentUser.location);
-    }
+    await _searchRepository.dislikeUser(currentUserId, selectedUserId);
 
-    yield LoadCurrentUserState(currentUser, difference);
+    yield LoadCurrentUserState();
   }
 
   Stream<SearchState> _mapLoadCurrentUserToState(
       {String currentUserId}) async* {
-    yield LoadingState();
-
-    int difference;
-    UserModel currentUser =
-        await _searchRepository.getCurrentUser(currentUserId);
-    if (currentUser != null) {
-      difference = await getDifference(currentUser.location);
-    }
-
-    yield LoadCurrentUserState(currentUser, difference);
+    yield LoadCurrentUserState();
   }
 }

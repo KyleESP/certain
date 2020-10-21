@@ -6,12 +6,8 @@ abstract class SearchEvent extends Equatable {
 }
 
 class LoadUserEvent extends SearchEvent {
-  final String userId;
-
-  LoadUserEvent({this.userId});
-
   @override
-  List<Object> get props => [userId];
+  List<Object> get props => [];
 }
 
 class LoadCurrentUserEvent extends SearchEvent {

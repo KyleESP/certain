@@ -1,3 +1,4 @@
+import 'package:certain/models/question_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserModel {
@@ -11,7 +12,11 @@ class UserModel {
   int maxDistance;
   int minAge;
   int maxAge;
-  List<dynamic> mcq;
+  double distance;
+  String bio;
+  List<QuestionModel> mcq;
+
+  int get age => (DateTime.now().year - birthdate.toDate().year);
 
   UserModel(
       {this.uid,
@@ -24,5 +29,7 @@ class UserModel {
       this.maxDistance,
       this.minAge,
       this.maxAge,
+      this.distance,
+      this.bio,
       this.mcq});
 }

@@ -8,13 +8,13 @@ import 'package:bloc/bloc.dart';
 
 import 'package:certain/repositories/user_repository.dart';
 
-class ParametersBloc extends Bloc<ParametersEvent, ParametersState> {
+class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   UserRepository _userRepository;
 
-  ParametersBloc(this._userRepository) : super(ParametersInitialState());
+  SettingsBloc(this._userRepository) : super(SettingsInitialState());
 
   @override
-  Stream<ParametersState> mapEventToState(ParametersEvent event) async* {
+  Stream<SettingsState> mapEventToState(SettingsEvent event) async* {
     if (event is InterestedInChanged) {
       yield* _mapInterestedInChangedToState(event.interestedIn);
     } else if (event is PhotoChanged) {
@@ -23,50 +23,79 @@ class ParametersBloc extends Bloc<ParametersEvent, ParametersState> {
       yield* _mapMaxDistanceChangedToState(event.maxDistance);
     } else if (event is AgeRangeChanged) {
       yield* _mapAgeRangeChangedToState(event.minAge, event.maxAge);
+    } else if (event is BioChanged) {
+      yield* _mapBioToState(event.bio);
     } else if (event is LoadUserEvent) {
       yield* _mapLoadUserToState();
     }
   }
 
-  Stream<ParametersState> _mapLoadUserToState() async* {
+  Stream<SettingsState> _mapLoadUserToState() async* {
     yield LoadingState();
     UserModel user = await _userRepository.getUser();
 
     yield LoadUserState(user);
   }
 
-  Stream<ParametersState> _mapPhotoChangedToState(File photo) async* {
+  Stream<SettingsState> _mapPhotoChangedToState(File photo) async* {
+    yield SettingsState.submitting();
+
     try {
       await _userRepository.update(photo: photo);
+
+      yield SettingsState.success();
     } catch (_) {
-      yield ParametersState.failure();
+      yield SettingsState.failure();
     }
   }
 
-  Stream<ParametersState> _mapInterestedInChangedToState(
+  Stream<SettingsState> _mapInterestedInChangedToState(
       String interestedIn) async* {
+    yield SettingsState.submitting();
+
     try {
       await _userRepository.update(interestedIn: interestedIn);
+
+      yield SettingsState.success();
     } catch (_) {
-      yield ParametersState.failure();
+      yield SettingsState.failure();
     }
   }
 
-  Stream<ParametersState> _mapMaxDistanceChangedToState(
-      int maxDistance) async* {
+  Stream<SettingsState> _mapMaxDistanceChangedToState(int maxDistance) async* {
+    yield SettingsState.submitting();
+
     try {
       await _userRepository.update(maxDistance: maxDistance);
+
+      yield SettingsState.success();
     } catch (_) {
-      yield ParametersState.failure();
+      yield SettingsState.failure();
     }
   }
 
-  Stream<ParametersState> _mapAgeRangeChangedToState(
+  Stream<SettingsState> _mapAgeRangeChangedToState(
       int minAge, int maxAge) async* {
+    yield SettingsState.submitting();
+
     try {
       await _userRepository.update(minAge: minAge, maxAge: maxAge);
+
+      yield SettingsState.success();
     } catch (_) {
-      yield ParametersState.failure();
+      yield SettingsState.failure();
+    }
+  }
+
+  Stream<SettingsState> _mapBioToState(String bio) async* {
+    yield SettingsState.submitting();
+
+    try {
+      await _userRepository.update(bio: bio);
+
+      yield SettingsState.success();
+    } catch (_) {
+      yield SettingsState.failure();
     }
   }
 }

@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'bloc.dart';
 
 import 'package:bloc/bloc.dart';
@@ -7,16 +8,17 @@ import 'package:rxdart/rxdart.dart';
 import 'package:certain/repositories/user_repository.dart';
 
 import 'package:certain/helpers/validators.dart';
+import 'package:certain/helpers/error_messages.dart';
 
-class LoginBloc extends Bloc<LoginEvent, LoginState> {
+class SignInBloc extends Bloc<SignInEvent, SignInState> {
   UserRepository _userRepository;
 
-  LoginBloc(this._userRepository) : super(LoginState.empty());
+  SignInBloc(this._userRepository) : super(SignInState.empty());
 
   @override
-  Stream<Transition<LoginEvent, LoginState>> transformEvents(
-    Stream<LoginEvent> events,
-    Stream<Transition<LoginEvent, LoginState>> Function(LoginEvent event) next,
+  Stream<Transition<SignInEvent, SignInState>> transformEvents(
+    Stream<SignInEvent> events,
+    Stream<Transition<SignInEvent, SignInState>> Function(SignInEvent event) next,
   ) {
     final nonDebounceStream = events.where((event) {
       return (event is! EmailChanged || event is! PasswordChanged);
@@ -33,8 +35,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   @override
-  Stream<LoginState> mapEventToState(
-    LoginEvent event,
+  Stream<SignInState> mapEventToState(
+    SignInEvent event,
   ) async* {
     if (event is EmailChanged) {
       yield* _mapEmailChangedToState(event.email);
@@ -46,28 +48,29 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     }
   }
 
-  Stream<LoginState> _mapEmailChangedToState(String email) async* {
+  Stream<SignInState> _mapEmailChangedToState(String email) async* {
     yield state.update(
       isEmailValid: Validators.isValidEmail(email),
     );
   }
 
-  Stream<LoginState> _mapPasswordChangedToState(String password) async* {
+  Stream<SignInState> _mapPasswordChangedToState(String password) async* {
     yield state.update(isEmailValid: Validators.isValidPassword(password));
   }
 
-  Stream<LoginState> _mapLoginWithCredentialsPressedToState({
+  Stream<SignInState> _mapLoginWithCredentialsPressedToState({
     String email,
     String password,
   }) async* {
-    yield LoginState.loading();
+    yield SignInState.loading();
 
     try {
       await _userRepository.signInWithEmail(email, password);
 
-      yield LoginState.success();
-    } catch (_) {
-      LoginState.failure();
+      yield SignInState.success();
+    } catch (e) {
+      var errorMessage = firebaseErrors[e.code] ?? e.message;
+      yield SignInState.failure(errorMessage);
     }
   }
 }

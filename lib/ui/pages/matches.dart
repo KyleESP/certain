@@ -1,3 +1,4 @@
+import 'package:certain/helpers/constants.dart';
 import 'package:certain/helpers/functions.dart';
 import 'package:flutter/material.dart';
 
@@ -26,7 +27,8 @@ class Matches extends StatefulWidget {
 class _MatchesState extends State<Matches> {
   MatchesRepository matchesRepository = MatchesRepository();
   MatchesBloc _matchesBloc;
-  int difference;
+  double distance;
+  UserModel currentUser;
 
   @override
   void initState() {
@@ -42,6 +44,11 @@ class _MatchesState extends State<Matches> {
       cubit: _matchesBloc,
       builder: (BuildContext context, MatchesState state) {
         if (state is LoadingState) {
+          _matchesBloc.add(LoadCurrentUserEvent(userId: widget.userId));
+          return CircularProgressIndicator();
+        }
+        if (state is LoadCurrentUserState) {
+          currentUser = state.currentUser;
           _matchesBloc.add(LoadListsEvent(userId: widget.userId));
           return CircularProgressIndicator();
         }
@@ -74,10 +81,8 @@ class _MatchesState extends State<Matches> {
                             onTap: () async {
                               UserModel selectedUser = await matchesRepository
                                   .getUserDetails(user[index].id);
-                              UserModel currentUser = await matchesRepository
-                                  .getUserDetails(widget.userId);
-                              difference =
-                                  await getDifference(selectedUser.location);
+                              distance =
+                                  await getDistance(selectedUser.location);
                               showDialog(
                                 context: context,
                                 builder: (BuildContext context) => Dialog(
@@ -106,11 +111,7 @@ class _MatchesState extends State<Matches> {
                                                   " " +
                                                       selectedUser.name +
                                                       ", " +
-                                                      (DateTime.now().year -
-                                                              selectedUser
-                                                                  .birthdate
-                                                                  .toDate()
-                                                                  .year)
+                                                      selectedUser.age
                                                           .toString(),
                                                   style: TextStyle(
                                                       color: Colors.white,
@@ -127,12 +128,10 @@ class _MatchesState extends State<Matches> {
                                                 color: Colors.white,
                                               ),
                                               Text(
-                                                difference != null
-                                                    ? (difference / 1000)
-                                                            .floor()
-                                                            .toString() +
-                                                        " km away"
-                                                    : "away",
+                                                distance != null
+                                                    ? distance.toString() +
+                                                        " km"
+                                                    : "Distance inconnue",
                                                 style: TextStyle(
                                                   color: Colors.white,
                                                 ),
@@ -146,9 +145,49 @@ class _MatchesState extends State<Matches> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
                                             children: <Widget>[
-                                              Padding(
+                                              Container(
                                                 padding: EdgeInsets.all(
-                                                    size.height * 0.02),
+                                                    size.width * 0.01),
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: Colors.white,
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: Colors.grey[300],
+                                                      spreadRadius: 1,
+                                                      blurRadius: 5,
+                                                      offset: Offset(5.0, 5.0),
+                                                    ),
+                                                  ],
+                                                ),
+                                                child: iconWidget(Icons.clear,
+                                                    () {
+                                                  _matchesBloc.add(
+                                                      RemoveMatchEvent(
+                                                          currentUser:
+                                                              widget.userId,
+                                                          selectedUser:
+                                                              user[index].id));
+                                                  user.removeAt(index);
+                                                  Navigator.pop(context);
+                                                }, size.height * 0.07,
+                                                    dislikeButton),
+                                              ),
+                                              Container(
+                                                padding: EdgeInsets.all(
+                                                    size.height * 0.01),
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  color: Colors.white,
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: Colors.grey[300],
+                                                      spreadRadius: 1,
+                                                      blurRadius: 5,
+                                                      offset: Offset(5.0, 5.0),
+                                                    ),
+                                                  ],
+                                                ),
                                                 child: iconWidget(Icons.message,
                                                     () {
                                                   Navigator.push(context,
@@ -161,8 +200,8 @@ class _MatchesState extends State<Matches> {
                                                     },
                                                   ));
                                                 }, size.height * 0.04,
-                                                    Colors.white),
-                                              ),
+                                                    Colors.blue),
+                                              )
                                             ],
                                           )
                                         ],

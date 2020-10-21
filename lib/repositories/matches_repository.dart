@@ -44,9 +44,9 @@ class MatchesRepository {
   }
 
   openChat({currentUserId, selectedUserId}) async {
-    var _usersCollection = _firestore.collection('users');
-    var currentUserDoc = _usersCollection.doc(currentUserId);
-    var selectedUserDoc = _usersCollection.doc(selectedUserId);
+    var usersCollection = _firestore.collection('users');
+    var currentUserDoc = usersCollection.doc(currentUserId);
+    var selectedUserDoc = usersCollection.doc(selectedUserId);
     var timestampField = {'timestamp': DateTime.now()};
 
     await currentUserDoc
@@ -68,9 +68,15 @@ class MatchesRepository {
     var selectedUserDoc = usersCollection.doc(selectedUserId);
 
     await currentUserDoc.collection('matchList').doc(selectedUserId).delete();
-    await currentUserDoc.collection('dislikedList').doc(selectedUserId).set({});
+    await currentUserDoc
+        .collection('notToShowList')
+        .doc(selectedUserId)
+        .set({});
 
     await selectedUserDoc.collection('matchList').doc(currentUserId).delete();
-    await selectedUserDoc.collection('dislikeList').doc(currentUserId).set({});
+    await selectedUserDoc
+        .collection('notToShowList')
+        .doc(currentUserId)
+        .set({});
   }
 }

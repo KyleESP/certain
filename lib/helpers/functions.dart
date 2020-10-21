@@ -16,11 +16,15 @@ void scaffoldInfo(BuildContext context, String text, Widget sideWidget) {
     );
 }
 
-getDifference(GeoPoint userLocation) async {
-  Position position = await getCurrentPosition();
+Future<double> getDistance(GeoPoint userLocation) async {
+  Position position =
+      await getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
 
   double location = distanceBetween(userLocation.latitude,
-      userLocation.longitude, position.latitude, position.longitude);
+          userLocation.longitude, position.latitude, position.longitude) /
+      1000;
 
-  return location.toInt();
+  location = double.parse(location.toStringAsFixed(2));
+
+  return location;
 }

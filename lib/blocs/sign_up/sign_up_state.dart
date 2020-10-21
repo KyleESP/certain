@@ -7,6 +7,7 @@ class SignUpState {
   final bool isSubmitting;
   final bool isSuccess;
   final bool isFailure;
+  final String errorMessage;
 
   bool get isFormValid => isEmailValid && isPasswordValid;
 
@@ -15,7 +16,8 @@ class SignUpState {
       @required this.isPasswordValid,
       @required this.isSubmitting,
       @required this.isSuccess,
-      @required this.isFailure});
+      @required this.isFailure,
+      this.errorMessage});
 
   //initial state
   factory SignUpState.empty() {
@@ -38,14 +40,14 @@ class SignUpState {
     );
   }
 
-  factory SignUpState.failure() {
+  factory SignUpState.failure(String errorMessage) {
     return SignUpState(
-      isEmailValid: true,
-      isPasswordValid: true,
-      isSubmitting: false,
-      isFailure: true,
-      isSuccess: false,
-    );
+        isEmailValid: true,
+        isPasswordValid: true,
+        isSubmitting: false,
+        isFailure: true,
+        isSuccess: false,
+        errorMessage: errorMessage);
   }
 
   factory SignUpState.success() {

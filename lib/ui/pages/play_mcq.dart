@@ -10,8 +10,6 @@ import 'package:certain/ui/widgets/play_qcm_widgets.dart';
 
 import 'package:certain/helpers/constants.dart';
 
-import 'messages.dart';
-
 class PlayMcq extends StatefulWidget {
   final UserModel user;
   final UserModel selectedUser;
@@ -78,9 +76,6 @@ class _PlayMcqState extends State<PlayMcq> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          if (_optionSelected == _questionSelected.option1) {
-                            _correct++;
-                          }
                           if (isLastQuestion) {
                             var successPercentage = _correct / _mcqSize;
                             if (successPercentage >= 0.5) {
@@ -89,42 +84,33 @@ class _PlayMcqState extends State<PlayMcq> {
                                     currentUser: widget.user.uid,
                                     selectedUser: widget.selectedUser.uid),
                               );
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return Messages(
-                                      userId: widget.user.uid,
-                                    );
-                                  },
-                                ),
-                              );
+                              Navigator.pop(context);
+                              Navigator.pop(context);
                             } else {
                               _matchesBloc.add(
                                 RemoveMatchEvent(
                                     currentUser: widget.user.uid,
                                     selectedUser: widget.selectedUser.uid),
                               );
-                              /*Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return Tabs(widget.user.uid);
-                                  },
-                                ),
-                              );*/
+                              Navigator.pop(context);
+                              Navigator.pop(context);
                             }
+                          } else if (isButtonEnabled) {
+                            setState(() {
+                              if (_optionSelected ==
+                                  _questionSelected.option1) {
+                                _correct++;
+                              }
+                              _mcq.remove(_questionSelected);
+                              _questionSelected = _mcq[0];
+                              _optionSelected = null;
+                              _optionsShuffled = [
+                                _questionSelected.option1,
+                                _questionSelected.option2,
+                                _questionSelected.option3
+                              ]..shuffle();
+                            });
                           }
-                          setState(() {
-                            _mcq.remove(_questionSelected);
-                            _questionSelected = _mcq[0];
-                            _optionSelected = null;
-                            _optionsShuffled = [
-                              _questionSelected.option1,
-                              _questionSelected.option2,
-                              _questionSelected.option3
-                            ]..shuffle();
-                          });
                         },
                         child: Container(
                           alignment: Alignment.center,
