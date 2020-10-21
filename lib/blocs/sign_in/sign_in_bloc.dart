@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'bloc.dart';
 
 import 'package:bloc/bloc.dart';
