@@ -88,8 +88,7 @@ class _SignUpFormState extends State<SignUpForm> {
     return BlocListener<SignUpBloc, SignUpState>(
       listener: (BuildContext context, SignUpState state) {
         if (state.isFailure) {
-          scaffoldInfo(
-              context, "Création du compte échouée", Icon(Icons.error));
+          scaffoldInfo(context, state.errorMessage, Icon(Icons.error));
         }
         if (state.isSubmitting) {
           scaffoldInfo(

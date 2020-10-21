@@ -12,7 +12,7 @@ import 'package:certain/ui/pages/splash_screen.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'bottom_tab.dart';
-import 'login.dart';
+import 'sign_in.dart';
 import 'create_mcq.dart';
 
 class Home extends StatelessWidget {
@@ -41,7 +41,9 @@ class Home extends StatelessWidget {
             return SplashScreen();
           }
           if (state is Authenticated) {
-            return BottomTab(userId : state.userId,);
+            return BottomTab(
+              userId: state.userId,
+            );
           }
           if (state is AuthenticatedButMcqNotSet) {
             return CreateMcq();
@@ -53,7 +55,7 @@ class Home extends StatelessWidget {
             );
           }
           if (state is Unauthenticated) {
-            return Login(
+            return SignIn(
               userRepository: _userRepository,
             );
           } else
