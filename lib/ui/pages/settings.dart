@@ -135,7 +135,7 @@ class _SettingsState extends State<Settings> {
                       ),
                     ),
                     Positioned(
-                      top: size.height * 0.14,
+                      top: size.height * 0.12,
                       child: CircleAvatar(
                         radius: size.width * 0.2,
                         backgroundColor: Colors.transparent,
@@ -165,7 +165,7 @@ class _SettingsState extends State<Settings> {
                       ),
                     ),
                     Positioned(
-                      top: size.height * 0.15,
+                      top: size.height * 0.13,
                       left: size.width * 0.6,
                       child: Container(
                         width: size.width * 0.08,
@@ -184,7 +184,7 @@ class _SettingsState extends State<Settings> {
                       ),
                     ),
                     Positioned(
-                      top: size.height * 0.15,
+                      top: size.height * 0.13,
                       left: size.width * 0.6,
                       child: CircleButton(
                         onTap: () async {
@@ -208,49 +208,54 @@ class _SettingsState extends State<Settings> {
                       ),
                     ),
                     Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         SizedBox(
-                          height: size.height * 0.25,
+                          height: size.height * 0.35,
+                        ),
+                        Container(
+                            width: size.width * 0.85,
+                            child: TextFormField(
+                              controller: _bioController,
+                              keyboardType: TextInputType.multiline,
+                              maxLines: 3,
+                              maxLength: 300,
+                              cursorColor: Colors.grey[600],
+                              style: TextStyle(
+                                  color: Colors.grey[600],
+                                  fontSize: size.height * 0.018),
+                              decoration: InputDecoration(
+                                suffixIcon: IconButton(
+                                  color: backgroundColorRed,
+                                  onPressed: () {
+                                    _settingsBloc.add(
+                                        BioChanged(bio: _bioController.text));
+                                  },
+                                  icon: Icon(Icons.update),
+                                ),
+                                labelText: 'Votre bio',
+                                labelStyle: TextStyle(
+                                  color: Colors.grey[700],
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.grey[600],
+                                  ),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Colors.grey[600],
+                                  ),
+                                ),
+                              ),
+                            )),
+                        SizedBox(
+                          height: size.height * 0.02,
                         ),
                         Row(
                           children: <Widget>[
-                            Container(
-                                width: size.width,
-                                child: TextFormField(
-                                  controller: _bioController,
-                                  keyboardType: TextInputType.multiline,
-                                  maxLines: null,
-                                  maxLength: 300,
-                                  cursorColor: Colors.grey[600],
-                                  style: TextStyle(
-                                      color: Colors.grey[600],
-                                      fontSize: size.height * 0.02),
-                                  decoration: InputDecoration(
-                                    icon: Icon(
-                                      Icons.person,
-                                      color: backgroundColorRed,
-                                    ),
-                                    suffixIcon: IconButton(
-                                      onPressed: () {
-                                        _settingsBloc.add(BioChanged(
-                                            bio: _bioController.text));
-                                      },
-                                      icon: Icon(Icons.update),
-                                    ),
-                                    labelText: 'Votre bio',
-                                    labelStyle: TextStyle(
-                                      color: Colors.grey[700],
-                                    ),
-                                    focusedBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Colors.grey[600],
-                                      ),
-                                    ),
-                                  ),
-                                )),
-                            Spacer(flex: 7),
+                            Spacer(),
                             Text(
                               "Âge :",
                               style: TextStyle(
@@ -295,7 +300,7 @@ class _SettingsState extends State<Settings> {
                           ),
                         ),
                         SizedBox(
-                          height: size.height * 0.05,
+                          height: size.height * 0.02,
                         ),
                         Row(
                           children: <Widget>[
@@ -338,7 +343,7 @@ class _SettingsState extends State<Settings> {
                           ),
                         ),
                         SizedBox(
-                          height: size.height * 0.05,
+                          height: size.height * 0.015,
                         ),
                         Container(
                           alignment: Alignment.centerLeft,
@@ -363,7 +368,7 @@ class _SettingsState extends State<Settings> {
                           ],
                         ),
                         SizedBox(
-                          height: size.height * 0.05,
+                          height: size.height * 0.01,
                         ),
                         RaisedButton(
                           shape: RoundedRectangleBorder(
