@@ -143,8 +143,9 @@ class _LoginFormState extends State<LoginForm> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Container(
-                    margin: EdgeInsets.only(top: size.height * 0.1),
-                    child: Image.asset('assets/images/logo.png'),
+                    margin: EdgeInsets.only(top: size.height * 0.1, bottom: size.height * 0.02),
+                    child: Image.asset('assets/images/logo.png',
+                        height: 250, width: 250),
                   ),
                   Container(
                     padding: EdgeInsets.all(size.height * 0.02),
@@ -247,7 +248,7 @@ class _LoginFormState extends State<LoginForm> {
                   ),
                   Container(
                     padding: EdgeInsets.all(size.height * 0.02),
-                    margin: EdgeInsets.only(top: size.height * 0.1),
+                    margin: EdgeInsets.only(top: size.height * 0.18),
                     child: RichText(
                       text: TextSpan(
                         children: [
