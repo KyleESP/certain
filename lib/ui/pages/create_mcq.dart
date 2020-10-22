@@ -3,10 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 
-import 'package:certain/blocs/questions/questions_bloc.dart';
+import 'package:certain/blocs/create_mcq/bloc.dart';
 import 'package:certain/blocs/authentication/authentication_bloc.dart';
 import 'package:certain/blocs/authentication/authentication_event.dart';
-import 'package:certain/blocs/questions/bloc.dart';
 
 import 'package:certain/models/question_model.dart';
 import 'package:certain/repositories/questions_repository.dart';
@@ -23,8 +22,8 @@ class CreateMcq extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocProvider<QuestionsBloc>(
-        create: (context) => QuestionsBloc(_questionsRepository),
+      body: BlocProvider<CreateMcqBloc>(
+        create: (context) => CreateMcqBloc(_questionsRepository),
         child: CreateMcqForm(),
       ),
     );
@@ -37,7 +36,7 @@ class CreateMcqForm extends StatefulWidget {
 }
 
 class _CreateMcqFormState extends State<CreateMcqForm> {
-  QuestionsBloc _questionsBloc;
+  CreateMcqBloc _createMcqBloc;
   List<QuestionModel> _questionList;
   String _optionSelected;
   QuestionModel _questionSelected;
@@ -50,13 +49,13 @@ class _CreateMcqFormState extends State<CreateMcqForm> {
 
   bool get canNext => _questionList.length > 1 && _userQuestions.length < 10;
 
-  bool isButtonEnabled(bool condition, QuestionsState state) {
+  bool isButtonEnabled(bool condition, CreateMcqState state) {
     return condition && !state.isSubmitting;
   }
 
   @override
   void initState() {
-    _questionsBloc = BlocProvider.of<QuestionsBloc>(context);
+    _createMcqBloc = BlocProvider.of<CreateMcqBloc>(context);
     super.initState();
   }
 
@@ -79,7 +78,7 @@ class _CreateMcqFormState extends State<CreateMcqForm> {
   @override
   Widget build(BuildContext context) {
     final _formKey = GlobalKey<FormState>();
-    return BlocListener<QuestionsBloc, QuestionsState>(listener:
+    return BlocListener<CreateMcqBloc, CreateMcqState>(listener:
         (context, state) {
       if (state.isFailure) {
         scaffoldInfo(context, "Création du QCM échouée", Icon(Icons.error));
@@ -97,9 +96,9 @@ class _CreateMcqFormState extends State<CreateMcqForm> {
         BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
       }
     }, child:
-        BlocBuilder<QuestionsBloc, QuestionsState>(builder: (context, state) {
+        BlocBuilder<CreateMcqBloc, CreateMcqState>(builder: (context, state) {
       if (state is QuestionsInitialState) {
-        _questionsBloc.add(
+        _createMcqBloc.add(
           LoadQuestionsEvent(),
         );
         return loaderWidget();
@@ -110,7 +109,7 @@ class _CreateMcqFormState extends State<CreateMcqForm> {
       if (state is LoadQuestionsState) {
         _questionList = state.questionList;
         _questionSelected = _questionList[0];
-        _questionsBloc.add(LoadQuestionEvent());
+        _createMcqBloc.add(LoadQuestionEvent());
       }
       return Scaffold(
           body: Padding(
@@ -169,7 +168,7 @@ class _CreateMcqFormState extends State<CreateMcqForm> {
                                   "option_3": optionsRemaining[1],
                                 });
 
-                                _questionsBloc.add(
+                                _createMcqBloc.add(
                                   SubmittedMcqEvent(
                                       userQuestions: _userQuestions),
                                 );

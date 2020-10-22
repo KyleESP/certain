@@ -3,13 +3,13 @@ import 'package:certain/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MatchesRepository {
-  final FirebaseFirestore _firestore;
+  final FirebaseFirestore _firebaseFirestore;
 
   MatchesRepository({FirebaseFirestore firebaseFirestore})
-      : _firestore = firebaseFirestore ?? FirebaseFirestore.instance;
+      : _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
 
   Stream<QuerySnapshot> getMatchList(userId) {
-    return _firestore
+    return _firebaseFirestore
         .collection('users')
         .doc(userId)
         .collection('matchList')
@@ -20,7 +20,7 @@ class MatchesRepository {
     UserModel _user = UserModel();
     var data;
 
-    await _firestore.collection('users').doc(userId).get().then((user) {
+    await _firebaseFirestore.collection('users').doc(userId).get().then((user) {
       data = user.data();
       _user.uid = user.id;
       _user.name = data['name'];
@@ -44,14 +44,14 @@ class MatchesRepository {
   }
 
   Future<bool> passedMcq({currentUserId, selectedUserId}) async {
-    var usersCollection = _firestore.collection('users');
+    var usersCollection = _firebaseFirestore.collection('users');
     var currentUserDoc = usersCollection.doc(currentUserId);
 
     var selectedUserDoc = usersCollection.doc(selectedUserId);
 
     var selectedUserPassedMcq = false;
     var userFromSelectedUserPassedMcqList =
-        selectedUserDoc.collection('passedQcmList').doc(currentUserId);
+    selectedUserDoc.collection('passedQcmList').doc(currentUserId);
     await userFromSelectedUserPassedMcqList.get().then((user) {
       selectedUserPassedMcq = user.exists;
     });
@@ -80,7 +80,7 @@ class MatchesRepository {
   }
 
   removeMatch(currentUserId, selectedUserId) async {
-    var usersCollection = _firestore.collection('users');
+    var usersCollection = _firebaseFirestore.collection('users');
     var currentUserDoc = usersCollection.doc(currentUserId);
     var selectedUserDoc = usersCollection.doc(selectedUserId);
 
