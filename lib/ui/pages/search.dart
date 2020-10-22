@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:certain/helpers/constants.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:certain/blocs/search/bloc.dart';
@@ -107,7 +108,7 @@ class _SearchState extends State<Search> {
                 );
               } else {
                 _currentUser = _usersToShow[0];
-                return Stack(children: <Widget>[
+                return Stack(alignment: Alignment.center, children: <Widget>[
                   Positioned(
                     top: 0,
                     child: ClipRRect(
@@ -122,6 +123,14 @@ class _SearchState extends State<Search> {
                           gradient: gradient,
                         ),
                       ),
+                    ),
+                  ),
+                  Positioned(
+                    top: size.height * 0.05,
+                    child: Text(
+                      "Découvrir",
+                      style: TextStyle(
+                          color: Colors.white, fontSize: size.width * 0.06),
                     ),
                   ),
                   profileWidget(
@@ -172,18 +181,13 @@ class _SearchState extends State<Search> {
                             ],
                           ),
                           if (_currentUser.bio.isNotEmpty)
-                            Row(
-                              children: <Widget>[
-                                Icon(
-                                  Icons.description,
-                                  color: Colors.white,
-                                ),
-                                Text(
-                                  _currentUser.bio,
-                                  style: TextStyle(color: Colors.white),
-                                )
-                              ],
-                            )
+                            Container(
+                              margin: EdgeInsets.all(size.height * 0.01),
+                              child: Text(
+                                '"' + _currentUser.bio + '"',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
                         ],
                       ),
                     ),
