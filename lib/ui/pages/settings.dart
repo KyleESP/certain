@@ -78,7 +78,13 @@ class _SettingsState extends State<Settings> {
                 ));
           }
           if (state.isSuccess) {
-            scaffoldInfo(context, "Mise à jour réussi", Icon(Icons.done));
+            scaffoldInfo(
+                context,
+                "Mise à jour réussi",
+                Icon(
+                  Icons.done,
+                  color: backgroundColorOrange,
+                ));
           }
         },
         child: BlocBuilder<SettingsBloc, SettingsState>(
