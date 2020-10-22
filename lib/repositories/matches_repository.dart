@@ -46,7 +46,6 @@ class MatchesRepository {
   openChat({currentUserId, selectedUserId}) async {
     var usersCollection = _firestore.collection('users');
     var currentUserDoc = usersCollection.doc(currentUserId);
-    var selectedUserDoc = usersCollection.doc(selectedUserId);
     var timestampField = {'timestamp': DateTime.now()};
 
     await currentUserDoc
@@ -54,12 +53,6 @@ class MatchesRepository {
         .doc(selectedUserId)
         .set(timestampField);
     await currentUserDoc.collection('matchList').doc(selectedUserId).delete();
-
-    await selectedUserDoc
-        .collection('chats')
-        .doc(currentUserId)
-        .set(timestampField);
-    await selectedUserDoc.collection('matchList').doc(currentUserId).delete();
   }
 
   removeMatch(currentUserId, selectedUserId) async {
