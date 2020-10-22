@@ -91,8 +91,8 @@ class SearchRepository {
         data = user.data();
         userAge = (DateTime.now().year - data['birthdate'].toDate().year);
         if (user.id != uid &&
-            ["b", currentUser.interestedIn].contains(data["gender"]) &&
-            ["b", currentUser.gender].contains(data["interestedIn"]) &&
+            ['b', data['gender']].contains(currentUser.interestedIn) &&
+            ['b', currentUser.gender].contains(data["interestedIn"]) &&
             !usersNotToShowList.contains(user.id) &&
             userAge >= currentUser.minAge &&
             userAge <= currentUser.maxAge) {
