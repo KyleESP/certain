@@ -8,17 +8,15 @@ class SplashScreen extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: backgroundColor,
       body: Container(
+        decoration: BoxDecoration(
+          gradient: gradient,
+        ),
         width: size.width,
+        height: size.height,
         child: Center(
-          child: Text(
-            "Certain",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: size.width * 0.2,
-            ),
-          ),
+          child: Image.asset('assets/images/logo.png',
+              height: size.width * 0.6, width: size.width * 0.6),
         ),
       ),
     );

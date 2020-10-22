@@ -123,19 +123,8 @@ class _SignInFormState extends State<SignInForm> {
           return SingleChildScrollView(
             child: Container(
               decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      begin: Alignment.topRight,
-                      end: Alignment.bottomLeft,
-                      stops: [
-                    0.3,
-                    0.6,
-                    1.0
-                  ],
-                      colors: [
-                    backgroundColorRed,
-                    backgroundColorOrange,
-                    backgroundColorYellow
-                  ])),
+                gradient: gradient,
+              ),
               width: size.width,
               height: size.height,
               child: Column(
