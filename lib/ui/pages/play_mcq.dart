@@ -80,7 +80,7 @@ class _PlayMcqState extends State<PlayMcq> {
                             var successPercentage = _correct / _mcqSize;
                             if (successPercentage >= 0.5) {
                               _matchesBloc.add(
-                                OpenChatEvent(
+                                PassedMcqEvent(
                                     currentUser: widget.user.uid,
                                     selectedUser: widget.selectedUser.uid),
                               );

@@ -38,10 +38,10 @@ class RemoveMatchEvent extends MatchesEvent {
       ];
 }
 
-class OpenChatEvent extends MatchesEvent {
+class PassedMcqEvent extends MatchesEvent {
   final String currentUser, selectedUser;
 
-  OpenChatEvent({this.currentUser, this.selectedUser});
+  PassedMcqEvent({this.currentUser, this.selectedUser});
 
   @override
   List<Object> get props => [

@@ -43,16 +43,40 @@ class MatchesRepository {
     return _user;
   }
 
-  openChat({currentUserId, selectedUserId}) async {
+  Future<bool> passedMcq({currentUserId, selectedUserId}) async {
     var usersCollection = _firestore.collection('users');
     var currentUserDoc = usersCollection.doc(currentUserId);
-    var timestampField = {'timestamp': DateTime.now()};
 
-    await currentUserDoc
-        .collection('chats')
-        .doc(selectedUserId)
-        .set(timestampField);
+    var selectedUserDoc = usersCollection.doc(selectedUserId);
+
+    var selectedUserPassedMcq = false;
+    var userFromSelectedUserPassedMcqList =
+        selectedUserDoc.collection('passedQcmList').doc(currentUserId);
+    await userFromSelectedUserPassedMcqList.get().then((user) {
+      selectedUserPassedMcq = user.exists;
+    });
+
+    if (selectedUserPassedMcq) {
+      var timestampField = {'timestamp': DateTime.now()};
+      await currentUserDoc
+          .collection('chats')
+          .doc(selectedUserId)
+          .set(timestampField);
+      await selectedUserDoc
+          .collection('chats')
+          .doc(currentUserId)
+          .set(timestampField);
+      await userFromSelectedUserPassedMcqList.delete();
+    } else {
+      await currentUserDoc
+          .collection('passedQcmList')
+          .doc(selectedUserId)
+          .set({});
+    }
+
     await currentUserDoc.collection('matchList').doc(selectedUserId).delete();
+
+    return selectedUserPassedMcq;
   }
 
   removeMatch(currentUserId, selectedUserId) async {
@@ -67,6 +91,10 @@ class MatchesRepository {
         .set({});
 
     await selectedUserDoc.collection('matchList').doc(currentUserId).delete();
+    await selectedUserDoc
+        .collection('passedQcmList')
+        .doc(currentUserId)
+        .delete();
     await selectedUserDoc
         .collection('notToShowList')
         .doc(currentUserId)
