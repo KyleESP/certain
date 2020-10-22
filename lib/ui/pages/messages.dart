@@ -183,11 +183,11 @@ class _ChatWidgetState extends State<ChatWidget> {
                         content: Wrap(
                           children: <Widget>[
                             Text(
-                              "Do you want to delete this chat",
+                              "Voulez-vous supprimer ce chat ?",
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                             Text(
-                              "This action is irreversible.",
+                              "Cette action est irreversible.",
                               style: TextStyle(fontWeight: FontWeight.w500),
                             ),
                           ],
@@ -198,7 +198,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                               Navigator.of(context).pop();
                             },
                             child: Text(
-                              "No",
+                              "Non",
                               style: TextStyle(
                                 color: Colors.blue,
                               ),
@@ -210,7 +210,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                               Navigator.of(context).pop();
                             },
                             child: Text(
-                              "Yes",
+                              "Oui",
                               style: TextStyle(
                                 color: Colors.red,
                               ),
