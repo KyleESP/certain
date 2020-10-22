@@ -1,14 +1,14 @@
 import 'package:certain/models/question_model.dart';
 import 'package:equatable/equatable.dart';
 
-abstract class QuestionsEvent extends Equatable {
-  const QuestionsEvent();
+abstract class CreateMcqEvent extends Equatable {
+  const CreateMcqEvent();
 
   @override
   List<Object> get props => [];
 }
 
-class LoadQuestionsEvent extends QuestionsEvent {
+class LoadQuestionsEvent extends CreateMcqEvent {
   final List<QuestionModel> questionList;
 
   LoadQuestionsEvent({this.questionList});
@@ -17,14 +17,14 @@ class LoadQuestionsEvent extends QuestionsEvent {
   List<Object> get props => [questionList];
 }
 
-class LoadQuestionEvent extends QuestionsEvent {
+class LoadQuestionEvent extends CreateMcqEvent {
   LoadQuestionEvent();
 
   @override
   List<Object> get props => [];
 }
 
-class SubmittedMcqEvent extends QuestionsEvent {
+class SubmittedMcqEvent extends CreateMcqEvent {
   final List<Map<String, String>> userQuestions;
 
   SubmittedMcqEvent({this.userQuestions});

@@ -27,7 +27,7 @@ class MatchesBloc extends Bloc<MatchesEvent, MatchesState> {
       yield* _mapRemoveMatchToState(
           currentUserId: event.currentUser, selectedUserId: event.selectedUser);
     }
-    if (event is OpenChatEvent) {
+    if (event is PassedMcqEvent) {
       yield* _mapOpenChatToState(
           currentUserId: event.currentUser, selectedUserId: event.selectedUser);
     }
@@ -52,12 +52,16 @@ class MatchesBloc extends Bloc<MatchesEvent, MatchesState> {
 
   Stream<MatchesState> _mapRemoveMatchToState(
       {String currentUserId, String selectedUserId}) async* {
-    _matchesRepository.removeMatch(currentUserId, selectedUserId);
+    yield LoadingState();
+
+    await _matchesRepository.removeMatch(currentUserId, selectedUserId);
   }
 
   Stream<MatchesState> _mapOpenChatToState(
       {String currentUserId, String selectedUserId}) async* {
-    _matchesRepository.openChat(
+    yield LoadingState();
+
+    await _matchesRepository.passedMcq(
         currentUserId: currentUserId, selectedUserId: selectedUserId);
   }
 }

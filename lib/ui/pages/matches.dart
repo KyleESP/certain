@@ -25,14 +25,14 @@ class Matches extends StatefulWidget {
 }
 
 class _MatchesState extends State<Matches> {
-  MatchesRepository matchesRepository = MatchesRepository();
+  MatchesRepository _matchesRepository = MatchesRepository();
   MatchesBloc _matchesBloc;
   double distance;
   UserModel currentUser;
 
   @override
   void initState() {
-    _matchesBloc = MatchesBloc(matchesRepository);
+    _matchesBloc = MatchesBloc(_matchesRepository);
     super.initState();
   }
 
@@ -72,15 +72,16 @@ class _MatchesState extends State<Matches> {
                     );
                   }
                   if (snapshot.data.docs != null) {
-                    final user = snapshot.data.docs;
+                    final matchedUsers = snapshot.data.docs;
 
                     return SliverGrid(
                       delegate: SliverChildBuilderDelegate(
                         (BuildContext context, int index) {
+                          var user = matchedUsers[index];
                           return GestureDetector(
                             onTap: () async {
-                              UserModel selectedUser = await matchesRepository
-                                  .getUserDetails(user[index].id);
+                              UserModel selectedUser = await _matchesRepository
+                                  .getUserDetails(user.id);
                               distance =
                                   await getDistance(selectedUser.location);
                               showDialog(
@@ -167,8 +168,8 @@ class _MatchesState extends State<Matches> {
                                                           currentUser:
                                                               widget.userId,
                                                           selectedUser:
-                                                              user[index].id));
-                                                  user.removeAt(index);
+                                                              user.id));
+                                                  matchedUsers.remove(user);
                                                   Navigator.pop(context);
                                                 }, size.height * 0.07,
                                                     dislikeButton),
@@ -213,20 +214,20 @@ class _MatchesState extends State<Matches> {
                             },
                             child: profileWidget(
                               padding: size.height * 0.01,
-                              photo: user[index].data()['photoUrl'],
+                              photo: user.data()['photoUrl'],
                               photoWidth: size.width * 0.5,
                               photoHeight: size.height * 0.3,
                               clipRadius: size.height * 0.01,
                               containerHeight: size.height * 0.03,
                               containerWidth: size.width * 0.5,
                               child: Text(
-                                "  " + user[index].data()['name'],
+                                "  " + user.data()['name'],
                                 style: TextStyle(color: Colors.white),
                               ),
                             ),
                           );
                         },
-                        childCount: user.length,
+                        childCount: matchedUsers.length,
                       ),
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,

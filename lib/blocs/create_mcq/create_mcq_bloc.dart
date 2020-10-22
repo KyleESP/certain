@@ -6,13 +6,13 @@ import 'bloc.dart';
 
 import 'package:bloc/bloc.dart';
 
-class QuestionsBloc extends Bloc<QuestionsEvent, QuestionsState> {
+class CreateMcqBloc extends Bloc<CreateMcqEvent, CreateMcqState> {
   QuestionsRepository _questionsRepository;
 
-  QuestionsBloc(this._questionsRepository) : super(QuestionsInitialState());
+  CreateMcqBloc(this._questionsRepository) : super(QuestionsInitialState());
 
   @override
-  Stream<QuestionsState> mapEventToState(QuestionsEvent event) async* {
+  Stream<CreateMcqState> mapEventToState(CreateMcqEvent event) async* {
     if (event is LoadQuestionsEvent) {
       yield* _mapLoadQuestionsToState();
     } else if (event is LoadQuestionEvent) {
@@ -22,7 +22,7 @@ class QuestionsBloc extends Bloc<QuestionsEvent, QuestionsState> {
     }
   }
 
-  Stream<QuestionsState> _mapLoadQuestionsToState() async* {
+  Stream<CreateMcqState> _mapLoadQuestionsToState() async* {
     yield LoadingState();
 
     List<QuestionModel> questionList =
@@ -31,20 +31,20 @@ class QuestionsBloc extends Bloc<QuestionsEvent, QuestionsState> {
     yield LoadQuestionsState(questionList);
   }
 
-  Stream<QuestionsState> _mapLoadQuestionToState() async* {
+  Stream<CreateMcqState> _mapLoadQuestionToState() async* {
     yield LoadQuestionState();
   }
 
-  Stream<QuestionsState> _mapSubmittedMcqToState(
+  Stream<CreateMcqState> _mapSubmittedMcqToState(
       List<Map<String, String>> userQuestions) async* {
-    yield QuestionsState.loading();
+    yield CreateMcqState.loading();
 
     try {
       await _questionsRepository.createMcq(userQuestions);
 
-      yield QuestionsState.success();
+      yield CreateMcqState.success();
     } catch (_) {
-      QuestionsState.failure();
+      CreateMcqState.failure();
     }
   }
 }

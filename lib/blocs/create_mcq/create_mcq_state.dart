@@ -2,34 +2,34 @@ import 'package:certain/models/question_model.dart';
 import 'package:flutter/cupertino.dart';
 
 @immutable
-class QuestionsState {
+class CreateMcqState {
   final bool isSuccess;
   final bool isSubmitting;
   final bool isFailure;
 
-  QuestionsState(
+  CreateMcqState(
       {this.isSuccess = false,
       this.isFailure = false,
       this.isSubmitting = false});
 
-  factory QuestionsState.success() {
-    return QuestionsState(
+  factory CreateMcqState.success() {
+    return CreateMcqState(
       isSubmitting: false,
       isSuccess: true,
       isFailure: false,
     );
   }
 
-  factory QuestionsState.failure() {
-    return QuestionsState(
+  factory CreateMcqState.failure() {
+    return CreateMcqState(
       isSubmitting: false,
       isSuccess: false,
       isFailure: true,
     );
   }
 
-  factory QuestionsState.loading() {
-    return QuestionsState(
+  factory CreateMcqState.loading() {
+    return CreateMcqState(
       isFailure: false,
       isSuccess: false,
       isSubmitting: true,
@@ -37,14 +37,14 @@ class QuestionsState {
   }
 }
 
-class QuestionsInitialState extends QuestionsState {}
+class QuestionsInitialState extends CreateMcqState {}
 
-class LoadingState extends QuestionsState {}
+class LoadingState extends CreateMcqState {}
 
-class LoadQuestionsState extends QuestionsState {
+class LoadQuestionsState extends CreateMcqState {
   final List<QuestionModel> questionList;
 
   LoadQuestionsState(this.questionList);
 }
 
-class LoadQuestionState extends QuestionsState {}
+class LoadQuestionState extends CreateMcqState {}
