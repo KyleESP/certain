@@ -25,6 +25,13 @@ class MessageRepository {
         .collection('chats')
         .doc(selectedUserId)
         .delete();
+
+    await _firebaseFirestore
+        .collection('users')
+        .doc(selectedUserId)
+        .collection('chats')
+        .doc(currentUserId)
+        .delete();
   }
 
   Future<UserModel> getUserDetail({userId}) async {
