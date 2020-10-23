@@ -21,7 +21,14 @@ class Authenticated extends AuthenticationState {
   String toString() => "{userId} authentifié";
 }
 
-class AuthenticatedButMcqNotSet extends AuthenticationState {}
+class AuthenticatedButMcqNotSet extends AuthenticationState {
+  final String userId;
+
+  AuthenticatedButMcqNotSet(this.userId);
+
+  @override
+  List<Object> get props => [userId];
+}
 
 class AuthenticatedButProfileNotSet extends AuthenticationState {
   final String userId;

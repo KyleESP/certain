@@ -4,9 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:certain/helpers/functions.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:circle_button/circle_button.dart';
@@ -59,7 +57,6 @@ class _ProfileFormState extends State<ProfileForm> {
   String gender = "m", interestedIn = "f";
   DateTime birthdate;
   File photo;
-  GeoPoint location;
   ProfileBloc _profileBloc;
 
   bool get isFilled =>
@@ -73,16 +70,8 @@ class _ProfileFormState extends State<ProfileForm> {
     return isFilled && !state.isSubmitting;
   }
 
-  _getLocation() async {
-    Position position =
-        await getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-
-    location = GeoPoint(position.latitude, position.longitude);
-  }
-
   @override
   void initState() {
-    _getLocation();
     _profileBloc = BlocProvider.of<ProfileBloc>(context);
     super.initState();
   }
@@ -151,7 +140,8 @@ class _ProfileFormState extends State<ProfileForm> {
                                 child: CircleAvatar(
                                   radius: size.width * 0.19,
                                   backgroundImage: photo == null
-                                      ? AssetImage('assets/images/avatar_photo.png')
+                                      ? AssetImage(
+                                          'assets/images/avatar_photo.png')
                                       : FileImage(photo),
                                 )))),
                   ),
@@ -289,9 +279,9 @@ class _ProfileFormState extends State<ProfileForm> {
                                   context: context,
                                   locale: const Locale("fr", "FR"),
                                   initialDate:
-                                      DateTime(DateTime.now().year - 19),
-                                  firstDate: DateTime(1900),
-                                  lastDate: DateTime(DateTime.now().year - 19),
+                                      DateTime(DateTime.now().year - 20),
+                                  firstDate: DateTime(DateTime.now().year - 55),
+                                  lastDate: DateTime(DateTime.now().year - 18),
                                   builder:
                                       (BuildContext context, Widget child) {
                                     return Theme(
@@ -409,14 +399,12 @@ class _ProfileFormState extends State<ProfileForm> {
                           Padding(
                             padding: EdgeInsets.only(top: size.height * 0.03),
                             child: GestureDetector(
-                              onTap: () async {
+                              onTap: () {
                                 if (isButtonEnabled(state)) {
-                                  await _getLocation();
                                   _profileBloc.add(
                                     SubmittedEvent(
                                         name: _nameController.text,
                                         birthdate: birthdate,
-                                        location: location,
                                         gender: gender,
                                         interestedIn: interestedIn,
                                         photo: photo),

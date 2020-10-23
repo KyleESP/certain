@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:certain/helpers/functions.dart';
 import 'package:certain/models/user_model.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -19,17 +20,16 @@ class MatchesBloc extends Bloc<MatchesEvent, MatchesState> {
   ) async* {
     if (event is LoadListsEvent) {
       yield* _mapLoadListToState(currentUserId: event.userId);
-    }
-    if (event is LoadCurrentUserEvent) {
+    } else if (event is LoadCurrentUserEvent) {
       yield* _mapLoadCurrentUserToState(currentUserId: event.userId);
-    }
-    if (event is RemoveMatchEvent) {
+    } else if (event is RemoveMatchEvent) {
       yield* _mapRemoveMatchToState(
           currentUserId: event.currentUser, selectedUserId: event.selectedUser);
-    }
-    if (event is PassedMcqEvent) {
-      yield* _mapOpenChatToState(
+    } else if (event is PassedMcqEvent) {
+      yield* _mapPassedMcqToState(
           currentUserId: event.currentUser, selectedUserId: event.selectedUser);
+    } else if (event is SelectedUserEvent) {
+      yield* _mapSelectedUserToState(event.selectedUserId);
     }
   }
 
@@ -57,11 +57,21 @@ class MatchesBloc extends Bloc<MatchesEvent, MatchesState> {
     await _matchesRepository.removeMatch(currentUserId, selectedUserId);
   }
 
-  Stream<MatchesState> _mapOpenChatToState(
+  Stream<MatchesState> _mapPassedMcqToState(
       {String currentUserId, String selectedUserId}) async* {
     yield LoadingState();
 
     await _matchesRepository.passedMcq(
         currentUserId: currentUserId, selectedUserId: selectedUserId);
+  }
+
+  Stream<MatchesState> _mapSelectedUserToState(String selectedUserId) async* {
+    yield LoadingState();
+
+    UserModel selectedUser =
+        await _matchesRepository.getUserDetails(selectedUserId);
+    selectedUser.distance = await getDistance(selectedUser.location);
+
+    yield IsSelectedState(selectedUser: selectedUser);
   }
 }

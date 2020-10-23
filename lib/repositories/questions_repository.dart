@@ -1,15 +1,11 @@
 import 'package:certain/models/question_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class QuestionsRepository {
-  final FirebaseAuth _firebaseAuth;
   final FirebaseFirestore _firebaseFirestore;
 
-  QuestionsRepository(
-      {FirebaseAuth firebaseAuth, FirebaseFirestore firebaseFirestore})
-      : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
-        _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
+  QuestionsRepository({FirebaseFirestore firebaseFirestore})
+      : _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
 
   Future<List<QuestionModel>> getQuestions() async {
     List<QuestionModel> questionList = [];
@@ -29,10 +25,25 @@ class QuestionsRepository {
     return questionList;
   }
 
-  createMcq(List<Map<String, String>> mcq) async {
+  Future<List<QuestionModel>> getMcq(String userId) async {
+    List<QuestionModel> questionList = [];
+    await _firebaseFirestore.collection("users").doc(userId).get().then((user) {
+      for (var question in user.data()['mcq']) {
+        questionList.add(new QuestionModel(
+            question: question['question'],
+            option1: question['correct_answer'],
+            option2: question['option_2'],
+            option3: question['option_3']));
+      }
+    });
+
+    return questionList;
+  }
+
+  editMcq({String userId, List<Map<String, String>> userQuestions}) async {
     await _firebaseFirestore
         .collection("users")
-        .doc(_firebaseAuth.currentUser.uid)
-        .update({"mcq": mcq});
+        .doc(userId)
+        .update({"mcq": userQuestions});
   }
 }

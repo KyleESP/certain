@@ -1,3 +1,4 @@
+import 'package:certain/helpers/functions.dart';
 import 'package:certain/models/question_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -16,7 +17,7 @@ class UserModel {
   String bio;
   List<QuestionModel> mcq;
 
-  int get age => (DateTime.now().year - birthdate.toDate().year);
+  int get age => calculateAge(birthdate.toDate());
 
   UserModel(
       {this.uid,

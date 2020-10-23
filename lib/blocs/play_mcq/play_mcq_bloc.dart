@@ -28,13 +28,15 @@ class PlayMcqBloc extends Bloc<PlayMcqEvent, PlayMcqState> {
       bool openChat = await _matchesRepository.passedMcq(
           currentUserId: currentUserId, selectedUserId: selectedUserId);
       if (openChat) {
-        yield PlayMcqState.completed("s");
+        yield CompletedState(
+            "Vous avez tout deux réussi vos QCM. Vous pouvez maintenant parler.");
       } else {
-        yield PlayMcqState.completed("w");
+        yield CompletedState(
+            "Vous avez réussi le QCM. Patientez que l'autre réussisse aussi.");
       }
     } else {
       await _matchesRepository.removeMatch(currentUserId, selectedUserId);
-      yield PlayMcqState.completed("f");
+      yield CompletedState("Vous avez raté le QCM... Dommage !");
     }
   }
 }

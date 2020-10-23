@@ -46,7 +46,7 @@ class Home extends StatelessWidget {
             );
           }
           if (state is AuthenticatedButMcqNotSet) {
-            return CreateMcq();
+            return CreateMcq(state.userId);
           }
           if (state is AuthenticatedButProfileNotSet) {
             return Profile(

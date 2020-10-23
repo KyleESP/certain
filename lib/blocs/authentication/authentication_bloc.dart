@@ -25,22 +25,34 @@ class AuthenticationBloc
   }
 
   Stream<AuthenticationState> _mapAppStartedToState() async* {
-    yield Unauthenticated();
+    final userExists = await _userRepository.userExists();
+    var mcqExists = false;
+    if (userExists) {
+      mcqExists = await _userRepository.userMcqExists();
+      if (mcqExists) {
+        yield Authenticated(_userRepository.getUserId());
+      } else {
+        yield Unauthenticated();
+      }
+    } else {
+      yield Unauthenticated();
+    }
   }
 
   Stream<AuthenticationState> _mapLoggedInToState() async* {
     final userExists = await _userRepository.userExists();
+    final uid = _userRepository.getUserId();
     var mcqExists = false;
     if (userExists) {
       mcqExists = await _userRepository.userMcqExists();
     }
 
     if (!userExists) {
-      yield AuthenticatedButProfileNotSet(_userRepository.getUserId());
+      yield AuthenticatedButProfileNotSet(uid);
     } else if (!mcqExists) {
-      yield AuthenticatedButMcqNotSet();
+      yield AuthenticatedButMcqNotSet(uid);
     } else {
-      yield Authenticated(_userRepository.getUserId());
+      yield Authenticated(uid);
     }
   }
 

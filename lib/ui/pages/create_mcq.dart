@@ -18,19 +18,26 @@ import 'package:certain/helpers/functions.dart';
 
 class CreateMcq extends StatelessWidget {
   final _questionsRepository = new QuestionsRepository();
+  final String userId;
+
+  CreateMcq(this.userId);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocProvider<CreateMcqBloc>(
         create: (context) => CreateMcqBloc(_questionsRepository),
-        child: CreateMcqForm(),
+        child: CreateMcqForm(userId),
       ),
     );
   }
 }
 
 class CreateMcqForm extends StatefulWidget {
+  final String userId;
+
+  CreateMcqForm(this.userId);
+
   @override
   _CreateMcqFormState createState() => _CreateMcqFormState();
 }
@@ -45,12 +52,10 @@ class _CreateMcqFormState extends State<CreateMcqForm> {
   bool get isQuestionCompleted =>
       _questionSelected != null && _optionSelected != null;
 
-  bool get isValid => isQuestionCompleted && _userQuestions.length >= 0;
+  bool get isLastQuestion => _userQuestions.length >= 5;
 
-  bool get canNext => _questionList.length > 1 && _userQuestions.length < 10;
-
-  bool isButtonEnabled(bool condition, CreateMcqState state) {
-    return condition && !state.isSubmitting;
+  bool isButtonEnabled(CreateMcqState state) {
+    return isQuestionCompleted && !state.isSubmitting;
   }
 
   @override
@@ -120,6 +125,7 @@ class _CreateMcqFormState extends State<CreateMcqForm> {
                 child: ListView(
                   padding: EdgeInsets.all(4),
                   children: <Widget>[
+                    Text("Question ${_userQuestions.length + 1}/6"),
                     DropdownSearch<QuestionModel>(
                       mode: Mode.BOTTOM_SHEET,
                       items: _questionList,
@@ -151,16 +157,15 @@ class _CreateMcqFormState extends State<CreateMcqForm> {
                     ],
                     Row(
                       children: [
-                        if (_userQuestions.length >= 4)
-                          GestureDetector(
-                            onTap: () {
-                              if (isButtonEnabled(isValid, state)) {
-                                var optionsRemaining = [
-                                  _questionSelected.option1,
-                                  _questionSelected.option2,
-                                  _questionSelected.option3
-                                ]..remove(_optionSelected);
-
+                        GestureDetector(
+                          onTap: () {
+                            if (isButtonEnabled(state)) {
+                              var optionsRemaining = [
+                                _questionSelected.option1,
+                                _questionSelected.option2,
+                                _questionSelected.option3
+                              ]..remove(_optionSelected);
+                              if (isLastQuestion) {
                                 _userQuestions.add({
                                   "question": _questionSelected.question,
                                   "correct_answer": _optionSelected,
@@ -170,40 +175,10 @@ class _CreateMcqFormState extends State<CreateMcqForm> {
 
                                 _createMcqBloc.add(
                                   SubmittedMcqEvent(
+                                      userId: widget.userId,
                                       userQuestions: _userQuestions),
                                 );
-                              }
-                            },
-                            child: Container(
-                              alignment: Alignment.center,
-                              width: MediaQuery.of(context).size.width / 2 - 20,
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 24, vertical: 20),
-                              decoration: BoxDecoration(
-                                  color: isButtonEnabled(isValid, state)
-                                      ? loginButtonColor
-                                      : loginButtonColor.withOpacity(0.3),
-                                  borderRadius: BorderRadius.circular(30)),
-                              child: Text(
-                                "Créér le QCM",
-                                style: TextStyle(
-                                    fontSize: 16, color: Colors.white),
-                              ),
-                            ),
-                          ),
-                        SizedBox(
-                          width: 8,
-                        ),
-                        if (isButtonEnabled(canNext, state))
-                          GestureDetector(
-                            onTap: () {
-                              if (isButtonEnabled(isQuestionCompleted, state)) {
-                                var optionsRemaining = [
-                                  _questionSelected.option1,
-                                  _questionSelected.option2,
-                                  _questionSelected.option3
-                                ]..remove(_optionSelected);
-
+                              } else {
                                 setState(() {
                                   _userQuestions.add({
                                     "question": _questionSelected.question,
@@ -217,25 +192,30 @@ class _CreateMcqFormState extends State<CreateMcqForm> {
                                   _optionSelected = null;
                                 });
                               }
-                            },
-                            child: Container(
-                              alignment: Alignment.center,
-                              width: MediaQuery.of(context).size.width / 2 - 40,
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 24, vertical: 20),
-                              decoration: BoxDecoration(
-                                  color: isButtonEnabled(
-                                          isQuestionCompleted, state)
-                                      ? loginButtonColor
-                                      : loginButtonColor.withOpacity(0.3),
-                                  borderRadius: BorderRadius.circular(30)),
-                              child: Text(
-                                "Ajouter une autre question",
-                                style: TextStyle(
-                                    fontSize: 16, color: Colors.white),
-                              ),
+                            }
+                          },
+                          child: Container(
+                            alignment: Alignment.center,
+                            width: MediaQuery.of(context).size.width / 2 - 20,
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 24, vertical: 20),
+                            decoration: BoxDecoration(
+                                color: isButtonEnabled(state)
+                                    ? loginButtonColor
+                                    : loginButtonColor.withOpacity(0.3),
+                                borderRadius: BorderRadius.circular(30)),
+                            child: Text(
+                              !isLastQuestion
+                                  ? "Ajouter une autre question"
+                                  : "Créér le QCM",
+                              style:
+                                  TextStyle(fontSize: 16, color: Colors.white),
                             ),
                           ),
+                        ),
+                        SizedBox(
+                          width: 8,
+                        ),
                       ],
                     ),
                   ],

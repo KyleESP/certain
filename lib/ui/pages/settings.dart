@@ -18,6 +18,8 @@ import 'package:certain/ui/widgets/interestedIn_widget.dart';
 import 'package:certain/helpers/functions.dart';
 import 'package:certain/helpers/constants.dart';
 
+import 'edit_mcq.dart';
+
 class Settings extends StatefulWidget {
   final String userId;
 
@@ -372,6 +374,28 @@ class _SettingsState extends State<Settings> {
                             interestedInWidget("b", size.width, _interestedIn,
                                 _onTapInterestedIn("b")),
                           ],
+                        ),
+                        SizedBox(
+                          height: size.height * 0.01,
+                        ),
+                        RaisedButton(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                          ),
+                          color: logoutButton,
+                          onPressed: () {
+                            Navigator.push(context, MaterialPageRoute(
+                              builder: (context) {
+                                return EditMcq(userId: _user.uid);
+                              },
+                            ));
+                          },
+                          child: Text(
+                            "Modifier votre QCM",
+                            style: TextStyle(
+                                fontSize: size.height * 0.02,
+                                color: Colors.white),
+                          ),
                         ),
                         SizedBox(
                           height: size.height * 0.01,
