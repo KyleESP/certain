@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 
 class OptionTile extends StatefulWidget {
   final String option, description, correctAnswer, optionSelected;
+  final Size size;
 
   OptionTile(
-      {this.description, this.correctAnswer, this.option, this.optionSelected});
+      {this.description, this.correctAnswer, this.option, this.optionSelected, this.size});
 
   @override
   _OptionTileState createState() => _OptionTileState();
@@ -14,12 +15,12 @@ class _OptionTileState extends State<OptionTile> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: EdgeInsets.symmetric(horizontal: widget.size.width * 0.01, vertical: widget.size.height * 0.01),
       child: Row(
         children: [
           Container(
-            height: 28,
-            width: 28,
+            height: widget.size.width * 0.07,
+            width: widget.size.width * 0.07,
             alignment: Alignment.center,
             decoration: BoxDecoration(
                 border: Border.all(
@@ -45,12 +46,16 @@ class _OptionTileState extends State<OptionTile> {
             ),
           ),
           SizedBox(
-            width: 8,
+            width: widget.size.width * 0.03,
           ),
-          Text(
-            widget.description,
-            style: TextStyle(fontSize: 17, color: Colors.black54),
-          )
+          Expanded(
+            child: Text(
+              widget.description,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 3,
+              style: TextStyle(fontSize: widget.size.height * 0.018, color: Colors.black54),
+            ),
+          ),
         ],
       ),
     );
