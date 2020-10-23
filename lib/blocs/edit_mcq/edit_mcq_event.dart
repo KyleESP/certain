@@ -7,6 +7,20 @@ abstract class EditMcqEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class LoadMcqEvent extends EditMcqEvent {
+  final String userId;
+
+  LoadMcqEvent(this.userId);
+
+  @override
+  List<Object> get props => [userId];
+}
+
+class LoadedMcqEvent extends EditMcqEvent {
+  @override
+  List<Object> get props => [];
+}
+
 class SubmittedMcqEvent extends EditMcqEvent {
   final String userId;
   final List<Map<String, String>> userQuestions;

@@ -1,4 +1,3 @@
-import 'package:certain/helpers/functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,35 +5,35 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:certain/blocs/edit_mcq/bloc.dart';
 
 import 'package:certain/models/question_model.dart';
-import 'package:certain/models/user_model.dart';
 import 'package:certain/repositories/questions_repository.dart';
 
 import 'package:certain/ui/widgets/play_qcm_widgets.dart';
 import 'package:certain/ui/widgets/loader_widget.dart';
 
 import 'package:certain/helpers/constants.dart';
+import 'package:certain/helpers/functions.dart';
 
 class EditMcq extends StatelessWidget {
   final _questionsRepository = new QuestionsRepository();
-  final UserModel user;
+  final String userId;
 
-  EditMcq({@required this.user});
+  EditMcq({@required this.userId});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocProvider<EditMcqBloc>(
         create: (context) => EditMcqBloc(_questionsRepository),
-        child: EditMcqForm(user: user),
+        child: EditMcqForm(userId: userId),
       ),
     );
   }
 }
 
 class EditMcqForm extends StatefulWidget {
-  final UserModel user;
+  final String userId;
 
-  EditMcqForm({this.user});
+  EditMcqForm({this.userId});
 
   @override
   _EditMcqFormState createState() => _EditMcqFormState();
@@ -55,9 +54,6 @@ class _EditMcqFormState extends State<EditMcqForm> {
   @override
   void initState() {
     _editMcqBloc = BlocProvider.of<EditMcqBloc>(context);
-    _mcq = widget.user.mcq;
-    _questionSelected = _mcq[0];
-    _optionSelected = _questionSelected.option1;
     super.initState();
   }
 
@@ -84,54 +80,51 @@ class _EditMcqFormState extends State<EditMcqForm> {
         Navigator.pop(context);
       }
     }, child: BlocBuilder<EditMcqBloc, EditMcqState>(builder: (context, state) {
+      if (state is EditMcqInitialState) {
+        _editMcqBloc.add(LoadMcqEvent(widget.userId));
+        return loaderWidget();
+      }
       if (state is LoadingState) {
         return loaderWidget();
       }
-      return Scaffold(
-          body: Padding(
-              padding: const EdgeInsets.all(25),
-              child: Form(
-                key: _formKey,
-                autovalidate: true,
-                child: ListView(
-                  padding: EdgeInsets.all(4),
-                  children: <Widget>[
-                    Text(_questionSelected.question),
-                    SizedBox(
-                      height: 12,
-                    ),
-                    optionWidget(_questionSelected.option1, "A"),
-                    optionWidget(_questionSelected.option2, "B"),
-                    optionWidget(_questionSelected.option3, "C"),
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: 8,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            if (isButtonEnabled) {
-                              var optionsRemaining = [
-                                _questionSelected.option1,
-                                _questionSelected.option2,
-                                _questionSelected.option3
-                              ]..remove(_optionSelected);
+      if (state is LoadMcqState) {
+        _mcq = state.mcq;
+        _questionSelected = _mcq[0];
+        _optionSelected = _questionSelected.option1;
+        _editMcqBloc.add(LoadedMcqEvent());
+      }
+      if (state is ShowMcqState) {
+        return Scaffold(
+            body: Padding(
+                padding: const EdgeInsets.all(25),
+                child: Form(
+                  key: _formKey,
+                  autovalidate: true,
+                  child: ListView(
+                    padding: EdgeInsets.all(4),
+                    children: <Widget>[
+                      Text(_questionSelected.question),
+                      SizedBox(
+                        height: 12,
+                      ),
+                      optionWidget(_questionSelected.option1, "A"),
+                      optionWidget(_questionSelected.option2, "B"),
+                      optionWidget(_questionSelected.option3, "C"),
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 8,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              if (isButtonEnabled) {
+                                var optionsRemaining = [
+                                  _questionSelected.option1,
+                                  _questionSelected.option2,
+                                  _questionSelected.option3
+                                ]..remove(_optionSelected);
 
-                              if (isLastQuestion) {
-                                _userQuestions.add({
-                                  "question": _questionSelected.question,
-                                  "correct_answer": _optionSelected,
-                                  "option_2": optionsRemaining[0],
-                                  "option_3": optionsRemaining[1],
-                                });
-
-                                _editMcqBloc.add(
-                                  SubmittedMcqEvent(
-                                      userId: widget.user.uid,
-                                      userQuestions: _userQuestions),
-                                );
-                              } else {
-                                setState(() {
+                                if (isLastQuestion) {
                                   _userQuestions.add({
                                     "question": _questionSelected.question,
                                     "correct_answer": _optionSelected,
@@ -139,37 +132,54 @@ class _EditMcqFormState extends State<EditMcqForm> {
                                     "option_3": optionsRemaining[1],
                                   });
 
-                                  _mcq.remove(_questionSelected);
-                                  _questionSelected = _mcq[0];
-                                  _optionSelected = _questionSelected.option1;
-                                });
+                                  _editMcqBloc.add(
+                                    SubmittedMcqEvent(
+                                        userId: widget.userId,
+                                        userQuestions: _userQuestions),
+                                  );
+                                } else {
+                                  setState(() {
+                                    _userQuestions.add({
+                                      "question": _questionSelected.question,
+                                      "correct_answer": _optionSelected,
+                                      "option_2": optionsRemaining[0],
+                                      "option_3": optionsRemaining[1],
+                                    });
+
+                                    _mcq.remove(_questionSelected);
+                                    _questionSelected = _mcq[0];
+                                    _optionSelected = _questionSelected.option1;
+                                  });
+                                }
                               }
-                            }
-                          },
-                          child: Container(
-                            alignment: Alignment.center,
-                            width: MediaQuery.of(context).size.width / 2 - 40,
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 24, vertical: 20),
-                            decoration: BoxDecoration(
-                                color: isButtonEnabled
-                                    ? loginButtonColor
-                                    : loginButtonColor.withOpacity(0.3),
-                                borderRadius: BorderRadius.circular(30)),
-                            child: Text(
-                              !isLastQuestion
-                                  ? "Prochaine question"
-                                  : "Terminer les modifications",
-                              style:
-                                  TextStyle(fontSize: 16, color: Colors.white),
+                            },
+                            child: Container(
+                              alignment: Alignment.center,
+                              width: MediaQuery.of(context).size.width / 2 - 40,
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 24, vertical: 20),
+                              decoration: BoxDecoration(
+                                  color: isButtonEnabled
+                                      ? loginButtonColor
+                                      : loginButtonColor.withOpacity(0.3),
+                                  borderRadius: BorderRadius.circular(30)),
+                              child: Text(
+                                !isLastQuestion
+                                    ? "Prochaine question"
+                                    : "Terminer les modifications",
+                                style: TextStyle(
+                                    fontSize: 16, color: Colors.white),
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              )));
+                        ],
+                      ),
+                    ],
+                  ),
+                )));
+      } else {
+        return Container();
+      }
     }));
   }
 

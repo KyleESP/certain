@@ -25,6 +25,21 @@ class QuestionsRepository {
     return questionList;
   }
 
+  Future<List<QuestionModel>> getMcq(String userId) async {
+    List<QuestionModel> questionList = [];
+    await _firebaseFirestore.collection("users").doc(userId).get().then((user) {
+      for (var question in user.data()['mcq']) {
+        questionList.add(new QuestionModel(
+            question: question['question'],
+            option1: question['correct_answer'],
+            option2: question['option_2'],
+            option3: question['option_3']));
+      }
+    });
+
+    return questionList;
+  }
+
   editMcq({String userId, List<Map<String, String>> userQuestions}) async {
     await _firebaseFirestore
         .collection("users")

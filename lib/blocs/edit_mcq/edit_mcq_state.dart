@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:certain/models/question_model.dart';
 
 @immutable
 class EditMcqState {
@@ -38,4 +39,12 @@ class EditMcqState {
 
 class EditMcqInitialState extends EditMcqState {}
 
+class ShowMcqState extends EditMcqState {}
+
 class LoadingState extends EditMcqState {}
+
+class LoadMcqState extends EditMcqState {
+  final List<QuestionModel> mcq;
+
+  LoadMcqState(this.mcq);
+}

@@ -386,7 +386,7 @@ class _SettingsState extends State<Settings> {
                           onPressed: () {
                             Navigator.push(context, MaterialPageRoute(
                               builder: (context) {
-                                return EditMcq(user: _user);
+                                return EditMcq(userId: _user.uid);
                               },
                             ));
                           },
