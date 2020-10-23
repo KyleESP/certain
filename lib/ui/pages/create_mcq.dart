@@ -239,6 +239,7 @@ class _CreateMcqFormState extends State<CreateMcqForm> {
 
                                         _createMcqBloc.add(
                                           SubmittedMcqEvent(
+                                              userId: widget.userId,
                                               userQuestions: _userQuestions),
                                         );
                                       } else {
