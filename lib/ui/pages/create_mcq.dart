@@ -52,12 +52,10 @@ class _CreateMcqFormState extends State<CreateMcqForm> {
   bool get isQuestionCompleted =>
       _questionSelected != null && _optionSelected != null;
 
-  bool get isValid => isQuestionCompleted && _userQuestions.length >= 0;
+  bool get isLastQuestion => _userQuestions.length >= 5;
 
-  bool get canNext => _questionList.length > 1 && _userQuestions.length < 6;
-
-  bool isButtonEnabled(bool condition, CreateMcqState state) {
-    return condition && !state.isSubmitting;
+  bool isButtonEnabled(CreateMcqState state) {
+    return isQuestionCompleted && !state.isSubmitting;
   }
 
   @override
@@ -159,16 +157,15 @@ class _CreateMcqFormState extends State<CreateMcqForm> {
                     ],
                     Row(
                       children: [
-                        if (_userQuestions.length == 6)
-                          GestureDetector(
-                            onTap: () {
-                              if (isButtonEnabled(isValid, state)) {
-                                var optionsRemaining = [
-                                  _questionSelected.option1,
-                                  _questionSelected.option2,
-                                  _questionSelected.option3
-                                ]..remove(_optionSelected);
-
+                        GestureDetector(
+                          onTap: () {
+                            if (isButtonEnabled(state)) {
+                              var optionsRemaining = [
+                                _questionSelected.option1,
+                                _questionSelected.option2,
+                                _questionSelected.option3
+                              ]..remove(_optionSelected);
+                              if (isLastQuestion) {
                                 _userQuestions.add({
                                   "question": _questionSelected.question,
                                   "correct_answer": _optionSelected,
@@ -181,36 +178,7 @@ class _CreateMcqFormState extends State<CreateMcqForm> {
                                       userId: widget.userId,
                                       userQuestions: _userQuestions),
                                 );
-                              }
-                            },
-                            child: Container(
-                              alignment: Alignment.center,
-                              width: MediaQuery.of(context).size.width / 2 - 20,
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 24, vertical: 20),
-                              decoration: BoxDecoration(
-                                  color: loginButtonColor,
-                                  borderRadius: BorderRadius.circular(30)),
-                              child: Text(
-                                "Créér le QCM",
-                                style: TextStyle(
-                                    fontSize: 16, color: Colors.white),
-                              ),
-                            ),
-                          ),
-                        SizedBox(
-                          width: 8,
-                        ),
-                        if (isButtonEnabled(canNext, state))
-                          GestureDetector(
-                            onTap: () {
-                              if (isButtonEnabled(isQuestionCompleted, state)) {
-                                var optionsRemaining = [
-                                  _questionSelected.option1,
-                                  _questionSelected.option2,
-                                  _questionSelected.option3
-                                ]..remove(_optionSelected);
-
+                              } else {
                                 setState(() {
                                   _userQuestions.add({
                                     "question": _questionSelected.question,
@@ -224,25 +192,30 @@ class _CreateMcqFormState extends State<CreateMcqForm> {
                                   _optionSelected = null;
                                 });
                               }
-                            },
-                            child: Container(
-                              alignment: Alignment.center,
-                              width: MediaQuery.of(context).size.width / 2 - 40,
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 24, vertical: 20),
-                              decoration: BoxDecoration(
-                                  color: isButtonEnabled(
-                                          isQuestionCompleted, state)
-                                      ? loginButtonColor
-                                      : loginButtonColor.withOpacity(0.3),
-                                  borderRadius: BorderRadius.circular(30)),
-                              child: Text(
-                                "Ajouter une autre question",
-                                style: TextStyle(
-                                    fontSize: 16, color: Colors.white),
-                              ),
+                            }
+                          },
+                          child: Container(
+                            alignment: Alignment.center,
+                            width: MediaQuery.of(context).size.width / 2 - 20,
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 24, vertical: 20),
+                            decoration: BoxDecoration(
+                                color: isButtonEnabled(state)
+                                    ? loginButtonColor
+                                    : loginButtonColor.withOpacity(0.3),
+                                borderRadius: BorderRadius.circular(30)),
+                            child: Text(
+                              !isLastQuestion
+                                  ? "Ajouter une autre question"
+                                  : "Créér le QCM",
+                              style:
+                                  TextStyle(fontSize: 16, color: Colors.white),
                             ),
                           ),
+                        ),
+                        SizedBox(
+                          width: 8,
+                        ),
                       ],
                     ),
                   ],
