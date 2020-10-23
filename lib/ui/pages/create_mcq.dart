@@ -45,12 +45,10 @@ class _CreateMcqFormState extends State<CreateMcqForm> {
   bool get isQuestionCompleted =>
       _questionSelected != null && _optionSelected != null;
 
-  bool get isValid => isQuestionCompleted && _userQuestions.length >= 0;
+  bool get isLastQuestion => _userQuestions.length >= 5;
 
-  bool get canNext => _questionList.length > 1 && _userQuestions.length < 10;
-
-  bool isButtonEnabled(bool condition, CreateMcqState state) {
-    return condition && !state.isSubmitting;
+  bool isButtonEnabled(CreateMcqState state) {
+    return isQuestionCompleted && !state.isSubmitting;
   }
 
   @override
@@ -71,12 +69,14 @@ class _CreateMcqFormState extends State<CreateMcqForm> {
         description: "$option",
         optionSelected: _optionSelected,
         correctAnswer: _optionSelected,
+        size: MediaQuery.of(context).size,
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     final _formKey = GlobalKey<FormState>();
     return BlocListener<CreateMcqBloc, CreateMcqState>(listener:
         (context, state) {
@@ -112,135 +112,172 @@ class _CreateMcqFormState extends State<CreateMcqForm> {
         _createMcqBloc.add(LoadQuestionEvent());
       }
       return Scaffold(
-          body: Padding(
+          body: Container(
+              decoration: BoxDecoration(
+                gradient: gradient,
+              ),
+              width: size.width,
+              height: size.height,
               padding: const EdgeInsets.all(25),
-              child: Form(
-                key: _formKey,
-                autovalidate: true,
-                child: ListView(
-                  padding: EdgeInsets.all(4),
-                  children: <Widget>[
-                    DropdownSearch<QuestionModel>(
-                      mode: Mode.BOTTOM_SHEET,
-                      items: _questionList,
-                      selectedItem: _questionSelected,
-                      isFilteredOnline: true,
-                      showSearchBox: true,
-                      label: 'Question *',
-                      dropdownSearchDecoration: InputDecoration(
-                          filled: true,
-                          fillColor:
-                              Theme.of(context).inputDecorationTheme.fillColor),
-                      autoValidate: true,
-                      validator: (QuestionModel u) =>
-                          u == null ? "Question field is required " : null,
-                      onChanged: (QuestionModel q) {
-                        setState(() {
-                          _questionSelected = q;
-                          _optionSelected = null;
-                        });
-                      },
-                    ),
-                    SizedBox(
-                      height: 12,
-                    ),
-                    if (_questionSelected != null) ...[
-                      optionWidget(_questionSelected.option1, "A"),
-                      optionWidget(_questionSelected.option2, "B"),
-                      optionWidget(_questionSelected.option3, "C"),
-                    ],
-                    Row(
-                      children: [
-                        if (_userQuestions.length >= 4)
-                          GestureDetector(
-                            onTap: () {
-                              if (isButtonEnabled(isValid, state)) {
-                                var optionsRemaining = [
-                                  _questionSelected.option1,
-                                  _questionSelected.option2,
-                                  _questionSelected.option3
-                                ]..remove(_optionSelected);
-
-                                _userQuestions.add({
-                                  "question": _questionSelected.question,
-                                  "correct_answer": _optionSelected,
-                                  "option_2": optionsRemaining[0],
-                                  "option_3": optionsRemaining[1],
-                                });
-
-                                _createMcqBloc.add(
-                                  SubmittedMcqEvent(
-                                      userQuestions: _userQuestions),
-                                );
-                              }
-                            },
-                            child: Container(
-                              alignment: Alignment.center,
-                              width: MediaQuery.of(context).size.width / 2 - 20,
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 24, vertical: 20),
-                              decoration: BoxDecoration(
-                                  color: isButtonEnabled(isValid, state)
-                                      ? loginButtonColor
-                                      : loginButtonColor.withOpacity(0.3),
-                                  borderRadius: BorderRadius.circular(30)),
-                              child: Text(
-                                "Créér le QCM",
-                                style: TextStyle(
-                                    fontSize: 16, color: Colors.white),
-                              ),
-                            ),
-                          ),
-                        SizedBox(
-                          width: 8,
-                        ),
-                        if (isButtonEnabled(canNext, state))
-                          GestureDetector(
-                            onTap: () {
-                              if (isButtonEnabled(isQuestionCompleted, state)) {
-                                var optionsRemaining = [
-                                  _questionSelected.option1,
-                                  _questionSelected.option2,
-                                  _questionSelected.option3
-                                ]..remove(_optionSelected);
-
-                                setState(() {
-                                  _userQuestions.add({
-                                    "question": _questionSelected.question,
-                                    "correct_answer": _optionSelected,
-                                    "option_2": optionsRemaining[0],
-                                    "option_3": optionsRemaining[1],
-                                  });
-
-                                  _questionList.remove(_questionSelected);
-                                  _questionSelected = _questionList[0];
-                                  _optionSelected = null;
-                                });
-                              }
-                            },
-                            child: Container(
-                              alignment: Alignment.center,
-                              width: MediaQuery.of(context).size.width / 2 - 40,
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 24, vertical: 20),
-                              decoration: BoxDecoration(
-                                  color: isButtonEnabled(
-                                          isQuestionCompleted, state)
-                                      ? loginButtonColor
-                                      : loginButtonColor.withOpacity(0.3),
-                                  borderRadius: BorderRadius.circular(30)),
-                              child: Text(
-                                "Ajouter une autre question",
-                                style: TextStyle(
-                                    fontSize: 16, color: Colors.white),
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
-                  ],
+              child: Stack(alignment: Alignment.center, children: <Widget>[
+                Positioned(
+                  top: size.height * 0.05,
+                  child: Text(
+                    "Création de votre questionnaire",
+                    style: TextStyle(
+                        color: Colors.white, fontSize: size.width * 0.05),
+                  ),
                 ),
-              )));
+                ClipRRect(
+                    borderRadius: BorderRadius.circular(20.0),
+                    child: Container(
+                        height: size.height * 0.58,
+                        width: size.width * 0.95,
+                        padding: EdgeInsets.all(size.width * 0.05),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey[700],
+                              spreadRadius: 10,
+                              blurRadius: 10,
+                            ),
+                          ],
+                        ),
+                        child: Form(
+                          key: _formKey,
+                          autovalidate: true,
+                          child: ListView(
+                            padding: EdgeInsets.all(size.width * 0.01),
+                            children: <Widget>[
+                              Text(
+                                "Question ${_userQuestions.length + 1} / 6",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: size.height * 0.018,
+                                    color: Colors.black54),
+                              ),
+                              SizedBox(
+                                height: size.height * 0.015,
+                              ),
+                              DropdownSearch<QuestionModel>(
+                                mode: Mode.DIALOG,
+                                items: _questionList,
+                                selectedItem: _questionSelected,
+                                isFilteredOnline: true,
+                                showSearchBox: false,
+                                label: 'Sélectionnez une question *',
+                                dropdownSearchDecoration: InputDecoration(
+                                  labelStyle:
+                                      TextStyle(fontSize: size.height * 0.022),
+                                  filled: true,
+                                  fillColor: Theme.of(context)
+                                      .inputDecorationTheme
+                                      .fillColor,
+                                  focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                    color: backgroundColorOrange,
+                                  )),
+                                ),
+                                autoValidate: true,
+                                validator: (QuestionModel u) => u == null
+                                    ? "Question field is required "
+                                    : null,
+                                onChanged: (QuestionModel q) {
+                                  setState(() {
+                                    _questionSelected = q;
+                                    _optionSelected = null;
+                                  });
+                                },
+                              ),
+                              SizedBox(
+                                height: size.height * 0.02,
+                              ),
+                              Text(
+                                "Sélectionnez votre réponse : ",
+                                style: TextStyle(
+                                    fontSize: size.height * 0.018,
+                                    color: Colors.black54),
+                              ),
+                              SizedBox(
+                                height: size.height * 0.01,
+                              ),
+                              if (_questionSelected != null) ...[
+                                optionWidget(_questionSelected.option1, "A"),
+                                optionWidget(_questionSelected.option2, "B"),
+                                optionWidget(_questionSelected.option3, "C"),
+                              ],
+                              SizedBox(
+                                height: size.height * 0.03,
+                              ),
+                              Align(
+                                alignment: Alignment.bottomCenter,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    if (isButtonEnabled(state)) {
+                                      var optionsRemaining = [
+                                        _questionSelected.option1,
+                                        _questionSelected.option2,
+                                        _questionSelected.option3
+                                      ]..remove(_optionSelected);
+
+                                      if (isLastQuestion) {
+                                        _userQuestions.add({
+                                          "question":
+                                              _questionSelected.question,
+                                          "correct_answer": _optionSelected,
+                                          "option_2": optionsRemaining[0],
+                                          "option_3": optionsRemaining[1],
+                                        });
+
+                                        _createMcqBloc.add(
+                                          SubmittedMcqEvent(
+                                              userQuestions: _userQuestions),
+                                        );
+                                      } else {
+                                        setState(() {
+                                          _userQuestions.add({
+                                            "question":
+                                                _questionSelected.question,
+                                            "correct_answer": _optionSelected,
+                                            "option_2": optionsRemaining[0],
+                                            "option_3": optionsRemaining[1],
+                                          });
+
+                                          _questionList
+                                              .remove(_questionSelected);
+                                          _questionSelected = _questionList[0];
+                                          _optionSelected = null;
+                                        });
+                                      }
+                                    }
+                                  },
+                                  child: Container(
+                                    alignment: Alignment.centerRight,
+                                    width: size.width * 0.36,
+                                    height: size.height * 0.08,
+                                    decoration: BoxDecoration(
+                                      color: isButtonEnabled(state)
+                                          ? loginButtonColor
+                                          : loginButtonColor.withOpacity(0.3),
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: Text(
+                                      !isLastQuestion
+                                          ? "Question suivante"
+                                          : "Créer le questionnaire",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: size.height * 0.02,
+                                          color: Colors.white),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ))),
+              ])));
     }));
   }
 }
