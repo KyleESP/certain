@@ -1,6 +1,7 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'dart:math';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:certain/blocs/edit_mcq/bloc.dart';
@@ -42,11 +43,12 @@ class EditMcqForm extends StatefulWidget {
 
 class _EditMcqFormState extends State<EditMcqForm> {
   EditMcqBloc _editMcqBloc;
-  List<QuestionModel> _mcq, _mcqCopy;
+  List<QuestionModel> _mcq;
   String _optionSelected;
-  QuestionModel _questionSelected, _questionShowed;
+  QuestionModel _questionSelected;
   List<Map<String, String>> _userQuestions = [];
   List<QuestionModel> _questionList = [];
+  Random random = new Random();
 
   bool get isLastQuestion => _mcq.length == 1;
 
@@ -91,20 +93,13 @@ class _EditMcqFormState extends State<EditMcqForm> {
       }
       if (state is LoadMcqState) {
         _mcq = state.mcq;
-        _mcqCopy = _mcq;
         _questionList = state.questionList;
         _questionSelected = _mcq[0];
-        _questionShowed = _questionSelected;
         _optionSelected = _questionSelected.option1;
         _editMcqBloc.add(LoadedMcqEvent());
       }
       if (state is ShowMcqState) {
         var _questionListCopy = _questionList;
-        for (var q in _mcqCopy) {
-          _questionListCopy.removeWhere((item) =>
-              item.question == q.question &&
-              item.question != _questionShowed.question);
-        }
         for (var q in _userQuestions) {
           _questionListCopy
               .removeWhere((item) => item.question == q['question']);
@@ -183,9 +178,19 @@ class _EditMcqFormState extends State<EditMcqForm> {
                                       "option_3": optionsRemaining[1],
                                     });
 
-                                    _mcq.remove(_questionSelected);
-                                    _questionSelected = _mcq[0];
-                                    _questionShowed = _questionSelected;
+                                    _mcq.removeAt(0);
+                                    var exist = false;
+                                    for (var q in _mcq) {
+                                      if (q.question ==
+                                          _questionSelected.question) {
+                                        exist = true;
+                                        break;
+                                      }
+                                    }
+                                    _questionSelected = exist
+                                        ? _questionList[random
+                                            .nextInt(_questionList.length)]
+                                        : _mcq[0];
                                     _optionSelected = _questionSelected.option1;
                                   });
                                 }
