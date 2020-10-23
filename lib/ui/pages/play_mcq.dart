@@ -74,17 +74,7 @@ class _PlayMcqFormState extends State<PlayMcqForm> {
     final _formKey = GlobalKey<FormState>();
     Size size = MediaQuery.of(context).size;
     return BlocListener<PlayMcqBloc, PlayMcqState>(listener: (context, state) {
-      if (state.isCompleted) {
-        var message = "";
-        if (state.status == "w") {
-          message =
-              "Vous avez réussi le QCM. Patientez que l'autre réussisse aussi.";
-        } else if (state.status == "s") {
-          message =
-              "Vous avez tout deux réussi vos QCM. Vous pouvez maintenant parler.";
-        } else {
-          message = "Vous avez raté le QCM... Dommage !";
-        }
+      if (state is CompletedState) {
         showDialog(
             context: context,
             builder: (context) {
@@ -107,7 +97,7 @@ class _PlayMcqFormState extends State<PlayMcqForm> {
                     padding:
                         EdgeInsets.symmetric(horizontal: size.height * 0.02),
                     child: Text(
-                      message,
+                      state.message,
                       style: TextStyle(
                           color: Colors.red, fontSize: size.height * 0.02),
                     ),
