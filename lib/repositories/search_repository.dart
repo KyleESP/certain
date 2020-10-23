@@ -89,7 +89,7 @@ class SearchRepository {
     await _firebaseFirestore.collection('users').get().then((users) async {
       for (var user in users.docs) {
         data = user.data();
-        userAge = (DateTime.now().year - data['birthdate'].toDate().year);
+        userAge = calculateAge(data['birthdate'].toDate());
         if (user.id != uid &&
             ['b', data['gender']].contains(currentUser.interestedIn) &&
             ['b', currentUser.gender].contains(data["interestedIn"]) &&

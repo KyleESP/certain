@@ -49,7 +49,6 @@ class _PlayMcqFormState extends State<PlayMcqForm> {
   String _optionSelected;
   QuestionModel _questionSelected;
   int _correct = 0;
-  int _mcqSize;
   List<String> _optionsShuffled = [];
 
   bool get isLastQuestion => _mcq.length == 1;
@@ -61,7 +60,6 @@ class _PlayMcqFormState extends State<PlayMcqForm> {
   void initState() {
     _playMcqBloc = BlocProvider.of<PlayMcqBloc>(context);
     _mcq = widget.selectedUser.mcq;
-    _mcqSize = _mcq.length;
     _questionSelected = _mcq[0];
     _optionsShuffled = [
       _questionSelected.option1,
@@ -76,17 +74,7 @@ class _PlayMcqFormState extends State<PlayMcqForm> {
     final _formKey = GlobalKey<FormState>();
     Size size = MediaQuery.of(context).size;
     return BlocListener<PlayMcqBloc, PlayMcqState>(listener: (context, state) {
-      if (state.isCompleted) {
-        var message = "";
-        if (state.status == "w") {
-          message =
-              "Vous avez réussi le QCM. Patientez que l'autre réussisse aussi.";
-        } else if (state.status == "s") {
-          message =
-              "Vous avez tout deux réussi vos QCM. Vous pouvez maintenant parler.";
-        } else {
-          message = "Vous avez raté le QCM... Dommage !";
-        }
+      if (state is CompletedState) {
         showDialog(
             context: context,
             builder: (context) {
@@ -109,7 +97,7 @@ class _PlayMcqFormState extends State<PlayMcqForm> {
                     padding:
                         EdgeInsets.symmetric(horizontal: size.height * 0.02),
                     child: Text(
-                      message,
+                      state.message,
                       style: TextStyle(
                           color: Colors.red, fontSize: size.height * 0.02),
                     ),
@@ -131,6 +119,7 @@ class _PlayMcqFormState extends State<PlayMcqForm> {
                 child: ListView(
                   padding: EdgeInsets.all(4),
                   children: <Widget>[
+                    Text("Question ${7 - _mcq.length}/6"),
                     Text(_questionSelected.question),
                     SizedBox(
                       height: 12,
@@ -146,7 +135,7 @@ class _PlayMcqFormState extends State<PlayMcqForm> {
                         GestureDetector(
                           onTap: () {
                             if (isLastQuestion) {
-                              var successPercentage = _correct / _mcqSize;
+                              var successPercentage = _correct / 6;
                               _playMcqBloc.add(CompletedEvent(
                                   currentUserId: widget.user.uid,
                                   selectedUserId: widget.selectedUser.uid,

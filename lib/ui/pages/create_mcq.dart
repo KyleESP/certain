@@ -18,19 +18,26 @@ import 'package:certain/helpers/functions.dart';
 
 class CreateMcq extends StatelessWidget {
   final _questionsRepository = new QuestionsRepository();
+  final String userId;
+
+  CreateMcq(this.userId);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocProvider<CreateMcqBloc>(
         create: (context) => CreateMcqBloc(_questionsRepository),
-        child: CreateMcqForm(),
+        child: CreateMcqForm(userId),
       ),
     );
   }
 }
 
 class CreateMcqForm extends StatefulWidget {
+  final String userId;
+
+  CreateMcqForm(this.userId);
+
   @override
   _CreateMcqFormState createState() => _CreateMcqFormState();
 }

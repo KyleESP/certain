@@ -1,9 +1,11 @@
 import 'dart:io';
 
-import 'package:certain/models/user_model.dart';
+import 'package:certain/helpers/functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+
+import 'package:certain/models/user_model.dart';
 
 class UserRepository {
   final FirebaseAuth _firebaseAuth;
@@ -98,7 +100,7 @@ class UserRepository {
         .child(uid)
         .putFile(photo);
 
-    final age = DateTime.now().year - birthdate.year;
+    final age = calculateAge(birthdate);
 
     return await storageUploadTask.onComplete.then((ref) async {
       await ref.ref.getDownloadURL().then((url) async {
@@ -111,8 +113,8 @@ class UserRepository {
           'interestedIn': interestedIn,
           'birthdate': birthdate,
           'maxDistance': 30,
-          'minAge': age,
-          'maxAge': age + 1,
+          'minAge': age - ((age - 18) >= 2 ? 2 : age - 18),
+          'maxAge': age + ((55 - age) >= 2 ? 2 : 55 - age),
           'bio': ''
         });
       });
