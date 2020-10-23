@@ -140,7 +140,8 @@ class _ProfileFormState extends State<ProfileForm> {
                                 child: CircleAvatar(
                                   radius: size.width * 0.19,
                                   backgroundImage: photo == null
-                                      ? AssetImage('assets/images/avatar_photo.png')
+                                      ? AssetImage(
+                                          'assets/images/avatar_photo.png')
                                       : FileImage(photo),
                                 )))),
                   ),
@@ -278,9 +279,9 @@ class _ProfileFormState extends State<ProfileForm> {
                                   context: context,
                                   locale: const Locale("fr", "FR"),
                                   initialDate:
-                                      DateTime(DateTime.now().year - 19),
-                                  firstDate: DateTime(1900),
-                                  lastDate: DateTime(DateTime.now().year - 19),
+                                      DateTime(DateTime.now().year - 20),
+                                  firstDate: DateTime(DateTime.now().year - 55),
+                                  lastDate: DateTime(DateTime.now().year - 18),
                                   builder:
                                       (BuildContext context, Widget child) {
                                     return Theme(
