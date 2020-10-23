@@ -18,7 +18,8 @@ class CreateMcqBloc extends Bloc<CreateMcqEvent, CreateMcqState> {
     } else if (event is LoadQuestionEvent) {
       yield* _mapLoadQuestionToState();
     } else if (event is SubmittedMcqEvent) {
-      yield* _mapSubmittedMcqToState(event.userQuestions);
+      yield* _mapSubmittedMcqToState(
+          userId: event.userId, userQuestions: event.userQuestions);
     }
   }
 
@@ -36,11 +37,12 @@ class CreateMcqBloc extends Bloc<CreateMcqEvent, CreateMcqState> {
   }
 
   Stream<CreateMcqState> _mapSubmittedMcqToState(
-      List<Map<String, String>> userQuestions) async* {
+      {userId, userQuestions}) async* {
     yield CreateMcqState.loading();
 
     try {
-      await _questionsRepository.createMcq(userQuestions);
+      await _questionsRepository.editMcq(
+          userId: userId, userQuestions: userQuestions);
 
       yield CreateMcqState.success();
     } catch (_) {

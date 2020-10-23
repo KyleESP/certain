@@ -1,15 +1,11 @@
 import 'package:certain/models/question_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class QuestionsRepository {
-  final FirebaseAuth _firebaseAuth;
   final FirebaseFirestore _firebaseFirestore;
 
-  QuestionsRepository(
-      {FirebaseAuth firebaseAuth, FirebaseFirestore firebaseFirestore})
-      : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
-        _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
+  QuestionsRepository({FirebaseFirestore firebaseFirestore})
+      : _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
 
   Future<List<QuestionModel>> getQuestions() async {
     List<QuestionModel> questionList = [];
@@ -29,10 +25,10 @@ class QuestionsRepository {
     return questionList;
   }
 
-  createMcq(List<Map<String, String>> mcq) async {
+  editMcq({String userId, List<Map<String, String>> userQuestions}) async {
     await _firebaseFirestore
         .collection("users")
-        .doc(_firebaseAuth.currentUser.uid)
-        .update({"mcq": mcq});
+        .doc(userId)
+        .update({"mcq": userQuestions});
   }
 }

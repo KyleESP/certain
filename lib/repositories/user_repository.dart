@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:certain/models/question_model.dart';
 import 'package:certain/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -78,6 +79,15 @@ class UserRepository {
       _user.minAge = data['minAge'];
       _user.maxAge = data['maxAge'];
       _user.bio = data['bio'];
+      List<QuestionModel> mcq = [];
+      for (var question in data['mcq']) {
+        mcq.add(new QuestionModel(
+            question: question['question'],
+            option1: question['correct_answer'],
+            option2: question['option_2'],
+            option3: question['option_3']));
+      }
+      _user.mcq = mcq;
     });
 
     return _user;

@@ -25,10 +25,11 @@ class LoadQuestionEvent extends CreateMcqEvent {
 }
 
 class SubmittedMcqEvent extends CreateMcqEvent {
+  final String userId;
   final List<Map<String, String>> userQuestions;
 
-  SubmittedMcqEvent({this.userQuestions});
+  SubmittedMcqEvent({this.userId, this.userQuestions});
 
   @override
-  List<Object> get props => [userQuestions];
+  List<Object> get props => [userId, userQuestions];
 }
