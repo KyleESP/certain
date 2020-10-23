@@ -44,7 +44,7 @@ class ShowMcqState extends EditMcqState {}
 class LoadingState extends EditMcqState {}
 
 class LoadMcqState extends EditMcqState {
-  final List<QuestionModel> mcq;
+  final List<QuestionModel> mcq, questionList;
 
-  LoadMcqState(this.mcq);
+  LoadMcqState({this.mcq, this.questionList});
 }

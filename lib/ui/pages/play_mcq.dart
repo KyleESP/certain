@@ -49,7 +49,6 @@ class _PlayMcqFormState extends State<PlayMcqForm> {
   String _optionSelected;
   QuestionModel _questionSelected;
   int _correct = 0;
-  int _mcqSize;
   List<String> _optionsShuffled = [];
 
   bool get isLastQuestion => _mcq.length == 1;
@@ -61,7 +60,6 @@ class _PlayMcqFormState extends State<PlayMcqForm> {
   void initState() {
     _playMcqBloc = BlocProvider.of<PlayMcqBloc>(context);
     _mcq = widget.selectedUser.mcq;
-    _mcqSize = _mcq.length;
     _questionSelected = _mcq[0];
     _optionsShuffled = [
       _questionSelected.option1,
@@ -131,6 +129,7 @@ class _PlayMcqFormState extends State<PlayMcqForm> {
                 child: ListView(
                   padding: EdgeInsets.all(4),
                   children: <Widget>[
+                    Text("Question ${7 - _mcq.length}/6"),
                     Text(_questionSelected.question),
                     SizedBox(
                       height: 12,
@@ -146,7 +145,7 @@ class _PlayMcqFormState extends State<PlayMcqForm> {
                         GestureDetector(
                           onTap: () {
                             if (isLastQuestion) {
-                              var successPercentage = _correct / _mcqSize;
+                              var successPercentage = _correct / 6;
                               _playMcqBloc.add(CompletedEvent(
                                   currentUserId: widget.user.uid,
                                   selectedUserId: widget.selectedUser.uid,

@@ -1,3 +1,4 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -41,10 +42,11 @@ class EditMcqForm extends StatefulWidget {
 
 class _EditMcqFormState extends State<EditMcqForm> {
   EditMcqBloc _editMcqBloc;
-  List<QuestionModel> _mcq;
+  List<QuestionModel> _mcq, _mcqCopy;
   String _optionSelected;
-  QuestionModel _questionSelected;
+  QuestionModel _questionSelected, _questionShowed;
   List<Map<String, String>> _userQuestions = [];
+  List<QuestionModel> _questionList = [];
 
   bool get isLastQuestion => _mcq.length == 1;
 
@@ -89,11 +91,24 @@ class _EditMcqFormState extends State<EditMcqForm> {
       }
       if (state is LoadMcqState) {
         _mcq = state.mcq;
+        _mcqCopy = _mcq;
+        _questionList = state.questionList;
         _questionSelected = _mcq[0];
+        _questionShowed = _questionSelected;
         _optionSelected = _questionSelected.option1;
         _editMcqBloc.add(LoadedMcqEvent());
       }
       if (state is ShowMcqState) {
+        var _questionListCopy = _questionList;
+        for (var q in _mcqCopy) {
+          _questionListCopy.removeWhere((item) =>
+              item.question == q.question &&
+              item.question != _questionShowed.question);
+        }
+        for (var q in _userQuestions) {
+          _questionListCopy
+              .removeWhere((item) => item.question == q['question']);
+        }
         return Scaffold(
             body: Padding(
                 padding: const EdgeInsets.all(25),
@@ -103,7 +118,29 @@ class _EditMcqFormState extends State<EditMcqForm> {
                   child: ListView(
                     padding: EdgeInsets.all(4),
                     children: <Widget>[
-                      Text(_questionSelected.question),
+                      Text("Question ${7 - _mcq.length}/6"),
+                      DropdownSearch<QuestionModel>(
+                        mode: Mode.BOTTOM_SHEET,
+                        items: _questionListCopy,
+                        selectedItem: _questionSelected,
+                        isFilteredOnline: true,
+                        showSearchBox: true,
+                        label: 'Question *',
+                        dropdownSearchDecoration: InputDecoration(
+                            filled: true,
+                            fillColor: Theme.of(context)
+                                .inputDecorationTheme
+                                .fillColor),
+                        autoValidate: true,
+                        validator: (QuestionModel u) =>
+                            u == null ? "Question field is required " : null,
+                        onChanged: (QuestionModel q) {
+                          setState(() {
+                            _questionSelected = q;
+                            _optionSelected = null;
+                          });
+                        },
+                      ),
                       SizedBox(
                         height: 12,
                       ),
@@ -148,6 +185,7 @@ class _EditMcqFormState extends State<EditMcqForm> {
 
                                     _mcq.remove(_questionSelected);
                                     _questionSelected = _mcq[0];
+                                    _questionShowed = _questionSelected;
                                     _optionSelected = _questionSelected.option1;
                                   });
                                 }

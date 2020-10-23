@@ -54,7 +54,7 @@ class _CreateMcqFormState extends State<CreateMcqForm> {
 
   bool get isValid => isQuestionCompleted && _userQuestions.length >= 0;
 
-  bool get canNext => _questionList.length > 1 && _userQuestions.length < 10;
+  bool get canNext => _questionList.length > 1 && _userQuestions.length < 6;
 
   bool isButtonEnabled(bool condition, CreateMcqState state) {
     return condition && !state.isSubmitting;
@@ -127,6 +127,7 @@ class _CreateMcqFormState extends State<CreateMcqForm> {
                 child: ListView(
                   padding: EdgeInsets.all(4),
                   children: <Widget>[
+                    Text("Question ${_userQuestions.length + 1}/6"),
                     DropdownSearch<QuestionModel>(
                       mode: Mode.BOTTOM_SHEET,
                       items: _questionList,
@@ -158,7 +159,7 @@ class _CreateMcqFormState extends State<CreateMcqForm> {
                     ],
                     Row(
                       children: [
-                        if (_userQuestions.length >= 4)
+                        if (_userQuestions.length == 6)
                           GestureDetector(
                             onTap: () {
                               if (isButtonEnabled(isValid, state)) {
@@ -177,7 +178,8 @@ class _CreateMcqFormState extends State<CreateMcqForm> {
 
                                 _createMcqBloc.add(
                                   SubmittedMcqEvent(
-                                      userId: widget.userId, userQuestions: _userQuestions),
+                                      userId: widget.userId,
+                                      userQuestions: _userQuestions),
                                 );
                               }
                             },
@@ -187,9 +189,7 @@ class _CreateMcqFormState extends State<CreateMcqForm> {
                               padding: EdgeInsets.symmetric(
                                   horizontal: 24, vertical: 20),
                               decoration: BoxDecoration(
-                                  color: isButtonEnabled(isValid, state)
-                                      ? loginButtonColor
-                                      : loginButtonColor.withOpacity(0.3),
+                                  color: loginButtonColor,
                                   borderRadius: BorderRadius.circular(30)),
                               child: Text(
                                 "Créér le QCM",

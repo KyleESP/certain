@@ -26,9 +26,11 @@ class EditMcqBloc extends Bloc<EditMcqEvent, EditMcqState> {
   Stream<EditMcqState> _mapLoadMcqToState(String userId) async* {
     yield LoadingState();
 
+    List<QuestionModel> questionList =
+        await _questionsRepository.getQuestions();
     List<QuestionModel> mcq = await _questionsRepository.getMcq(userId);
 
-    yield LoadMcqState(mcq);
+    yield LoadMcqState(mcq: mcq, questionList: questionList);
   }
 
   Stream<EditMcqState> _mapLoadedMcqToState() async* {
