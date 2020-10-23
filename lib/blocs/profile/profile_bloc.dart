@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:geolocator/geolocator.dart';
+
 import 'bloc.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -32,7 +34,6 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
           name: event.name,
           gender: event.gender,
           birthdate: event.birthdate,
-          location: event.location,
           interestedIn: event.interestedIn);
     }
   }
@@ -80,10 +81,12 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       String name,
       String userId,
       DateTime birthdate,
-      GeoPoint location,
       String interestedIn}) async* {
     yield ProfileState.loading();
     try {
+      Position position =
+          await getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      GeoPoint location = GeoPoint(position.latitude, position.longitude);
       await _userRepository.createProfile(
           photo, name, gender, interestedIn, birthdate, location);
       yield ProfileState.success();
