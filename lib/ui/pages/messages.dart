@@ -1,3 +1,4 @@
+import 'package:certain/ui/widgets/loader_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -45,9 +46,7 @@ class _MessagesState extends State<Messages> {
           _messageBloc.add(ChatStreamEvent(currentUserId: widget.userId));
         }
         if (state is ChatLoadingState) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
+          return loaderWidget();
         }
         if (state is ChatLoadedState) {
           Stream<QuerySnapshot> chatStream = state.chatStream;
@@ -55,15 +54,9 @@ class _MessagesState extends State<Messages> {
           return StreamBuilder<QuerySnapshot>(
             stream: chatStream,
             builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return Text("No data");
-              }
-
-              if (snapshot.data.docs.isNotEmpty) {
+              if (snapshot.hasData && snapshot.data.docs.isNotEmpty) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
+                  return loaderWidget();
                 } else {
                   return ListView.builder(
                     scrollDirection: Axis.vertical,
@@ -78,11 +71,12 @@ class _MessagesState extends State<Messages> {
                     },
                   );
                 }
-              } else
+              } else {
                 return Text(
                   "Tu n'a aucune conversation.",
                   style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
                 );
+              }
             },
           );
         }
@@ -382,9 +376,7 @@ class _MessagingState extends State<Messaging> {
             );
           }
           if (state is MessagingLoadingState) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
+            return loaderWidget();
           }
           if (state is MessagingLoadedState) {
             Stream<QuerySnapshot> messageStream = state.messageStream;

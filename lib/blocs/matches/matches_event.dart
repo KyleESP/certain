@@ -49,3 +49,12 @@ class PassedMcqEvent extends MatchesEvent {
         selectedUser,
       ];
 }
+
+class SelectedUserEvent extends MatchesEvent {
+  final String selectedUserId;
+
+  SelectedUserEvent(this.selectedUserId);
+
+  @override
+  List<Object> get props => [selectedUserId];
+}

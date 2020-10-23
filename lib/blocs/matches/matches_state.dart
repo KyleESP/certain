@@ -28,3 +28,12 @@ class LoadUserState extends MatchesState {
   @override
   List<Object> get props => [matchedList];
 }
+
+class IsSelectedState extends MatchesState {
+  final UserModel selectedUser;
+
+  IsSelectedState({this.selectedUser});
+
+  @override
+  List<Object> get props => [selectedUser];
+}
