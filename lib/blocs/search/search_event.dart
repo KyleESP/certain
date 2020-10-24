@@ -45,12 +45,3 @@ class LikeUserEvent extends SearchEvent {
         currentUserPhotoUrl
       ];
 }
-
-class DislikeUserEvent extends SearchEvent {
-  final String currentUserId, selectedUserId;
-
-  DislikeUserEvent(this.currentUserId, this.selectedUserId);
-
-  @override
-  List<Object> get props => [currentUserId, selectedUserId];
-}

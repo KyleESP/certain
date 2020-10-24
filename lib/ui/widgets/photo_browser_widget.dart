@@ -45,27 +45,27 @@ class _PhotoBrowserState extends State<PhotoBrowser> {
   }
 
   Widget _buildPhotoControls() {
-    return new Stack(
+    return Stack(
       fit: StackFit.expand,
       children: <Widget>[
-        new GestureDetector(
+        GestureDetector(
           onTap: _prevImage,
-          child: new FractionallySizedBox(
+          child: FractionallySizedBox(
             widthFactor: 0.5,
             heightFactor: 1.0,
             alignment: Alignment.topLeft,
-            child: new Container(
+            child: Container(
               color: Colors.transparent,
             ),
           ),
         ),
-        new GestureDetector(
+        GestureDetector(
           onTap: _nextImage,
-          child: new FractionallySizedBox(
+          child: FractionallySizedBox(
             widthFactor: 0.5,
             heightFactor: 1.0,
             alignment: Alignment.topRight,
-            child: new Container(
+            child: Container(
               color: Colors.transparent,
             ),
           ),
@@ -84,11 +84,11 @@ class _PhotoBrowserState extends State<PhotoBrowser> {
           photoLink: widget.photoAssetPaths[visiblePhotoIndex],
         ),
         // Photo indicator
-        new Positioned(
+        Positioned(
           top: 0.0,
           left: 0.0,
           right: 0.0,
-          child: new SelectedPhotoIndicator(
+          child: SelectedPhotoIndicator(
             photoCount: widget.photoAssetPaths.length,
             visiblePhotoIndex: visiblePhotoIndex,
           ),
@@ -107,30 +107,30 @@ class SelectedPhotoIndicator extends StatelessWidget {
   SelectedPhotoIndicator({this.visiblePhotoIndex, this.photoCount});
 
   Widget _buildInactiveIndicator() {
-    return new Expanded(
-      child: new Padding(
+    return Expanded(
+      child: Padding(
         padding: const EdgeInsets.only(left: 2.0, right: 2.0),
-        child: new Container(
+        child: Container(
           height: 3.0,
-          decoration: new BoxDecoration(
+          decoration: BoxDecoration(
               color: Colors.black.withOpacity(0.2),
-              borderRadius: new BorderRadius.circular(2.5)),
+              borderRadius: BorderRadius.circular(2.5)),
         ),
       ),
     );
   }
 
   Widget _buildActiveIndicator() {
-    return new Expanded(
-      child: new Padding(
+    return Expanded(
+      child: Padding(
         padding: const EdgeInsets.only(left: 2.0, right: 2.0),
-        child: new Container(
+        child: Container(
           height: 3.0,
-          decoration: new BoxDecoration(
+          decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: new BorderRadius.circular(2.5),
+              borderRadius: BorderRadius.circular(2.5),
               boxShadow: [
-                new BoxShadow(
+                BoxShadow(
                     color: const Color(0x22000000),
                     blurRadius: 2.0,
                     spreadRadius: 0.0,
@@ -153,9 +153,9 @@ class SelectedPhotoIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new Padding(
+    return Padding(
       padding: const EdgeInsets.all(0.0),
-      child: new Row(
+      child: Row(
         children: _buildIndicators(),
       ),
     );

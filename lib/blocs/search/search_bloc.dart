@@ -27,10 +27,6 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           currentUserPhotoUrl: event.currentUserPhotoUrl,
           selectedUserName: event.selectedUserName,
           selectedUserPhotoUrl: event.selectedUserPhotoUrl);
-    } else if (event is DislikeUserEvent) {
-      yield* _mapDislikeToState(
-          currentUserId: event.currentUserId,
-          selectedUserId: event.selectedUserId);
     } else if (event is LoadCurrentUserEvent) {
       yield* _mapLoadCurrentUserToState(currentUserId: event.userId);
     } else if (event is LoadUserEvent) {
@@ -54,8 +50,6 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       String currentUserPhotoUrl,
       String selectedUserName,
       String selectedUserPhotoUrl}) async* {
-    yield LoadingState();
-
     bool hasMatched = await _searchRepository.likeUser(
         currentUserId,
         selectedUserId,
@@ -65,17 +59,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         selectedUserPhotoUrl);
 
     if (hasMatched) {
-      yield SearchState.matched();
+      yield HasMatchedState();
     }
-
-    yield LoadCurrentUserState();
-  }
-
-  Stream<SearchState> _mapDislikeToState(
-      {String currentUserId, String selectedUserId}) async* {
-    yield LoadingState();
-
-    await _searchRepository.dislikeUser(currentUserId, selectedUserId);
 
     yield LoadCurrentUserState();
   }

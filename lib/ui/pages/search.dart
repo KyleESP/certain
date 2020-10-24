@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:certain/helpers/constants.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:certain/blocs/search/bloc.dart';
 
@@ -9,9 +8,8 @@ import 'package:certain/models/user_model.dart';
 import 'package:certain/repositories/search_repository.dart';
 import 'package:certain/repositories/user_repository.dart';
 
-import 'package:certain/ui/widgets/icon_widget.dart';
 import 'package:certain/ui/widgets/profile_widget.dart';
-import 'package:certain/ui/widgets/user_gender_widget.dart';
+import 'package:certain/ui/pages/swap_card.dart';
 import 'package:certain/ui/widgets/loader_widget.dart';
 
 class Search extends StatefulWidget {
@@ -28,12 +26,26 @@ class _SearchState extends State<Search> {
   final UserRepository _userRepository = UserRepository();
   SearchBloc _searchBloc;
   List<UserModel> _usersToShow = [];
-  UserModel _user, _currentUser;
+  UserModel _user, _selectedUser;
 
   @override
   void initState() {
     _searchBloc = SearchBloc(_searchRepository, _userRepository);
     super.initState();
+  }
+
+  _likeUser() {
+    _searchBloc.add(LikeUserEvent(
+        currentUserId: widget.userId,
+        selectedUserId: _selectedUser.uid,
+        currentUserPhotoUrl: _user.photo,
+        currentUserName: _user.name,
+        selectedUserPhotoUrl: _selectedUser.photo,
+        selectedUserName: _selectedUser.name));
+  }
+
+  _dislikeUser(UserModel user) {
+    _searchRepository.dislikeUser(widget.userId, user.uid);
   }
 
   @override
@@ -43,7 +55,7 @@ class _SearchState extends State<Search> {
     return BlocListener<SearchBloc, SearchState>(
         cubit: _searchBloc,
         listener: (context, state) {
-          if (state.hasMatched) {
+          if (state is HasMatchedState) {
             showDialog(
                 context: context,
                 builder: (context) {
@@ -53,7 +65,7 @@ class _SearchState extends State<Search> {
                   return Dialog(
                     backgroundColor: Colors.transparent,
                     child: profileWidget(
-                      photo: _currentUser.photo,
+                      photo: _selectedUser.photo,
                       photoHeight: size.height,
                       padding: size.height * 0.01,
                       photoWidth: size.width,
@@ -64,7 +76,7 @@ class _SearchState extends State<Search> {
                         padding: EdgeInsets.symmetric(
                             horizontal: size.height * 0.02),
                         child: Text(
-                          "Tu as matché avec " + _currentUser.name + " !",
+                          "Tu as matché avec " + _selectedUser.name + " !",
                           style: TextStyle(
                               color: Colors.red, fontSize: size.height * 0.02),
                         ),
@@ -89,9 +101,6 @@ class _SearchState extends State<Search> {
             if (state is LoadUserState) {
               _user = state.user;
               _usersToShow = state.usersToShow;
-              if (_usersToShow.isNotEmpty) {
-                _currentUser = _usersToShow[0];
-              }
               _searchBloc.add(
                 LoadCurrentUserEvent(),
               );
@@ -106,7 +115,6 @@ class _SearchState extends State<Search> {
                       color: Colors.black),
                 );
               } else {
-                _currentUser = _usersToShow[0];
                 return Stack(alignment: Alignment.center, children: <Widget>[
                   Positioned(
                     top: 0,
@@ -132,118 +140,23 @@ class _SearchState extends State<Search> {
                           color: Colors.white, fontSize: size.width * 0.06),
                     ),
                   ),
-                  profileWidget(
-                    padding: size.height * 0.035,
-                    photoHeight: size.height * 0.63,
-                    photoWidth: size.width * 0.85,
-                    photo: _currentUser.photo,
-                    clipRadius: size.height * 0.02,
-                    containerHeight: size.height * 0.25,
-                    containerWidth: size.width * 0.85,
-                    child: Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: size.width * 0.02),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          SizedBox(
-                            height: size.height * 0.06,
-                          ),
-                          Row(
-                            children: <Widget>[
-                              userGender(_currentUser.gender),
-                              Expanded(
-                                child: Text(
-                                  " " +
-                                      _currentUser.name +
-                                      ", " +
-                                      _currentUser.age.toString(),
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: size.height * 0.03),
-                                ),
-                              )
-                            ],
-                          ),
-                          Row(
-                            children: <Widget>[
-                              Icon(
-                                Icons.location_on,
-                                color: Colors.white,
-                              ),
-                              Text(
-                                _currentUser.distance != null
-                                    ? _currentUser.distance.toString() + " km"
-                                    : "Distance inconnue",
-                                style: TextStyle(color: Colors.white),
-                              )
-                            ],
-                          ),
-                          if (_currentUser.bio.isNotEmpty)
-                            Container(
-                              margin: EdgeInsets.all(size.height * 0.01),
-                              child: Text(
-                                '"' + _currentUser.bio + '"',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                        ],
-                      ),
-                    ),
+                  SwapCard(
+                    demoProfiles: _usersToShow,
+                    size: size,
+                    myCallback: (decision, user) {
+                      switch (decision) {
+                        case Decision.like:
+                          _selectedUser = user;
+                          _likeUser();
+                          break;
+                        case Decision.nope:
+                          _dislikeUser(user);
+                          break;
+                        default:
+                          break;
+                      }
+                    },
                   ),
-                  Align(
-                    alignment: Alignment(0.0, 0.9),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.all(size.width * 0.01),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey[300],
-                                spreadRadius: 1,
-                                blurRadius: 5,
-                                offset: Offset(5.0, 5.0),
-                              ),
-                            ],
-                          ),
-                          child: iconWidget(Icons.clear, () {
-                            _usersToShow.remove(_currentUser);
-                            _searchBloc.add(DislikeUserEvent(
-                                widget.userId, _currentUser.uid));
-                          }, size.height * 0.07, dislikeButton),
-                        ),
-                        Container(
-                          padding: EdgeInsets.all(size.width * 0.03),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey[300],
-                                spreadRadius: 1,
-                                blurRadius: 5,
-                                offset: Offset(5.0, 5.0),
-                              ),
-                            ],
-                          ),
-                          child: iconWidget(FontAwesomeIcons.solidHeart, () {
-                            _usersToShow.remove(_currentUser);
-                            _searchBloc.add(LikeUserEvent(
-                                currentUserId: widget.userId,
-                                selectedUserId: _currentUser.uid,
-                                currentUserPhotoUrl: _user.photo,
-                                currentUserName: _user.name,
-                                selectedUserPhotoUrl: _currentUser.photo,
-                                selectedUserName: _currentUser.name));
-                          }, size.height * 0.05, likeButton),
-                        ),
-                      ],
-                    ),
-                  )
                 ]);
               }
             } else
