@@ -197,6 +197,7 @@ class _PlayMcqFormState extends State<PlayMcqForm> {
         description: "$option",
         optionSelected: _optionSelected,
         correctAnswer: _optionSelected,
+        size: MediaQuery.of(context).size,
       ),
     );
   }

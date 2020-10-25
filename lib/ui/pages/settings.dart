@@ -227,6 +227,7 @@ class _SettingsState extends State<Settings> {
                             child: TextFormField(
                               controller: _bioController,
                               keyboardType: TextInputType.multiline,
+                              minLines: 1,
                               maxLines: 3,
                               maxLength: 300,
                               cursorColor: Colors.grey[600],
