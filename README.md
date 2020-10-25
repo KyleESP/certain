@@ -1,10 +1,6 @@
-# certain
+_Kyle ESPARON & Juline GABROVEC_
 
-Une application de rencontre originale.
-
-Kyle ESPARON & Juline GABROVEC
-
-# Cahier des charges
+# Certain
 
 ### Contexte 
 
@@ -55,14 +51,14 @@ De plus, sur cet IDE, nul besoin d’installer des multitudes de plugins pour pr
 _*Le profil*_
 
 Pour accéder à l’application il est nécessaire de créer un profil utilisateur. Un profil contient les informations suivantes : 
-prénom *
-sexe *
-adresse email *
-date de naissance *
-sexe de la personne recherchée * (homme / femme / les deux)
-bio
-questionnaire *
-photo de profil *
+- prénom *
+- sexe *
+- adresse email *
+- date de naissance *
+- sexe de la personne recherchée * (homme / femme / les deux)
+- bio
+- questionnaire *
+- photo de profil *
 
 (*) Informations obligatoires
 
@@ -96,13 +92,12 @@ C’est un système de messagerie instantanée. Il ne permet pas d’envoyer de 
 ### Les paramètres
 
 C’est la page permettant de paramétrer les données de l’utilisateur suivantes :
-
-rayon de recherche de personne
-tranche d’âge des personnes recherchées
-sexe de la personne recherchée
-bio
-questionnaire
-photo de profil
+- rayon de recherche de personne
+- tranche d’âge des personnes recherchées
+- sexe de la personne recherchée
+- bio
+- questionnaire
+- photo de profil
 
 // Screen paramètres
 
