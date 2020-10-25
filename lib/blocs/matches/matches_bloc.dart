@@ -29,7 +29,7 @@ class MatchesBloc extends Bloc<MatchesEvent, MatchesState> {
       yield* _mapPassedMcqToState(
           currentUserId: event.currentUser, selectedUserId: event.selectedUser);
     } else if (event is SelectedUserEvent) {
-      yield* _mapSelectedUserToState(event.selectedUserId);
+      yield* _mapSelectedUserToState(event.selectedUserId, event.index);
     }
   }
 
@@ -65,13 +65,13 @@ class MatchesBloc extends Bloc<MatchesEvent, MatchesState> {
         currentUserId: currentUserId, selectedUserId: selectedUserId);
   }
 
-  Stream<MatchesState> _mapSelectedUserToState(String selectedUserId) async* {
+  Stream<MatchesState> _mapSelectedUserToState(String selectedUserId, int index) async* {
     yield LoadingState();
 
     UserModel selectedUser =
         await _matchesRepository.getUserDetails(selectedUserId);
     selectedUser.distance = await getDistance(selectedUser.location);
 
-    yield IsSelectedState(selectedUser: selectedUser);
+    yield IsSelectedState(selectedUser: selectedUser, index: index);
   }
 }

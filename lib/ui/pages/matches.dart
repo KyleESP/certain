@@ -29,7 +29,6 @@ class _MatchesState extends State<Matches> {
   MatchesBloc _matchesBloc;
   double distance;
   UserModel currentUser;
-  QueryDocumentSnapshot user;
   var matchedUsers;
 
   @override
@@ -123,7 +122,7 @@ class _MatchesState extends State<Matches> {
                                 _matchesBloc.add(RemoveMatchEvent(
                                     currentUser: widget.userId,
                                     selectedUser: selectedUser.uid));
-                                matchedUsers.remove(user);
+                                matchedUsers.removeAt(state.index);
                                 Navigator.pop(context);
                               }, size.height * 0.07, dislikeButton),
                             ),
@@ -220,12 +219,12 @@ class _MatchesState extends State<Matches> {
                         return SliverGrid(
                           delegate: SliverChildBuilderDelegate(
                             (BuildContext context, int index) {
-                              user = matchedUsers[index];
+                              QueryDocumentSnapshot user = matchedUsers[index];
                               return Container(
                                 margin: EdgeInsets.only(left : size.width * 0.04, right : size.width * 0.04),
                                   child: GestureDetector(
                                     onTap: () {
-                                      _matchesBloc.add(SelectedUserEvent(user.id));
+                                      _matchesBloc.add(SelectedUserEvent(user.id, index));
                                     },
                                     child: profileWidget(
                                       padding: size.height * 0.01,
