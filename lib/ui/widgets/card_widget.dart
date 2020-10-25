@@ -33,6 +33,7 @@ class _CardWidgetState extends State<CardWidget> {
       card: ProfileCard(
         name: widget.user.name,
         bio: widget.user.bio,
+        distance: widget.user.distance,
         gender: widget.user.gender,
         birthdate: widget.user.birthdate,
         photos: [widget.user.photo],

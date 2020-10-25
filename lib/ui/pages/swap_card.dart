@@ -245,6 +245,7 @@ class _CardStackState extends State<CardStack> {
       child: ProfileCard(
           name: widget.matchEngine.nextMatch.user.name,
           gender: widget.matchEngine.nextMatch.user.gender,
+          distance: widget.matchEngine.nextMatch.user.distance,
           birthdate: widget.matchEngine.nextMatch.user.birthdate,
           bio: widget.matchEngine.nextMatch.user.bio,
           photos: [widget.matchEngine.nextMatch.user.photo]),
@@ -256,6 +257,7 @@ class _CardStackState extends State<CardStack> {
         key: _frontCard,
         name: widget.matchEngine.currentMatch.user.name,
         gender: widget.matchEngine.currentMatch.user.gender,
+        distance: widget.matchEngine.currentMatch.user.distance,
         birthdate: widget.matchEngine.currentMatch.user.birthdate,
         bio: widget.matchEngine.currentMatch.user.bio,
         photos: [widget.matchEngine.currentMatch.user.photo]);

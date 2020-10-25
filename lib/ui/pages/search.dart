@@ -82,7 +82,7 @@ class _SearchState extends State<Search> {
           );
         }
         if (state is LoadCurrentUserState) {
-          if (_lastReached) {
+          if (_usersToShow.isEmpty || _lastReached) {
             return Text(
               "Il n'y a aucune personne",
               style: TextStyle(

@@ -7,11 +7,18 @@ import 'package:flutter/material.dart';
 
 class ProfileCard extends StatefulWidget {
   final String name, bio, gender;
+  final double distance;
   final Timestamp birthdate;
   final List<String> photos;
 
   ProfileCard(
-      {Key key, this.name, this.birthdate, this.gender, this.bio, this.photos})
+      {Key key,
+      this.name,
+      this.birthdate,
+      this.gender,
+      this.bio,
+      this.photos,
+      this.distance})
       : super(key: key);
 
   @override
@@ -37,9 +44,9 @@ class _ProfileCardState extends State<ProfileCard> {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  Colors.transparent,
-                  Colors.black.withOpacity(0.8),
-                ])),
+              Colors.transparent,
+              Colors.black.withOpacity(0.8),
+            ])),
         padding: const EdgeInsets.all(24.0),
         child: Row(
           mainAxisSize: MainAxisSize.max,
@@ -54,7 +61,9 @@ class _ProfileCardState extends State<ProfileCard> {
                       "${widget.name}, ${calculateAge(widget.birthdate.toDate())}",
                       style: TextStyle(color: Colors.white, fontSize: 24.0)),
                   Text(widget.bio,
-                      style: TextStyle(color: Colors.white, fontSize: 18.0))
+                      style: TextStyle(color: Colors.white, fontSize: 18.0)),
+                  Text("A ${widget.distance}km",
+                      style: TextStyle(color: Colors.white, fontSize: 18.0)),
                 ],
               ),
             ),
@@ -68,7 +77,7 @@ class _ProfileCardState extends State<ProfileCard> {
   Widget build(BuildContext context) {
     return Container(
       decoration:
-      BoxDecoration(borderRadius: BorderRadius.circular(10.0), boxShadow: [
+          BoxDecoration(borderRadius: BorderRadius.circular(10.0), boxShadow: [
         BoxShadow(
           color: const Color(0x11000000),
           blurRadius: 5.0,
@@ -90,4 +99,3 @@ class _ProfileCardState extends State<ProfileCard> {
     );
   }
 }
-
