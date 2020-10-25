@@ -29,26 +29,26 @@ Nous avons combiné Flutter avec le BLoC pattern. Il permet de séparer la prés
 s’appuyer sur l’utilisation exclusive de Streams pour les entrées (Sink) et les sorties (Stream)
 
 
-_*Dart*_
+_Dart_
 
 Dart est le langage créé par Google et utilisé par Flutter. Il est orienté objet et est très facile à prendre en main quand on maîtrise déjà C, Java ou JavaScript. Il s’agit en fait d’une alternative à JavaScript dans laquelle on a limité les défauts.
 
-_*GitHub*_
+_GitHub_
 
 Le gestionnaire de version utilisé est GitHub tout simplement car c’est le plus populaire et que son système de gestion de tickets est simple d’utilisation et efficace.
 
-_*Firebase*_
+_Firebase_
 
 Côté back-end, nous utilisons Firebase, facilement combinable avec Flutter. Il nous permet d'héberger notre base de données avec une offre gratuite et d’y effectuer des requêtes NoSQL en temps réel.
 
-_*Android Studio*_
+_Android Studio_
 
 Nous utilisons l’IDE Android Studio sur lequel Flutter est très bien adapté. L’avantage est qu’il est très utile pour tester les interfaces graphiques. On peut facilement changer le type d'écran de l’émulateur intégré et cela permet de vérifier que nos interfaces sont bien compatibles avec les différents appareils Android.
 De plus, sur cet IDE, nul besoin d’installer des multitudes de plugins pour profiter de fonctionnalités intéressantes comme le système de Hot Reload et de développement sur son téléphone personnel.
 
 ### Fonctionnalités
 
-_*Le profil*_
+_Profil_
 
 Pour accéder à l’application il est nécessaire de créer un profil utilisateur. Un profil contient les informations suivantes : 
 - prénom *
@@ -65,7 +65,7 @@ Pour accéder à l’application il est nécessaire de créer un profil utilisat
 Il est possible de modifier les informations du profil à tout moment. 
 Dans le profil il est également possible de paramétrer le périmètre de recherche et  la tranche d’âge des personnes recherchées.
 
-_*Profils proposés*_
+_Profils proposés_
 
 Les profils proposés à chaque utilisateur sont sélectionnés en fonction de leur localisation et des critères définis dans le profil . 
 Pour chaque profil proposé, il y a possibilité de lire le nom, l’âge, le sexe, la description, regarder la photo et de liker ou disliker le profil.
@@ -76,14 +76,14 @@ Lors d’un match, un pop-up apparaît indiquant cet évènement.
 
 // TODO : Screen page match
 
-_*Questionnaire*_
+_Questionnaire_
 
 Le QCM est composé de 6 questions avec une seule réponse possible, créé par chaque utilisateur à la création de son profil. Il est possible d’éditer son questionnaire à tout moment dans les paramètres. Le choix des questions par l’utilisateur est fait parmi une banque de questions proposées. 
 Quand un utilisateur match avec une autre personne, il doit répondre au QCM créé par ce dernier. Si son taux de réponses justes est supérieur ou égal à 50% (c’est-à-dire au moins 3 réponses correctes) et vice-versa, alors un chat est ouvert et les deux personnes peuvent entrer en discussion.
 
 // TODO : Screen questionnaire
 
-_*Chat*_
+_Chat_
 
 C’est un système de messagerie instantanée. Il ne permet pas d’envoyer de photo pour éviter que les personnes envoie des images à caractère sexuel, ce qui pourrait facilement survenir sur ce type d’application.
 
