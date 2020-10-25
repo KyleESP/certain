@@ -1,14 +1,13 @@
-import 'dart:math';
-
-import 'package:certain/ui/widgets/icon_widget.dart';
-import 'package:certain/ui/widgets/photo_browser_widget.dart';
+import 'package:certain/ui/widgets/profile_card_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttery_dart2/layout.dart';
+
+import 'package:flutter/cupertino.dart';
 
 import 'package:certain/models/user_model.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import 'package:certain/helpers/constants.dart';
+import 'dart:math';
+
+import 'package:fluttery_dart2/layout.dart';
 
 class SwapCard extends StatefulWidget {
   SwapCard({
@@ -23,7 +22,7 @@ class SwapCard extends StatefulWidget {
   final List<UserModel> demoProfiles;
   final Size size;
 
-  final Function(Decision, UserModel user) myCallback;
+  final Function(Decision, UserModel user, bool lastReached) myCallback;
 
   @override
   _SwapCardState createState() => _SwapCardState();
@@ -41,8 +40,8 @@ class _SwapCardState extends State<SwapCard> {
 
     return CardStack(
         matchEngine: matchEngine,
-        onSwipeCallback: (match, user) {
-          widget.myCallback(match, user);
+        onSwipeCallback: (match, user, lastReached) {
+          widget.myCallback(match, user, lastReached);
         });
 
     /*Align(
@@ -109,14 +108,14 @@ class MatchEngine extends ChangeNotifier {
   }
 
   Match get currentMatch => _matches[_currentMatchIndex];
-  Match get nextMatch => _matches[_nextMatchIndex];
+  Match get nextMatch =>
+      _nextMatchIndex < _matches.length ? _matches[_nextMatchIndex] : null;
 
   void cycleMatch() {
     if (currentMatch.decision != Decision.indecided) {
       currentMatch.reset();
       _currentMatchIndex = _nextMatchIndex;
-      _nextMatchIndex =
-          _nextMatchIndex < _matches.length - 1 ? _nextMatchIndex + 1 : 0;
+      _nextMatchIndex++;
       notifyListeners();
     }
   }
@@ -157,7 +156,7 @@ enum Decision {
 }
 
 class CardStack extends StatefulWidget {
-  final Function(Decision, UserModel user) onSwipeCallback;
+  final Function(Decision, UserModel user, bool lastReached) onSwipeCallback;
 
   final MatchEngine matchEngine;
 
@@ -237,6 +236,8 @@ class _CardStackState extends State<CardStack> {
       alignment: Alignment.center,
       child: ProfileCard(
           name: widget.matchEngine.nextMatch.user.name,
+          gender: widget.matchEngine.nextMatch.user.gender,
+          birthdate: widget.matchEngine.nextMatch.user.birthdate,
           bio: widget.matchEngine.nextMatch.user.bio,
           photos: [widget.matchEngine.nextMatch.user.photo]),
     );
@@ -246,6 +247,8 @@ class _CardStackState extends State<CardStack> {
     return ProfileCard(
         key: _frontCard,
         name: widget.matchEngine.currentMatch.user.name,
+        gender: widget.matchEngine.nextMatch.user.gender,
+        birthdate: widget.matchEngine.nextMatch.user.birthdate,
         bio: widget.matchEngine.currentMatch.user.bio,
         photos: [widget.matchEngine.currentMatch.user.photo]);
   }
@@ -275,27 +278,32 @@ class _CardStackState extends State<CardStack> {
     switch (direction) {
       case SlideDirection.left:
         currentMatch.nope();
-        widget.onSwipeCallback(currentMatch.decision, currentMatch.user);
+        widget.onSwipeCallback(currentMatch.decision, currentMatch.user,
+            widget.matchEngine.nextMatch == null);
         break;
       case SlideDirection.right:
         currentMatch.like();
-        widget.onSwipeCallback(currentMatch.decision, currentMatch.user);
+        widget.onSwipeCallback(currentMatch.decision, currentMatch.user,
+            widget.matchEngine.nextMatch == null);
         break;
     }
 
-    widget.matchEngine.cycleMatch();
+    if (widget.matchEngine.nextMatch != null) {
+      widget.matchEngine.cycleMatch();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
-        DraggableCard(
-          screenHeight: MediaQuery.of(context).size.height,
-          screenWidth: MediaQuery.of(context).size.width,
-          isDraggable: false,
-          card: _buildBackCard(),
-        ),
+        if (widget.matchEngine.nextMatch != null)
+          DraggableCard(
+            screenHeight: MediaQuery.of(context).size.height,
+            screenWidth: MediaQuery.of(context).size.width,
+            isDraggable: false,
+            card: _buildBackCard(),
+          ),
         DraggableCard(
           screenHeight: MediaQuery.of(context).size.height,
           screenWidth: MediaQuery.of(context).size.width,
@@ -359,13 +367,13 @@ class _DraggableCardState extends State<DraggableCard>
       duration: const Duration(milliseconds: 1000),
     )
       ..addListener(() => setState(() {
-            cardOffset = Offset.lerp(slideBackStart, const Offset(0.0, 0.0),
-                Curves.elasticOut.transform(slideBackAnimation.value));
+        cardOffset = Offset.lerp(slideBackStart, const Offset(0.0, 0.0),
+            Curves.elasticOut.transform(slideBackAnimation.value));
 
-            if (null != widget.onSlideUpdate) {
-              widget.onSlideUpdate(cardOffset.distance);
-            }
-          }))
+        if (null != widget.onSlideUpdate) {
+          widget.onSlideUpdate(cardOffset.distance);
+        }
+      }))
       ..addStatusListener((AnimationStatus status) {
         if (status == AnimationStatus.completed) {
           setState(() {
@@ -381,12 +389,12 @@ class _DraggableCardState extends State<DraggableCard>
       duration: const Duration(milliseconds: 500),
     )
       ..addListener(() => setState(() {
-            cardOffset = slideOutTween.evaluate(slideOutAnimation);
+        cardOffset = slideOutTween.evaluate(slideOutAnimation);
 
-            if (null != widget.onSlideUpdate) {
-              widget.onSlideUpdate(cardOffset.distance);
-            }
-          }))
+        if (null != widget.onSlideUpdate) {
+          widget.onSlideUpdate(cardOffset.distance);
+        }
+      }))
       ..addStatusListener((AnimationStatus status) {
         if (status == AnimationStatus.completed) {
           setState(() {
@@ -493,7 +501,7 @@ class _DraggableCardState extends State<DraggableCard>
         slideOutAnimation.forward(from: 0.0);
 
         slideOutDirection =
-            isInLeftRegion ? SlideDirection.left : SlideDirection.right;
+        isInLeftRegion ? SlideDirection.left : SlideDirection.right;
       } else {
         slideBackStart = cardOffset;
         slideBackAnimation.forward(from: 0.0);
@@ -504,7 +512,7 @@ class _DraggableCardState extends State<DraggableCard>
   double _rotation(Rect dragBounds) {
     if (dragStart != null) {
       final rotationCornerMultiplier =
-          dragStart.dy >= dragBounds.top + (dragBounds.height / 2) ? -1 : 1;
+      dragStart.dy >= dragBounds.top + (dragBounds.height / 2) ? -1 : 1;
       return (pi / 8) *
           (cardOffset.dx / dragBounds.width) *
           rotationCornerMultiplier;
@@ -531,109 +539,26 @@ class _DraggableCardState extends State<DraggableCard>
           position: anchor,
           child: Transform(
             transform:
-                Matrix4.translationValues(cardOffset.dx, cardOffset.dy, 0.0)
-                  ..rotateZ(_rotation(anchorBounds)),
+            Matrix4.translationValues(cardOffset.dx, cardOffset.dy, 0.0)
+              ..rotateZ(_rotation(anchorBounds)),
             origin: _rotationOrigin(anchorBounds),
             child: Container(
               key: profileCardKey,
               width: anchorBounds.width,
               height: anchorBounds.height,
               padding: const EdgeInsets.all(16.0),
-              child: GestureDetector(
+              child: widget.isDraggable
+                  ? GestureDetector(
                 onPanStart: _onPanStart,
                 onPanUpdate: _onPanUpdate,
                 onPanEnd: _onPanEnd,
                 child: widget.card,
-              ),
+              )
+                  : widget.card,
             ),
           ),
         );
       },
-    );
-  }
-}
-
-class ProfileCard extends StatefulWidget {
-  final String name, bio;
-  final List<String> photos;
-
-  ProfileCard({Key key, this.name, this.bio, this.photos}) : super(key: key);
-
-  @override
-  _ProfileCardState createState() => _ProfileCardState();
-}
-
-class _ProfileCardState extends State<ProfileCard> {
-  Widget _buildBackground() {
-    return PhotoBrowser(
-      photoAssetPaths: widget.photos,
-      visiblePhotoIndex: 0,
-    );
-  }
-
-  Widget _buildProfileSynopsis() {
-    return Positioned(
-      left: 0.0,
-      right: 0.0,
-      bottom: 0.0,
-      child: Container(
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-              Colors.transparent,
-              Colors.black.withOpacity(0.8),
-            ])),
-        padding: const EdgeInsets.all(24.0),
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          children: <Widget>[
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Text(widget.name,
-                      style: TextStyle(color: Colors.white, fontSize: 24.0)),
-                  Text(widget.bio,
-                      style: TextStyle(color: Colors.white, fontSize: 18.0))
-                ],
-              ),
-            ),
-            Icon(
-              Icons.info,
-              color: Colors.white,
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration:
-          BoxDecoration(borderRadius: BorderRadius.circular(10.0), boxShadow: [
-        BoxShadow(
-          color: const Color(0x11000000),
-          blurRadius: 5.0,
-          spreadRadius: 2.0,
-        )
-      ]),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(10.0),
-        child: Material(
-          child: Stack(
-            fit: StackFit.expand,
-            children: <Widget>[
-              _buildBackground(),
-              _buildProfileSynopsis(),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }

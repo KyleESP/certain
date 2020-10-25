@@ -19,15 +19,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   Stream<SearchState> mapEventToState(
     SearchEvent event,
   ) async* {
-    if (event is LikeUserEvent) {
-      yield* _mapLikeToState(
-          currentUserId: event.currentUserId,
-          selectedUserId: event.selectedUserId,
-          currentUserName: event.currentUserName,
-          currentUserPhotoUrl: event.currentUserPhotoUrl,
-          selectedUserName: event.selectedUserName,
-          selectedUserPhotoUrl: event.selectedUserPhotoUrl);
-    } else if (event is LoadCurrentUserEvent) {
+    if (event is LoadCurrentUserEvent) {
       yield* _mapLoadCurrentUserToState(currentUserId: event.userId);
     } else if (event is LoadUserEvent) {
       yield* _mapLoadUserToState();
@@ -41,28 +33,6 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     List<UserModel> usersToShow = await _searchRepository.getUsersToShow();
 
     yield LoadUserState(user, usersToShow);
-  }
-
-  Stream<SearchState> _mapLikeToState(
-      {String currentUserId,
-      String selectedUserId,
-      String currentUserName,
-      String currentUserPhotoUrl,
-      String selectedUserName,
-      String selectedUserPhotoUrl}) async* {
-    bool hasMatched = await _searchRepository.likeUser(
-        currentUserId,
-        selectedUserId,
-        currentUserName,
-        currentUserPhotoUrl,
-        selectedUserName,
-        selectedUserPhotoUrl);
-
-    if (hasMatched) {
-      yield HasMatchedState();
-    }
-
-    yield LoadCurrentUserState();
   }
 
   Stream<SearchState> _mapLoadCurrentUserToState(

@@ -19,6 +19,4 @@ class LoadUserState extends SearchState {
   LoadUserState(this.user, this.usersToShow);
 }
 
-class HasMatchedState extends SearchState {}
-
 class LoadCurrentUserState extends SearchState {}
