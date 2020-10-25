@@ -111,77 +111,135 @@ class _PlayMcqFormState extends State<PlayMcqForm> {
         return loaderWidget();
       }
       return Scaffold(
-          body: Padding(
+          body: Container(
+              decoration: BoxDecoration(
+                gradient: gradient,
+              ),
+              width: size.width,
+              height: size.height,
               padding: const EdgeInsets.all(25),
-              child: Form(
-                key: _formKey,
-                autovalidate: true,
-                child: ListView(
-                  padding: EdgeInsets.all(4),
-                  children: <Widget>[
-                    Text("Question ${7 - _mcq.length}/6"),
-                    Text(_questionSelected.question),
-                    SizedBox(
-                      height: 12,
-                    ),
-                    optionWidget(_optionsShuffled[0], "A"),
-                    optionWidget(_optionsShuffled[1], "B"),
-                    optionWidget(_optionsShuffled[2], "C"),
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: 8,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            if (isLastQuestion) {
-                              var successPercentage = _correct / 6;
-                              _playMcqBloc.add(CompletedEvent(
-                                  currentUserId: widget.user.uid,
-                                  selectedUserId: widget.selectedUser.uid,
-                                  status:
-                                      successPercentage >= 0.5 ? "s" : "f"));
-                            } else if (isButtonEnabled) {
-                              setState(() {
-                                if (_optionSelected ==
-                                    _questionSelected.option1) {
-                                  _correct++;
-                                }
-                                _mcq.remove(_questionSelected);
-                                _questionSelected = _mcq[0];
-                                _optionSelected = null;
-                                _optionsShuffled = [
-                                  _questionSelected.option1,
-                                  _questionSelected.option2,
-                                  _questionSelected.option3
-                                ]..shuffle();
-                              });
-                            }
-                          },
-                          child: Container(
-                            alignment: Alignment.center,
-                            width: MediaQuery.of(context).size.width / 2 - 40,
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 24, vertical: 20),
-                            decoration: BoxDecoration(
-                                color: isButtonEnabled
-                                    ? loginButtonColor
-                                    : loginButtonColor.withOpacity(0.3),
-                                borderRadius: BorderRadius.circular(30)),
-                            child: Text(
-                              !isLastQuestion
-                                  ? "Prochaine question"
-                                  : "Terminer",
-                              style:
-                                  TextStyle(fontSize: 16, color: Colors.white),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+              child: Stack(alignment: Alignment.center, children: <Widget>[
+                Container(
+                  margin: EdgeInsets.only(top: size.height * 0.05, left: size.width * 0.03, right: size.width * 0.03),
+                  alignment: Alignment.topCenter,
+                  child: Text(
+                    "Répondez au questionnaire de ${widget.selectedUser.name}",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Colors.white, fontSize: size.height * 0.028),
+                  ),
                 ),
-              )));
+                Container(
+                  height: size.height * 0.46,
+                  width: size.width * 0.82,
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey[800],
+                        blurRadius: 20.0,
+                        spreadRadius: 10.0,
+                      )
+                    ],
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                ),
+                ClipRRect(
+                    borderRadius: BorderRadius.circular(20.0),
+                    child: Container(
+                        height: size.height * 0.5,
+                        width: size.width * 0.95,
+                        padding: EdgeInsets.all(size.width * 0.05),
+                        color: Colors.white,
+                        child: Form(
+                          key: _formKey,
+                          autovalidate: true,
+                          child: ListView(
+                            padding: EdgeInsets.all(4),
+                            children: <Widget>[
+                              Text(
+                                "Question ${7 - _mcq.length}/6",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: size.height * 0.018,
+                                    color: Colors.black54),
+                              ),
+                              SizedBox(
+                                height: size.height * 0.02,
+                              ),
+                              Text(
+                                _questionSelected.question,
+                                style: TextStyle(
+                                    fontSize: size.height * 0.018,
+                                    color: Colors.black87),
+                              ),
+                              SizedBox(
+                                height: size.height * 0.02,
+                              ),
+                              optionWidget(_optionsShuffled[0], "A"),
+                              optionWidget(_optionsShuffled[1], "B"),
+                              optionWidget(_optionsShuffled[2], "C"),
+                              SizedBox(
+                                height: size.height * 0.04,
+                              ),
+                              Align(
+                                alignment: Alignment.bottomCenter,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    if (isLastQuestion) {
+                                      var successPercentage = _correct / 6;
+                                      _playMcqBloc.add(CompletedEvent(
+                                          currentUserId: widget.user.uid,
+                                          selectedUserId:
+                                              widget.selectedUser.uid,
+                                          status: successPercentage >= 0.5
+                                              ? "s"
+                                              : "f"));
+                                    } else if (isButtonEnabled) {
+                                      setState(() {
+                                        if (_optionSelected ==
+                                            _questionSelected.option1) {
+                                          _correct++;
+                                        }
+                                        _mcq.remove(_questionSelected);
+                                        _questionSelected = _mcq[0];
+                                        _optionSelected = null;
+                                        _optionsShuffled = [
+                                          _questionSelected.option1,
+                                          _questionSelected.option2,
+                                          _questionSelected.option3
+                                        ]..shuffle();
+                                      });
+                                    }
+                                  },
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    padding: EdgeInsets.only(
+                                        left: size.width * 0.05,
+                                        right: size.width * 0.05),
+                                    width: size.width * 0.4,
+                                    height: size.height * 0.08,
+                                    decoration: BoxDecoration(
+                                      color: isButtonEnabled
+                                          ? loginButtonColor
+                                          : loginButtonColor.withOpacity(0.3),
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: Text(
+                                      !isLastQuestion
+                                          ? "Question suivante"
+                                          : "Terminer",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: size.height * 0.02,
+                                          color: Colors.white),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )))
+              ])));
     }));
   }
 
@@ -197,6 +255,7 @@ class _PlayMcqFormState extends State<PlayMcqForm> {
         description: "$option",
         optionSelected: _optionSelected,
         correctAnswer: _optionSelected,
+        size: MediaQuery.of(context).size,
       ),
     );
   }

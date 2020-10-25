@@ -135,22 +135,27 @@ class _CreateMcqFormState extends State<CreateMcqForm> {
                         color: Colors.white, fontSize: size.width * 0.05),
                   ),
                 ),
+              Container(
+                height: size.height * 0.53,
+                width: size.width * 0.82,
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey[800],
+                        blurRadius: 20.0,
+                        spreadRadius: 10.0,
+                      )
+                    ],
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                ),
                 ClipRRect(
                     borderRadius: BorderRadius.circular(20.0),
                     child: Container(
                         height: size.height * 0.58,
                         width: size.width * 0.95,
                         padding: EdgeInsets.all(size.width * 0.05),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey[700],
-                              spreadRadius: 10,
-                              blurRadius: 10,
-                            ),
-                          ],
-                        ),
+                        color: Colors.white,
                         child: Form(
                           key: _formKey,
                           autovalidate: true,
@@ -262,7 +267,8 @@ class _CreateMcqFormState extends State<CreateMcqForm> {
                                   },
                                   child: Container(
                                     alignment: Alignment.centerRight,
-                                    width: size.width * 0.36,
+                                    padding: EdgeInsets.only(left: size.width * 0.05, right: size.width * 0.05),
+                                    width: size.width * 0.4,
                                     height: size.height * 0.08,
                                     decoration: BoxDecoration(
                                       color: isButtonEnabled(state)
