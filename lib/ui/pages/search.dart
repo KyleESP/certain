@@ -54,8 +54,8 @@ class _SearchState extends State<Search> {
     }
   }
 
-  _dislikeUser(UserModel user) {
-    _searchRepository.dislikeUser(widget.userId, user.uid);
+  _dislikeUser() {
+    _searchRepository.dislikeUser(widget.userId, _selectedUser.uid);
   }
 
   @override
@@ -120,13 +120,13 @@ class _SearchState extends State<Search> {
                 demoProfiles: _usersToShow,
                 size: size,
                 myCallback: (decision, user, lastReached) {
+                  _selectedUser = user;
                   switch (decision) {
                     case Decision.like:
-                      _selectedUser = user;
                       _likeUser();
                       break;
                     case Decision.nope:
-                      _dislikeUser(user);
+                      _dislikeUser();
                       break;
                     default:
                       break;

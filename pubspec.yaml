@@ -45,7 +45,6 @@ dependencies:
   intl: ^0.16.1
   circle_button: ^1.0.1
   dropdown_search: ^0.4.4
-  flutter_tindercard: ^0.2.0
   fluttery_dart2: ^0.0.9
 
 flutter_icons:

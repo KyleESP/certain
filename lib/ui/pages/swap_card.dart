@@ -1,24 +1,25 @@
-import 'package:certain/ui/widgets/profile_card_widget.dart';
-import 'package:flutter/material.dart';
+import 'dart:math';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:fluttery_dart2/layout.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import 'package:certain/ui/widgets/icon_widget.dart';
+import 'package:certain/ui/widgets/profile_card_widget.dart';
 
 import 'package:certain/models/user_model.dart';
 
-import 'dart:math';
-
-import 'package:fluttery_dart2/layout.dart';
+import 'package:certain/helpers/constants.dart';
 
 class SwapCard extends StatefulWidget {
   SwapCard({
     Key key,
-    this.title,
     this.demoProfiles,
     this.size,
     this.myCallback,
   }) : super(key: key);
 
-  final String title;
   final List<UserModel> demoProfiles;
   final Size size;
 
@@ -44,54 +45,61 @@ class _SwapCardState extends State<SwapCard> {
           widget.myCallback(match, user, lastReached);
         });
 
-    /*Align(
-        child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        Container(
-          padding: EdgeInsets.all(widget.size.width * 0.01),
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey[300],
-                spreadRadius: 1,
-                blurRadius: 5,
-                offset: Offset(5.0, 5.0),
+    /* Align(
+          alignment: Alignment(0.0, 0.9),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.all(widget.size.width * 0.01),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey[300],
+                      spreadRadius: 1,
+                      blurRadius: 5,
+                      offset: Offset(5.0, 5.0),
+                    ),
+                  ],
+                ),
+                child: iconWidget(Icons.clear, () {
+                  matchEngine.currentMatch.nope();
+                  widget.myCallback(
+                      matchEngine.currentMatch.decision,
+                      matchEngine.currentMatch.user,
+                      matchEngine.nextMatch == null);
+                  matchEngine.cycleMatch();
+                }, widget.size.height * 0.07, dislikeButton),
+              ),
+              Container(
+                padding: EdgeInsets.all(widget.size.width * 0.03),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey[300],
+                      spreadRadius: 1,
+                      blurRadius: 5,
+                      offset: Offset(5.0, 5.0),
+                    ),
+                  ],
+                ),
+                child: iconWidget(FontAwesomeIcons.solidHeart, () {
+                  matchEngine.currentMatch.nope();
+                  widget.myCallback(
+                      matchEngine.currentMatch.decision,
+                      matchEngine.currentMatch.user,
+                      matchEngine.nextMatch == null);
+                  matchEngine.cycleMatch();
+                }, widget.size.height * 0.05, likeButton),
               ),
             ],
           ),
-          child: iconWidget(Icons.clear, () {
-            matchEngine.currentMatch.nope();
-            widget.myCallback(matchEngine.currentMatch.decision,
-                matchEngine.currentMatch.user);
-            matchEngine.cycleMatch();
-          }, widget.size.height * 0.07, dislikeButton),
-        ),
-        Container(
-          padding: EdgeInsets.all(widget.size.width * 0.03),
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey[300],
-                spreadRadius: 1,
-                blurRadius: 5,
-                offset: Offset(5.0, 5.0),
-              ),
-            ],
-          ),
-          child: iconWidget(FontAwesomeIcons.solidHeart, () {
-            matchEngine.currentMatch.nope();
-            widget.myCallback(matchEngine.currentMatch.decision,
-                matchEngine.currentMatch.user);
-            matchEngine.cycleMatch();
-          }, widget.size.height * 0.05, likeButton),
-        ),
-      ],
-    ));*/
+        )
+     */
   }
 }
 
@@ -247,8 +255,8 @@ class _CardStackState extends State<CardStack> {
     return ProfileCard(
         key: _frontCard,
         name: widget.matchEngine.currentMatch.user.name,
-        gender: widget.matchEngine.nextMatch.user.gender,
-        birthdate: widget.matchEngine.nextMatch.user.birthdate,
+        gender: widget.matchEngine.currentMatch.user.gender,
+        birthdate: widget.matchEngine.currentMatch.user.birthdate,
         bio: widget.matchEngine.currentMatch.user.bio,
         photos: [widget.matchEngine.currentMatch.user.photo]);
   }
@@ -367,13 +375,13 @@ class _DraggableCardState extends State<DraggableCard>
       duration: const Duration(milliseconds: 1000),
     )
       ..addListener(() => setState(() {
-        cardOffset = Offset.lerp(slideBackStart, const Offset(0.0, 0.0),
-            Curves.elasticOut.transform(slideBackAnimation.value));
+            cardOffset = Offset.lerp(slideBackStart, const Offset(0.0, 0.0),
+                Curves.elasticOut.transform(slideBackAnimation.value));
 
-        if (null != widget.onSlideUpdate) {
-          widget.onSlideUpdate(cardOffset.distance);
-        }
-      }))
+            if (null != widget.onSlideUpdate) {
+              widget.onSlideUpdate(cardOffset.distance);
+            }
+          }))
       ..addStatusListener((AnimationStatus status) {
         if (status == AnimationStatus.completed) {
           setState(() {
@@ -389,12 +397,12 @@ class _DraggableCardState extends State<DraggableCard>
       duration: const Duration(milliseconds: 500),
     )
       ..addListener(() => setState(() {
-        cardOffset = slideOutTween.evaluate(slideOutAnimation);
+            cardOffset = slideOutTween.evaluate(slideOutAnimation);
 
-        if (null != widget.onSlideUpdate) {
-          widget.onSlideUpdate(cardOffset.distance);
-        }
-      }))
+            if (null != widget.onSlideUpdate) {
+              widget.onSlideUpdate(cardOffset.distance);
+            }
+          }))
       ..addStatusListener((AnimationStatus status) {
         if (status == AnimationStatus.completed) {
           setState(() {
@@ -501,7 +509,7 @@ class _DraggableCardState extends State<DraggableCard>
         slideOutAnimation.forward(from: 0.0);
 
         slideOutDirection =
-        isInLeftRegion ? SlideDirection.left : SlideDirection.right;
+            isInLeftRegion ? SlideDirection.left : SlideDirection.right;
       } else {
         slideBackStart = cardOffset;
         slideBackAnimation.forward(from: 0.0);
@@ -512,7 +520,7 @@ class _DraggableCardState extends State<DraggableCard>
   double _rotation(Rect dragBounds) {
     if (dragStart != null) {
       final rotationCornerMultiplier =
-      dragStart.dy >= dragBounds.top + (dragBounds.height / 2) ? -1 : 1;
+          dragStart.dy >= dragBounds.top + (dragBounds.height / 2) ? -1 : 1;
       return (pi / 8) *
           (cardOffset.dx / dragBounds.width) *
           rotationCornerMultiplier;
@@ -539,8 +547,8 @@ class _DraggableCardState extends State<DraggableCard>
           position: anchor,
           child: Transform(
             transform:
-            Matrix4.translationValues(cardOffset.dx, cardOffset.dy, 0.0)
-              ..rotateZ(_rotation(anchorBounds)),
+                Matrix4.translationValues(cardOffset.dx, cardOffset.dy, 0.0)
+                  ..rotateZ(_rotation(anchorBounds)),
             origin: _rotationOrigin(anchorBounds),
             child: Container(
               key: profileCardKey,
@@ -549,11 +557,11 @@ class _DraggableCardState extends State<DraggableCard>
               padding: const EdgeInsets.all(16.0),
               child: widget.isDraggable
                   ? GestureDetector(
-                onPanStart: _onPanStart,
-                onPanUpdate: _onPanUpdate,
-                onPanEnd: _onPanEnd,
-                child: widget.card,
-              )
+                      onPanStart: _onPanStart,
+                      onPanUpdate: _onPanUpdate,
+                      onPanEnd: _onPanEnd,
+                      child: widget.card,
+                    )
                   : widget.card,
             ),
           ),
