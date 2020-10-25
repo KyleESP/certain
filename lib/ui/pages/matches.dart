@@ -174,15 +174,37 @@ class _MatchesState extends State<Matches> {
               return loaderWidget();
             }
             if (state is LoadUserState) {
-              return CustomScrollView(
+              return Stack(alignment: Alignment.center, children: <Widget>[
+                Positioned(
+                top: 0,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.elliptical(200.0, 100.0),
+                      bottomRight: Radius.elliptical(200.0, 100.0)),
+                  child: Container(
+                    height: size.height * 0.25,
+                    width: size.width,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.rectangle,
+                      gradient: gradient,
+                    ),
+                  ),
+                ),
+              ),
+              CustomScrollView(
                 slivers: <Widget>[
                   SliverAppBar(
                     pinned: true,
-                    backgroundColor: Colors.white,
+                    centerTitle: true,
                     title: Text(
-                      "Matched User",
-                      style: TextStyle(color: Colors.black, fontSize: 30.0),
+                      "Vos matchs",
+                      style: TextStyle(
+                          color: Colors.white, fontSize: size.height * 0.03),
                     ),
+                    backgroundColor: Colors.transparent,
+
+                    toolbarHeight: size.height * 0.12,
+
                   ),
                   StreamBuilder<QuerySnapshot>(
                     stream: state.matchedList,
@@ -199,23 +221,30 @@ class _MatchesState extends State<Matches> {
                           delegate: SliverChildBuilderDelegate(
                             (BuildContext context, int index) {
                               user = matchedUsers[index];
-                              return GestureDetector(
-                                onTap: () {
-                                  _matchesBloc.add(SelectedUserEvent(user.id));
-                                },
-                                child: profileWidget(
-                                  padding: size.height * 0.01,
-                                  photo: user.data()['photoUrl'],
-                                  photoWidth: size.width * 0.5,
-                                  photoHeight: size.height * 0.3,
-                                  clipRadius: size.height * 0.01,
-                                  containerHeight: size.height * 0.03,
-                                  containerWidth: size.width * 0.5,
-                                  child: Text(
-                                    "  " + user.data()['name'],
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ),
+                              return Container(
+                                margin: EdgeInsets.only(left : size.width * 0.04, right : size.width * 0.04),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      _matchesBloc.add(SelectedUserEvent(user.id));
+                                    },
+                                    child: profileWidget(
+                                      padding: size.height * 0.01,
+                                      photo: user.data()['photoUrl'],
+                                      photoWidth: size.width * 0.5,
+                                      photoHeight: size.height * 0.2,
+                                      clipRadius: size.height * 0.01,
+                                      containerHeight: size.height * 0.04,
+                                      containerWidth: size.width * 0.5,
+                                      child: Text(
+                                        "  " + user.data()['name'],
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                          fontSize: size.height * 0.023,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ),
+                                  )
                               );
                             },
                             childCount: matchedUsers.length,
@@ -233,7 +262,7 @@ class _MatchesState extends State<Matches> {
                     },
                   ),
                 ],
-              );
+              )]);
             }
             return Container();
           },
