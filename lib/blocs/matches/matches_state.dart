@@ -31,9 +31,10 @@ class LoadUserState extends MatchesState {
 
 class IsSelectedState extends MatchesState {
   final UserModel selectedUser;
+  final int index;
 
-  IsSelectedState({this.selectedUser});
+  IsSelectedState({this.selectedUser, this.index});
 
   @override
-  List<Object> get props => [selectedUser];
+  List<Object> get props => [selectedUser, index];
 }

@@ -14,6 +14,7 @@ import 'package:certain/repositories/matches_repository.dart';
 import 'package:certain/ui/widgets/icon_widget.dart';
 import 'package:certain/ui/widgets/profile_widget.dart';
 import 'package:certain/ui/widgets/user_gender_widget.dart';
+import 'package:certain/ui/widgets/photo_widget.dart';
 
 class Matches extends StatefulWidget {
   final String userId;
@@ -29,7 +30,6 @@ class _MatchesState extends State<Matches> {
   MatchesBloc _matchesBloc;
   double distance;
   UserModel currentUser;
-  QueryDocumentSnapshot user;
   var matchedUsers;
 
   @override
@@ -48,117 +48,172 @@ class _MatchesState extends State<Matches> {
           if (state is IsSelectedState) {
             UserModel selectedUser = state.selectedUser;
             showDialog(
-              context: context,
-              builder: (BuildContext context) => Dialog(
-                backgroundColor: Colors.transparent,
-                child: profileWidget(
-                  photo: selectedUser.photo,
-                  photoHeight: size.height,
-                  padding: size.height * 0.01,
-                  photoWidth: size.width,
-                  clipRadius: size.height * 0.01,
-                  containerWidth: size.width,
-                  containerHeight: size.height * 0.2,
-                  child: Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: size.height * 0.02),
-                    child: ListView(
+                context: context,
+                builder: (BuildContext context) => SimpleDialog(
+                      backgroundColor: Colors.transparent,
                       children: <Widget>[
-                        SizedBox(
-                          height: size.height * 0.02,
-                        ),
-                        Row(
+                        Column(
+                          //alignment: Alignment.center,
                           children: <Widget>[
-                            userGender(selectedUser.gender),
-                            Expanded(
-                              child: Text(
-                                " " +
-                                    selectedUser.name +
-                                    ", " +
-                                    selectedUser.age.toString(),
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: size.height * 0.05),
-                              ),
-                            )
-                          ],
-                        ),
-                        Row(
-                          children: <Widget>[
-                            Icon(
-                              Icons.location_on,
-                              color: Colors.white,
-                            ),
-                            Text(
-                              selectedUser.distance != null
-                                  ? selectedUser.distance.toString() + " km"
-                                  : "Distance inconnue",
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
-                            )
-                          ],
-                        ),
-                        SizedBox(
-                          height: size.height * 0.01,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Container(
-                              padding: EdgeInsets.all(size.width * 0.01),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey[300],
-                                    spreadRadius: 1,
-                                    blurRadius: 5,
-                                    offset: Offset(5.0, 5.0),
+                            Stack(
+                              alignment: Alignment.bottomCenter,
+                              children: <Widget>[
+                                Positioned(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(20.0),
+                                        topRight: Radius.circular(20.0)),
+                                    child: Container(
+                                      width: size.width,
+                                      height: size.height * 0.55,
+                                      child: PhotoWidget(
+                                        photoLink: selectedUser.photo,
+                                      ),
+                                    ),
                                   ),
+                                ),
+                                Positioned(
+                                  child: Container(
+                                    padding: EdgeInsets.only(
+                                        top: size.height * 0.03),
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                          colors: [
+                                            Colors.transparent,
+                                            Colors.black54,
+                                            Colors.black87,
+                                            Colors.black
+                                          ],
+                                          stops: [
+                                            0.1,
+                                            0.2,
+                                            0.4,
+                                            0.9
+                                          ],
+                                          begin: Alignment.topCenter,
+                                          end: Alignment.bottomCenter),
+                                      color: Colors.black45,
+                                    ),
+                                    width: size.width,
+                                    height: size.height * 0.13,
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: size.height * 0.02),
+                                      child: ListView(
+                                        children: <Widget>[
+                                          Row(
+                                            children: <Widget>[
+                                              userGender(selectedUser.gender),
+                                              Expanded(
+                                                child: Text(
+                                                  " " +
+                                                      selectedUser.name +
+                                                      ", " +
+                                                      selectedUser.age
+                                                          .toString(),
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize:
+                                                          size.height * 0.03),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: size.height * 0.01,
+                                          ),
+                                          Row(
+                                            children: <Widget>[
+                                              Icon(
+                                                Icons.location_on,
+                                                color: Colors.white,
+                                              ),
+                                              Text(
+                                                selectedUser.distance != null
+                                                    ? selectedUser.distance
+                                                            .toString() +
+                                                        " km"
+                                                    : "Distance inconnue",
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: size.height * 0.02,
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Container(
+                              height: size.height * 0.12,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(20.0),
+                                    bottomRight: Radius.circular(20.0)),
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: <Widget>[
+                                  Container(
+                                    padding: EdgeInsets.all(size.width * 0.01),
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black26,
+                                          spreadRadius: 1,
+                                          blurRadius: 5,
+                                          offset: Offset(0.0, 5.0),
+                                        ),
+                                      ],
+                                    ),
+                                    child: iconWidget(Icons.clear, () {
+                                      _matchesBloc.add(RemoveMatchEvent(
+                                          currentUser: widget.userId,
+                                          selectedUser: selectedUser.uid));
+                                      matchedUsers.removeAt(state.index);
+                                      Navigator.pop(context);
+                                    }, size.height * 0.06, dislikeButton),
+                                  ),
+                                  Container(
+                                    padding:
+                                        EdgeInsets.all(size.height * 0.015),
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black26,
+                                          spreadRadius: 1,
+                                          blurRadius: 5,
+                                          offset: Offset(0.0, 5.0),
+                                        ),
+                                      ],
+                                    ),
+                                    child: iconWidget(Icons.message, () {
+                                      Navigator.push(context, MaterialPageRoute(
+                                        builder: (context) {
+                                          return PlayMcq(
+                                              user: currentUser,
+                                              selectedUser: selectedUser);
+                                        },
+                                      ));
+                                    }, size.height * 0.045, likeButton),
+                                  )
                                 ],
                               ),
-                              child: iconWidget(Icons.clear, () {
-                                _matchesBloc.add(RemoveMatchEvent(
-                                    currentUser: widget.userId,
-                                    selectedUser: selectedUser.uid));
-                                matchedUsers.remove(user);
-                                Navigator.pop(context);
-                              }, size.height * 0.07, dislikeButton),
                             ),
-                            Container(
-                              padding: EdgeInsets.all(size.height * 0.01),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey[300],
-                                    spreadRadius: 1,
-                                    blurRadius: 5,
-                                    offset: Offset(5.0, 5.0),
-                                  ),
-                                ],
-                              ),
-                              child: iconWidget(Icons.message, () {
-                                Navigator.push(context, MaterialPageRoute(
-                                  builder: (context) {
-                                    return PlayMcq(
-                                        user: currentUser,
-                                        selectedUser: selectedUser);
-                                  },
-                                ));
-                              }, size.height * 0.04, Colors.blue),
-                            )
                           ],
-                        )
+                        ),
                       ],
-                    ),
-                  ),
-                ),
-              ),
-            );
+                    ));
           }
         },
         child: BlocBuilder<MatchesBloc, MatchesState>(
@@ -174,66 +229,109 @@ class _MatchesState extends State<Matches> {
               return loaderWidget();
             }
             if (state is LoadUserState) {
-              return CustomScrollView(
-                slivers: <Widget>[
-                  SliverAppBar(
-                    pinned: true,
-                    backgroundColor: Colors.white,
-                    title: Text(
-                      "Matched User",
-                      style: TextStyle(color: Colors.black, fontSize: 30.0),
+              return Stack(alignment: Alignment.center, children: <Widget>[
+                Positioned(
+                  top: 0,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.elliptical(200.0, 100.0),
+                        bottomRight: Radius.elliptical(200.0, 100.0)),
+                    child: Container(
+                      height: size.height * 0.25,
+                      width: size.width,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.rectangle,
+                        gradient: gradient,
+                      ),
                     ),
                   ),
-                  StreamBuilder<QuerySnapshot>(
-                    stream: state.matchedList,
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return SliverToBoxAdapter(
-                          child: Container(),
-                        );
-                      }
-                      if (snapshot.data.docs != null) {
-                        matchedUsers = snapshot.data.docs;
-
-                        return SliverGrid(
-                          delegate: SliverChildBuilderDelegate(
-                            (BuildContext context, int index) {
-                              user = matchedUsers[index];
-                              return GestureDetector(
-                                onTap: () {
-                                  _matchesBloc.add(SelectedUserEvent(user.id));
-                                },
-                                child: profileWidget(
-                                  padding: size.height * 0.01,
-                                  photo: user.data()['photoUrl'],
-                                  photoWidth: size.width * 0.5,
-                                  photoHeight: size.height * 0.3,
-                                  clipRadius: size.height * 0.01,
-                                  containerHeight: size.height * 0.03,
-                                  containerWidth: size.width * 0.5,
-                                  child: Text(
-                                    "  " + user.data()['name'],
-                                    style: TextStyle(color: Colors.white),
+                ),
+                CustomScrollView(
+                  slivers: <Widget>[
+                    SliverAppBar(
+                      pinned: true,
+                      centerTitle: true,
+                      title: Text(
+                        "Vos matchs",
+                        style: TextStyle(
+                            color: Colors.white, fontSize: size.height * 0.03),
+                      ),
+                      backgroundColor: Colors.transparent,
+                      toolbarHeight: size.height * 0.12,
+                    ),
+                    StreamBuilder<QuerySnapshot>(
+                      stream: state.matchedList,
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return SliverToBoxAdapter(
+                            child: Container(),
+                          );
+                        }
+                        if (snapshot.data.docs.isNotEmpty) {
+                          matchedUsers = snapshot.data.docs;
+                          return SliverGrid(
+                            delegate: SliverChildBuilderDelegate(
+                              (BuildContext context, int index) {
+                                QueryDocumentSnapshot user =
+                                    matchedUsers[index];
+                                return Container(
+                                    margin: EdgeInsets.only(
+                                        left: size.width * 0.04,
+                                        right: size.width * 0.04),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        _matchesBloc.add(
+                                            SelectedUserEvent(user.id, index));
+                                      },
+                                      child: profileWidget(
+                                        padding: size.height * 0.01,
+                                        photo: user.data()['photoUrl'],
+                                        photoWidth: size.width * 0.5,
+                                        photoHeight: size.height * 0.2,
+                                        clipRadius: size.height * 0.01,
+                                        containerHeight: size.height * 0.04,
+                                        containerWidth: size.width * 0.5,
+                                        child: Text(
+                                          "  " + user.data()['name'],
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: size.height * 0.023,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ),
+                                    ));
+                              },
+                              childCount: matchedUsers.length,
+                            ),
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                            ),
+                          );
+                        } else {
+                          return SliverToBoxAdapter(
+                            child: SizedBox(
+                              height: size.height * 0.7,
+                              child: Center(
+                                child: Text(
+                                  "Vous n'avez pas de matchs pour le moment !",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.black54,
+                                    fontSize: size.height * 0.023,
+                                    fontWeight: FontWeight.w500,
                                   ),
                                 ),
-                              );
-                            },
-                            childCount: matchedUsers.length,
-                          ),
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                          ),
-                        );
-                      } else {
-                        return SliverToBoxAdapter(
-                          child: Container(),
-                        );
-                      }
-                    },
-                  ),
-                ],
-              );
+                              ),
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                  ],
+                )
+              ]);
             }
             return Container();
           },
