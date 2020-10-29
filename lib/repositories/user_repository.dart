@@ -52,7 +52,7 @@ class UserRepository {
         email: email, password: password);
   }
 
-  Future<bool> isSignedIn() async {
+  bool isSignedIn() {
     return _firebaseAuth.currentUser != null;
   }
 
