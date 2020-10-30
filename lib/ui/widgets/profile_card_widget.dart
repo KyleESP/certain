@@ -34,6 +34,8 @@ class _ProfileCardState extends State<ProfileCard> {
   }
 
   Widget _buildProfileSynopsis() {
+    Size size = MediaQuery.of(context).size;
+
     return Positioned(
       left: 0.0,
       right: 0.0,
@@ -47,23 +49,57 @@ class _ProfileCardState extends State<ProfileCard> {
               Colors.transparent,
               Colors.black.withOpacity(0.8),
             ])),
-        padding: const EdgeInsets.all(24.0),
+        padding: EdgeInsets.all(size.width * 0.05),
         child: Row(
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  userGender(widget.gender),
-                  Text(
-                      "${widget.name}, ${calculateAge(widget.birthdate.toDate())}",
-                      style: TextStyle(color: Colors.white, fontSize: 24.0)),
-                  Text(widget.bio,
-                      style: TextStyle(color: Colors.white, fontSize: 18.0)),
-                  Text("A ${widget.distance}km",
-                      style: TextStyle(color: Colors.white, fontSize: 18.0)),
+                  SizedBox(
+                    height: size.height * 0.06,
+                  ),
+                  Row(
+                    children: <Widget>[
+                      userGender(widget.gender),
+                      Expanded(
+                        child: Text(
+                          "${widget.name}, ${calculateAge(widget.birthdate.toDate())}",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: size.height * 0.03),
+                        ),
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: size.height * 0.01,
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Icon(
+                        Icons.location_on,
+                        color: Colors.white,
+                      ),
+                      Text(
+                        widget.distance != null
+                            ? "${widget.distance} km"
+                            : "Distance inconnue",
+                        style: TextStyle(
+                            color: Colors.white, fontSize: size.height * 0.02),
+                      )
+                    ],
+                  ),
+                  if (widget.bio.isNotEmpty)
+                    Container(
+                      margin: EdgeInsets.all(size.height * 0.01),
+                      child: Text(
+                        '"' + widget.bio + '"',
+                        style: TextStyle(
+                            color: Colors.white, fontSize: size.height * 0.018),
+                      ),
+                    ),
                 ],
               ),
             ),
@@ -77,18 +113,20 @@ class _ProfileCardState extends State<ProfileCard> {
   Widget build(BuildContext context) {
     return Container(
       decoration:
-          BoxDecoration(borderRadius: BorderRadius.circular(10.0), boxShadow: [
+          BoxDecoration(borderRadius: BorderRadius.circular(20.0), boxShadow: [
         BoxShadow(
-          color: const Color(0x11000000),
-          blurRadius: 5.0,
+          color: Colors.black54,
+          blurRadius: 10.0,
           spreadRadius: 2.0,
+          offset: Offset(5.0, 5.0),
         )
       ]),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(10.0),
+        borderRadius: BorderRadius.circular(20.0),
         child: Material(
           child: Stack(
             fit: StackFit.expand,
+            alignment: Alignment.center,
             children: <Widget>[
               _buildBackground(),
               _buildProfileSynopsis(),

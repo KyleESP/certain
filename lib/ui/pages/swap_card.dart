@@ -44,62 +44,6 @@ class _SwapCardState extends State<SwapCard> {
         onSwipeCallback: (match, user, lastReached) {
           widget.myCallback(match, user, lastReached);
         });
-
-    /* Align(
-          alignment: Alignment(0.0, 0.9),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.all(widget.size.width * 0.01),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey[300],
-                      spreadRadius: 1,
-                      blurRadius: 5,
-                      offset: Offset(5.0, 5.0),
-                    ),
-                  ],
-                ),
-                child: iconWidget(Icons.clear, () {
-                  matchEngine.currentMatch.nope();
-                  widget.myCallback(
-                      matchEngine.currentMatch.decision,
-                      matchEngine.currentMatch.user,
-                      matchEngine.nextMatch == null);
-                  matchEngine.cycleMatch();
-                }, widget.size.height * 0.07, dislikeButton),
-              ),
-              Container(
-                padding: EdgeInsets.all(widget.size.width * 0.03),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey[300],
-                      spreadRadius: 1,
-                      blurRadius: 5,
-                      offset: Offset(5.0, 5.0),
-                    ),
-                  ],
-                ),
-                child: iconWidget(FontAwesomeIcons.solidHeart, () {
-                  matchEngine.currentMatch.nope();
-                  widget.myCallback(
-                      matchEngine.currentMatch.decision,
-                      matchEngine.currentMatch.user,
-                      matchEngine.nextMatch == null);
-                  matchEngine.cycleMatch();
-                }, widget.size.height * 0.05, likeButton),
-              ),
-            ],
-          ),
-        )
-     */
   }
 }
 
@@ -305,23 +249,80 @@ class _CardStackState extends State<CardStack> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Stack(
       children: <Widget>[
         if (widget.matchEngine.nextMatch != null)
           DraggableCard(
-            screenHeight: MediaQuery.of(context).size.height,
-            screenWidth: MediaQuery.of(context).size.width,
+            screenHeight: size.height,
+            screenWidth: size.width,
             isDraggable: false,
             card: _buildBackCard(),
           ),
         DraggableCard(
-          screenHeight: MediaQuery.of(context).size.height,
-          screenWidth: MediaQuery.of(context).size.width,
+          screenHeight: size.height,
+          screenWidth: size.width,
           card: _buildFrontCard(),
           slideTo: _desiredSlideOutDirection(),
           onSlideUpdate: _onSlideUpdate,
           onSlideComplete: _onSlideComplete,
-        )
+        ),
+        Align(
+          alignment: Alignment(0.0, 0.93),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.all(size.width * 0.01),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black26,
+                      spreadRadius: 1,
+                      blurRadius: 5,
+                      offset: Offset(5.0, 5.0),
+                    ),
+                  ],
+                ),
+                child: iconWidget(Icons.clear, () {
+                  Match currentMatch = widget.matchEngine.currentMatch;
+                  widget.matchEngine.currentMatch.nope();
+                  widget.onSwipeCallback(currentMatch.decision,
+                      currentMatch.user, widget.matchEngine.nextMatch == null);
+                  if (widget.matchEngine.nextMatch != null) {
+                    widget.matchEngine.cycleMatch();
+                  }
+                }, size.height * 0.06, dislikeButton),
+              ),
+              Container(
+                padding: EdgeInsets.all(size.width * 0.03),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black26,
+                      spreadRadius: 1,
+                      blurRadius: 5,
+                      offset: Offset(5.0, 5.0),
+                    ),
+                  ],
+                ),
+                child: iconWidget(FontAwesomeIcons.solidHeart, () {
+                  Match currentMatch = widget.matchEngine.currentMatch;
+                  currentMatch.like();
+                  widget.onSwipeCallback(currentMatch.decision,
+                      currentMatch.user, widget.matchEngine.nextMatch == null);
+                  if (widget.matchEngine.nextMatch != null) {
+                    widget.matchEngine.cycleMatch();
+                  }
+                }, size.height * 0.04, likeButton),
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }
@@ -554,8 +555,8 @@ class _DraggableCardState extends State<DraggableCard>
             origin: _rotationOrigin(anchorBounds),
             child: Container(
               key: profileCardKey,
-              width: anchorBounds.width,
-              height: anchorBounds.height,
+              width: anchorBounds.width * 0.9,
+              height: anchorBounds.height * 0.75,
               padding: const EdgeInsets.all(16.0),
               child: widget.isDraggable
                   ? GestureDetector(
