@@ -17,7 +17,7 @@ Widget profileWidget(
           color: Colors.black54,
           blurRadius: 5.0,
           spreadRadius: 2.0,
-          offset: Offset(10.0, 10.0),
+          offset: Offset(5.0, 5.0),
         )
       ],
       borderRadius: BorderRadius.circular(clipRadius),

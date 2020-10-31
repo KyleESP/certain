@@ -276,8 +276,9 @@ class _MatchesState extends State<Matches> {
                                     matchedUsers[index];
                                 return Container(
                                     margin: EdgeInsets.only(
-                                        left: size.width * 0.04,
-                                        right: size.width * 0.04),
+                                      left: size.width * 0.04,
+                                      right: size.width * 0.04,
+                                    ),
                                     child: GestureDetector(
                                       onTap: () {
                                         _matchesBloc.add(
@@ -287,16 +288,20 @@ class _MatchesState extends State<Matches> {
                                         padding: size.height * 0.01,
                                         photo: user.data()['photoUrl'],
                                         photoWidth: size.width * 0.5,
-                                        photoHeight: size.height * 0.2,
+                                        photoHeight: size.height * 0.3,
                                         clipRadius: size.height * 0.01,
-                                        containerHeight: size.height * 0.04,
+                                        containerHeight: size.height * 0.06,
                                         containerWidth: size.width * 0.5,
-                                        child: Text(
-                                          "  " + user.data()['name'],
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: size.height * 0.023,
-                                            fontWeight: FontWeight.w500,
+                                        child: Padding(
+                                          padding: EdgeInsets.only(
+                                              top: size.height * 0.02),
+                                          child: Text(
+                                            "  " + user.data()['name'],
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: size.height * 0.023,
+                                              fontWeight: FontWeight.w500,
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -307,6 +312,7 @@ class _MatchesState extends State<Matches> {
                             gridDelegate:
                                 SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,
+                              mainAxisSpacing: size.height * 0.04,
                             ),
                           );
                         } else {
