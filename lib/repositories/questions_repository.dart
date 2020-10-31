@@ -10,7 +10,7 @@ class QuestionsRepository {
   Future<List<QuestionModel>> getQuestions() async {
     List<QuestionModel> questionList = [];
     var data;
-    await _firebaseFirestore.collection("questions").get().then((questions) {
+    await _firebaseFirestore.collection("questions").orderBy('question').get().then((questions) {
       for (var question in questions.docs) {
         data = question.data();
         questionList.add(new QuestionModel(
