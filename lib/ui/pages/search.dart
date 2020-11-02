@@ -49,7 +49,10 @@ class _SearchState extends State<Search> {
     if (hasMatched) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => CardWidget(_selectedUser)),
+        MaterialPageRoute(
+            builder: (context) => CardWidget(_selectedUser, _user),
+
+        ),
       );
     }
   }
@@ -65,6 +68,7 @@ class _SearchState extends State<Search> {
     return BlocBuilder<SearchBloc, SearchState>(
       cubit: _searchBloc,
       builder: (context, state) {
+
         if (state is InitialSearchState) {
           _searchBloc.add(
             LoadUserEvent(),
