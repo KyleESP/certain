@@ -50,8 +50,7 @@ class _SearchState extends State<Search> {
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => CardWidget(_selectedUser, _user),
-
+          builder: (context) => CardWidget(_selectedUser, _user),
         ),
       );
     }
@@ -68,7 +67,6 @@ class _SearchState extends State<Search> {
     return BlocBuilder<SearchBloc, SearchState>(
       cubit: _searchBloc,
       builder: (context, state) {
-
         if (state is InitialSearchState) {
           _searchBloc.add(
             LoadUserEvent(),
@@ -86,40 +84,46 @@ class _SearchState extends State<Search> {
           );
         }
         if (state is LoadCurrentUserState) {
-          if (_usersToShow.isEmpty || _lastReached) {
-            return Text(
-              "Il n'y a aucune personne",
-              style: TextStyle(
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black),
-            );
-          } else {
-            return Stack(alignment: Alignment.center, children: <Widget>[
-              Positioned(
-                top: 0,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.elliptical(200.0, 140.0),
-                      bottomRight: Radius.elliptical(200.0, 140.0)),
-                  child: Container(
-                    height: size.height * 0.35,
-                    width: size.width,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.rectangle,
-                      gradient: gradient,
-                    ),
+          return Stack(alignment: Alignment.topCenter, children: <Widget>[
+            Positioned(
+              top: 0,
+              child: ClipRRect(
+                borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.elliptical(200.0, 140.0),
+                    bottomRight: Radius.elliptical(200.0, 140.0)),
+                child: Container(
+                  height: size.height * 0.35,
+                  width: size.width,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.rectangle,
+                    gradient: gradient,
                   ),
                 ),
               ),
+            ),
+            Positioned(
+              top: size.height * 0.06,
+              child: Text(
+                "Découvrir",
+                style:
+                    TextStyle(color: Colors.white, fontSize: size.width * 0.06),
+              ),
+            ),
+            if (_usersToShow.isEmpty || _lastReached)
               Positioned(
-                top: size.height * 0.05,
+                top: size.height * 0.5,
+                left: size.width * 0.1,
+                right: size.width * 0.1,
                 child: Text(
-                  "Découvrir",
+                  "Nous n'avons trouvé personne correspondant à vos attentes...",
+                  textAlign: TextAlign.center,
                   style: TextStyle(
-                      color: Colors.white, fontSize: size.width * 0.06),
+                      color: Colors.black54,
+                      fontSize: size.height * 0.023,
+                      fontWeight: FontWeight.w500),
                 ),
               ),
+            if (_usersToShow.isNotEmpty && !_lastReached)
               SwapCard(
                 demoProfiles: _usersToShow,
                 size: size,
@@ -142,8 +146,7 @@ class _SearchState extends State<Search> {
                   }
                 },
               ),
-            ]);
-          }
+          ]);
         } else
           return Container();
       },
