@@ -66,7 +66,7 @@ Dans le profil il est également possible de paramétrer le périmètre de reche
 _Profils proposés_
 
 Les profils proposés à chaque utilisateur sont sélectionnés en fonction de leur localisation et des critères définis dans le profil . 
-Pour chaque profil proposé, il y a possibilité de lire le nom, l’âge, le sexe, la description, regarder la photo et de liker ou disliker le profil.
+Pour chaque profil proposé, il y a possibilité de lire le nom, l’âge, le sexe, la description, regarder la photo et de liker ou disliker le profil (en swipant ou via deux boutons dédiés).
 
 // TODO : Screen page profil
 
