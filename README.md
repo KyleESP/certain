@@ -8,19 +8,15 @@ Une application mobile Android / iOS permettant de matcher et discuter avec des 
 
 L’idée de développer une application de rencontre est survenu après réflexion sur la question “Quel est le type d’application le plus tendance et surtout le plus passe-partout aujourd’hui ?”. En fait, malgré le peu de ressource, la taille de notre équipe et les contraintes de délai, nous avons voulu développer une application peu complexe à conceptualiser mais qui tend à intéresser le plus de personne.
 Bien sûr, les concurrents sont bien présents (Tinder, Fruitz, Lovoo…) et des nouveaux émergent. Nous avons donc cherché à rendre l’application originale pour se distinguer en y ajoutant le concept de questionnaire.
+Le questionnaire aura pour but de filtrer les personnes selon leur personnalité, pour assurer une correspondance maximum. Ce concept est à l’origine du nom de l’application “Certain”, faisant référence au fait qu’on soit quasiment certain que la personne nous corresponde. Lorsque deux personnes ont matché et ont tous deux réussi le questionnaire de l’autre, elles auront la possibilité de chatter directement sur l’application, pour faire plus ample connaissance.
 
 ### Périmètre
 
 Cette application a l’avantage de toucher un large public. En effet, déjà en 2016, plus d’un jeune âgé de 18 à 25 ans sur quatre fréquentait au moins un site de rencontre, 19% chez les 26-30 ans et 13% chez les 31-35 ans. Au-delà de 36 ans, les pourcentages chutent en dessous des 10% mais le taux est quand même correct. Ces chiffres ont encore augmenté en 2020.
 
-### Fonctionnement
-
-Il s’agit d’une application de rencontre basée sur l’utilisation d’un questionnaire personnalisé par chaque utilisateur et composé de 6 questions, permettant de cibler au mieux les attentes de chacun. Le questionnaire aura pour but de filtrer les personnes selon leur personnalité, pour assurer une correspondance maximum. Ce concept est à l’origine du nom de l’application “Certain”, faisant référence au fait qu’on soit quasiment certain que la personne nous corresponde. 
-Lorsque deux personnes ont matché et ont tous deux réussi le questionnaire de l’autre, elles auront la possibilité de chatter directement sur l’application, pour faire plus ample connaissance.
-
 ### Ressources
 
-_*Flutter*_
+_Flutter_
 
 La technologie principale choisie pour réaliser notre application est le framework Flutter, conçu par Google.
 Ce choix a premièrement été réalisé car la plupart des technologies multi-plateformes sont composées de parties spécifiques à Android et iOS, ce qui rend le développement plus long et plus complexe alors qu’ici seul un code commun est nécessaire et s’adapte parfaitement aux deux systèmes d’exploitation.
