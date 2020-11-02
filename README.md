@@ -91,7 +91,7 @@ C’est un système de messagerie instantanée. Il ne permet pas d’envoyer de 
 
 // TODO : Screen chat
 
-### Les paramètres
+_Les paramètres_
 
 C’est la page permettant de paramétrer les données de l’utilisateur suivantes :
 - rayon de recherche de personne
@@ -101,7 +101,12 @@ C’est la page permettant de paramétrer les données de l’utilisateur suivan
 - questionnaire
 - photo de profil
 
-// Screen paramètres
+// TODO : Screen paramètres
+
+
+### Cas d'utilisation
+
+// TODO : Expliquer un cas d'utilisation
 
 ### Délais
 
