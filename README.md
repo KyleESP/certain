@@ -2,6 +2,8 @@ _Kyle ESPARON & Juline GABROVEC_
 
 # Certain
 
+Une application mobile Android / iOS permettant de matcher et discuter avec des gens autour de toi !
+
 ### Contexte 
 
 L’idée de développer une application de rencontre est survenu après réflexion sur la question “Quel est le type d’application le plus tendance et surtout le plus passe-partout aujourd’hui ?”. En fait, malgré le peu de ressource, la taille de notre équipe et les contraintes de délai, nous avons voulu développer une application peu complexe à conceptualiser mais qui tend à intéresser le plus de personne.
