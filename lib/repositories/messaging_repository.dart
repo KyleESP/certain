@@ -120,7 +120,7 @@ class MessagingRepository {
         .doc(messageId)
         .get()
         .then((message) {
-      data = message.data;
+      data = message.data();
       _message.senderId = data['senderId'];
       _message.senderName = data['senderName'];
       _message.timestamp = data['timestamp'];
