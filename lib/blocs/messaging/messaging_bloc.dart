@@ -21,8 +21,7 @@ class MessagingBloc extends Bloc<MessagingEvent, MessagingState> {
       yield* _mapStreamToState(
           currentUserId: event.currentUserId,
           selectedUserId: event.selectedUserId);
-    }
-    if (event is SendMessageEvent) {
+    } else if (event is SendMessageEvent) {
       yield* _mapSendMessageToState(message: event.message);
     }
   }

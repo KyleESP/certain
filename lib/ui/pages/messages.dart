@@ -33,6 +33,7 @@ class _MessagesState extends State<Messages> {
 
   @override
   void initState() {
+    timeago.setLocaleMessages('fr', timeago.FrMessages());
     _messageBloc = MessageBloc(_messagesRepository);
     super.initState();
   }
@@ -273,9 +274,11 @@ class _ChatWidgetState extends State<ChatWidget> {
                         ),
                       ],
                     ),
-                    Text(timeago.format(chat.timestamp != null
-                        ? chat.timestamp.toDate()
-                        : widget.creationTime.toDate()))
+                    Text(timeago.format(
+                        chat.timestamp != null
+                            ? chat.timestamp.toDate()
+                            : widget.creationTime.toDate(),
+                        locale: 'fr'))
                   ],
                 ),
               ),
@@ -386,14 +389,13 @@ class _MessagingState extends State<Messaging> {
                 StreamBuilder<QuerySnapshot>(
                   stream: messageStream,
                   builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
+                    if (!snapshot.hasData || snapshot.data.docs.isEmpty) {
                       return Text(
                         "Commencer la conversation ?",
                         style: TextStyle(
                             fontSize: 16.0, fontWeight: FontWeight.bold),
                       );
-                    }
-                    if (snapshot.data.docs.isNotEmpty) {
+                    } else {
                       return Expanded(
                         child: Column(
                           children: <Widget>[
@@ -410,14 +412,6 @@ class _MessagingState extends State<Messaging> {
                               ),
                             )
                           ],
-                        ),
-                      );
-                    } else {
-                      return Center(
-                        child: Text(
-                          "Commencer la conversation ?",
-                          style: TextStyle(
-                              fontSize: 16.0, fontWeight: FontWeight.bold),
                         ),
                       );
                     }
@@ -490,11 +484,20 @@ class _MessageWidgetState extends State<MessageWidget> {
 
   MessageModel _message;
 
-  Future getDetails() async {
+  Future _getDetails() async {
     _message = await _messagingRepository.getMessageDetail(
         messageId: widget.messageId);
 
     return _message;
+  }
+
+  Widget _getTimeAgo(Size size) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: size.height * 0.01),
+      child: Text(
+        timeago.format(_message.timestamp.toDate(), locale: 'fr'),
+      ),
+    );
   }
 
   @override
@@ -502,128 +505,56 @@ class _MessageWidgetState extends State<MessageWidget> {
     Size size = MediaQuery.of(context).size;
 
     return FutureBuilder(
-      future: getDetails(),
+      future: _getDetails(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Container();
         } else {
           _message = snapshot.data;
+          bool isSender = _message.senderId == widget.currentUserId;
           return Column(
-            crossAxisAlignment: _message.senderId == widget.currentUserId
-                ? CrossAxisAlignment.end
-                : CrossAxisAlignment.start,
+            crossAxisAlignment:
+                isSender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
             children: <Widget>[
-              _message.text != null
-                  ? Wrap(
-                      crossAxisAlignment: WrapCrossAlignment.start,
-                      direction: Axis.horizontal,
-                      children: <Widget>[
-                        _message.senderId == widget.currentUserId
-                            ? Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: size.height * 0.01),
-                                child: Text(
-                                  timeago.format(
-                                    _message.timestamp.toDate(),
-                                  ),
+              Wrap(
+                crossAxisAlignment: WrapCrossAlignment.start,
+                direction: Axis.horizontal,
+                children: <Widget>[
+                  isSender ? _getTimeAgo(size) : Container(),
+                  Padding(
+                    padding: EdgeInsets.all(size.height * 0.01),
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: size.width * 0.7),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: isSender ? backgroundColor : Colors.grey[400],
+                          borderRadius: _message.senderId ==
+                                  widget.currentUserId
+                              ? BorderRadius.only(
+                                  topLeft: Radius.circular(size.height * 0.02),
+                                  topRight: Radius.circular(size.height * 0.02),
+                                  bottomLeft:
+                                      Radius.circular(size.height * 0.02),
+                                )
+                              : BorderRadius.only(
+                                  topLeft: Radius.circular(size.height * 0.02),
+                                  topRight: Radius.circular(size.height * 0.02),
+                                  bottomRight:
+                                      Radius.circular(size.height * 0.02),
                                 ),
-                              )
-                            : Container(),
-                        Padding(
-                          padding: EdgeInsets.all(size.height * 0.01),
-                          child: ConstrainedBox(
-                            constraints:
-                                BoxConstraints(maxWidth: size.width * 0.7),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: _message.senderId == widget.currentUserId
-                                    ? backgroundColor
-                                    : Colors.grey[400],
-                                borderRadius: _message.senderId ==
-                                        widget.currentUserId
-                                    ? BorderRadius.only(
-                                        topLeft:
-                                            Radius.circular(size.height * 0.02),
-                                        topRight:
-                                            Radius.circular(size.height * 0.02),
-                                        bottomLeft:
-                                            Radius.circular(size.height * 0.02),
-                                      )
-                                    : BorderRadius.only(
-                                        topLeft:
-                                            Radius.circular(size.height * 0.02),
-                                        topRight:
-                                            Radius.circular(size.height * 0.02),
-                                        bottomRight:
-                                            Radius.circular(size.height * 0.02),
-                                      ),
-                              ),
-                              padding: EdgeInsets.all(size.height * 0.01),
-                              child: Text(
-                                _message.text,
-                                style: TextStyle(
-                                    color: _message.senderId ==
-                                            widget.currentUserId
-                                        ? Colors.white
-                                        : Colors.black),
-                              ),
-                            ),
-                          ),
                         ),
-                        _message.senderId == widget.currentUserId
-                            ? SizedBox()
-                            : Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: size.height * 0.01),
-                                child: Text(timeago
-                                    .format(_message.timestamp.toDate())),
-                              )
-                      ],
-                    )
-                  : Wrap(
-                      crossAxisAlignment: WrapCrossAlignment.start,
-                      direction: Axis.horizontal,
-                      children: <Widget>[
-                        _message.senderId == widget.currentUserId
-                            ? Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: size.height * 0.01),
-                                child: Text(timeago
-                                    .format(_message.timestamp.toDate())),
-                              )
-                            : Container(),
-                        Padding(
-                          padding: EdgeInsets.all(size.height * 0.01),
-                          child: ConstrainedBox(
-                            constraints: BoxConstraints(
-                                maxWidth: size.width * 0.7,
-                                maxHeight: size.width * 0.8),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(color: backgroundColor),
-                                borderRadius:
-                                    BorderRadius.circular(size.height * 0.02),
-                              ),
-                              child: ClipRRect(
-                                borderRadius:
-                                    BorderRadius.circular(size.height * 0.02),
-                                child: PhotoWidget(
-                                  photoLink: _message.photoUrl,
-                                ),
-                              ),
-                            ),
-                          ),
+                        padding: EdgeInsets.all(size.height * 0.01),
+                        child: Text(
+                          _message.text,
+                          style: TextStyle(
+                              color: isSender ? Colors.white : Colors.black),
                         ),
-                        _message.senderId == widget.currentUserId
-                            ? SizedBox()
-                            : Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: size.height * 0.01),
-                                child: Text(timeago
-                                    .format(_message.timestamp.toDate())),
-                              )
-                      ],
-                    )
+                      ),
+                    ),
+                  ),
+                  isSender ? SizedBox() : _getTimeAgo(size)
+                ],
+              )
             ],
           );
         }
