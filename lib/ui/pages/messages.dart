@@ -528,8 +528,7 @@ class _MessageWidgetState extends State<MessageWidget> {
                       child: Container(
                         decoration: BoxDecoration(
                           color: isSender ? backgroundColor : Colors.grey[400],
-                          borderRadius: _message.senderId ==
-                                  widget.currentUserId
+                          borderRadius: isSender
                               ? BorderRadius.only(
                                   topLeft: Radius.circular(size.height * 0.02),
                                   topRight: Radius.circular(size.height * 0.02),
