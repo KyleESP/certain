@@ -16,8 +16,6 @@ import 'package:certain/repositories/messaging_repository.dart';
 
 import 'package:certain/ui/widgets/photo_widget.dart';
 
-import 'package:certain/helpers/constants.dart';
-
 class Messages extends StatefulWidget {
   final String userId;
 
@@ -111,23 +109,13 @@ class _ChatWidgetState extends State<ChatWidget> {
       print(error);
     });
 
-    if (message == null) {
-      return ChatModel(
-        name: user.name,
-        photoUrl: user.photo,
-        lastMessage: null,
-        lastMessagePhoto: null,
-        timestamp: null,
-      );
-    } else {
-      return ChatModel(
-        name: user.name,
-        photoUrl: user.photo,
-        lastMessage: message.text,
-        lastMessagePhoto: message.photoUrl,
-        timestamp: message.timestamp,
-      );
-    }
+    return ChatModel(
+      name: user.name,
+      photoUrl: user.photo,
+      lastMessage: message?.text,
+      lastMessagePhoto: message?.photoUrl,
+      timestamp: message?.timestamp,
+    );
   }
 
   openChat() async {
