@@ -345,7 +345,7 @@ class _MessagingState extends State<Messaging> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: backgroundColor,
+        backgroundColor: Colors.pinkAccent,
         elevation: size.height * 0.02,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -420,7 +420,7 @@ class _MessagingState extends State<Messaging> {
                 Container(
                   width: size.width,
                   height: size.height * 0.06,
-                  color: backgroundColor,
+                  color: Colors.pinkAccent,
                   child: Row(
                     children: <Widget>[
                       Expanded(
@@ -439,7 +439,7 @@ class _MessagingState extends State<Messaging> {
                               maxLines: null,
                               decoration: null,
                               textAlignVertical: TextAlignVertical.center,
-                              cursorColor: backgroundColor,
+                              cursorColor: Colors.pinkAccent,
                               textCapitalization: TextCapitalization.sentences,
                             ),
                           ),
@@ -527,7 +527,8 @@ class _MessageWidgetState extends State<MessageWidget> {
                       constraints: BoxConstraints(maxWidth: size.width * 0.7),
                       child: Container(
                         decoration: BoxDecoration(
-                          color: isSender ? backgroundColor : Colors.grey[400],
+                          color:
+                              isSender ? Colors.pinkAccent : Colors.grey[400],
                           borderRadius: isSender
                               ? BorderRadius.only(
                                   topLeft: Radius.circular(size.height * 0.02),
