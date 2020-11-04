@@ -2,7 +2,6 @@ import 'package:certain/blocs/play_mcq/play_mcq_bloc.dart';
 import 'package:certain/blocs/play_mcq/play_mcq_event.dart';
 import 'package:certain/blocs/play_mcq/play_mcq_state.dart';
 import 'package:certain/ui/widgets/loader_widget.dart';
-import 'package:certain/ui/widgets/profile_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -83,26 +82,64 @@ class _PlayMcqFormState extends State<PlayMcqForm> {
                 Navigator.pop(context);
                 Navigator.pop(context);
               });
-              return Dialog(
+              return SimpleDialog(
                 backgroundColor: Colors.transparent,
-                child: profileWidget(
-                  photo: widget.selectedUser.photo,
-                  photoHeight: size.height,
-                  padding: size.height * 0.01,
-                  photoWidth: size.width,
-                  clipRadius: size.height * 0.01,
-                  containerWidth: size.width,
-                  containerHeight: size.height * 0.2,
-                  child: Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: size.height * 0.02),
-                    child: Text(
-                      state.message,
-                      style: TextStyle(
-                          color: Colors.red, fontSize: size.height * 0.02),
-                    ),
+                children: <Widget>[
+                  Stack(
+                    alignment: Alignment.center,
+                    children: <Widget>[
+                      Positioned(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20.0),
+                          child: Container(
+                            height: size.height * 0.5,
+                            width: size.width * 0.9,
+                            padding: EdgeInsets.all(size.width * 0.02),
+                            decoration: BoxDecoration(
+                              gradient: gradient,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: size.height * 0.05,
+                        right: size.width * 0.06,
+                        child: CircleAvatar(
+                          radius: size.width * 0.18,
+                          backgroundColor: Colors.white,
+                          child: CircleAvatar(
+                            radius: size.width * 0.17,
+                            backgroundImage: NetworkImage(widget.user.photo),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: size.height * 0.05,
+                        left: size.width * 0.06,
+                        child: CircleAvatar(
+                          radius: size.width * 0.18,
+                          backgroundColor: Colors.white,
+                          child: CircleAvatar(
+                            radius: size.width * 0.17,
+                            backgroundImage:
+                                NetworkImage(widget.selectedUser.photo),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(top: size.height * 0.15),
+                        child: Text(
+                          state.message,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: size.height * 0.023,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
+                ],
               );
             });
       }
@@ -120,7 +157,10 @@ class _PlayMcqFormState extends State<PlayMcqForm> {
               padding: const EdgeInsets.all(25),
               child: Stack(alignment: Alignment.center, children: <Widget>[
                 Container(
-                  margin: EdgeInsets.only(top: size.height * 0.05, left: size.width * 0.03, right: size.width * 0.03),
+                  margin: EdgeInsets.only(
+                      top: size.height * 0.05,
+                      left: size.width * 0.03,
+                      right: size.width * 0.03),
                   alignment: Alignment.topCenter,
                   child: Text(
                     "Répondez au questionnaire de ${widget.selectedUser.name}",

@@ -29,10 +29,10 @@ class PlayMcqBloc extends Bloc<PlayMcqEvent, PlayMcqState> {
           currentUserId: currentUserId, selectedUserId: selectedUserId);
       if (openChat) {
         yield CompletedState(
-            "Vous avez tout deux réussi vos QCM. Vous pouvez maintenant parler.");
+            "Vous avez tout deux réussi vos QCM ! Vous pouvez maintenant parler.");
       } else {
         yield CompletedState(
-            "Vous avez réussi le QCM. Patientez que l'autre réussisse aussi.");
+            "Vous avez réussi le QCM ! Patientez que l'autre réussisse aussi.");
       }
     } else {
       await _matchesRepository.removeMatch(currentUserId, selectedUserId);
