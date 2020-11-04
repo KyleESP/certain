@@ -2,31 +2,29 @@ _Kyle ESPARON & Juline GABROVEC_
 
 # Certain
 
+Une application mobile Android / iOS permettant de matcher et discuter avec des gens autour de toi !
+
 ### Contexte 
 
 L’idée de développer une application de rencontre est survenu après réflexion sur la question “Quel est le type d’application le plus tendance et surtout le plus passe-partout aujourd’hui ?”. En fait, malgré le peu de ressource, la taille de notre équipe et les contraintes de délai, nous avons voulu développer une application peu complexe à conceptualiser mais qui tend à intéresser le plus de personne.
 Bien sûr, les concurrents sont bien présents (Tinder, Fruitz, Lovoo…) et des nouveaux émergent. Nous avons donc cherché à rendre l’application originale pour se distinguer en y ajoutant le concept de questionnaire.
+Le questionnaire aura pour but de filtrer les personnes selon leur personnalité, pour assurer une correspondance maximum. Ce concept est à l’origine du nom de l’application “Certain”, faisant référence au fait qu’on soit quasiment certain que la personne nous corresponde. Lorsque deux personnes ont matché et ont tous deux réussi le questionnaire de l’autre, elles auront la possibilité de chatter directement sur l’application, pour faire plus ample connaissance.
 
 ### Périmètre
 
 Cette application a l’avantage de toucher un large public. En effet, déjà en 2016, plus d’un jeune âgé de 18 à 25 ans sur quatre fréquentait au moins un site de rencontre, 19% chez les 26-30 ans et 13% chez les 31-35 ans. Au-delà de 36 ans, les pourcentages chutent en dessous des 10% mais le taux est quand même correct. Ces chiffres ont encore augmenté en 2020.
 
-### Fonctionnement
-
-Il s’agit d’une application de rencontre basée sur l’utilisation d’un questionnaire personnalisé par chaque utilisateur et composé de 6 questions, permettant de cibler au mieux les attentes de chacun. Le questionnaire aura pour but de filtrer les personnes selon leur personnalité, pour assurer une correspondance maximum. Ce concept est à l’origine du nom de l’application “Certain”, faisant référence au fait qu’on soit quasiment certain que la personne nous corresponde. 
-Lorsque deux personnes ont matché et ont tous deux réussi le questionnaire de l’autre, elles auront la possibilité de chatter directement sur l’application, pour faire plus ample connaissance.
-
 ### Ressources
 
-_*Flutter*_
+_Flutter_
 
 La technologie principale choisie pour réaliser notre application est le framework Flutter, conçu par Google.
 Ce choix a premièrement été réalisé car la plupart des technologies multi-plateformes sont composées de parties spécifiques à Android et iOS, ce qui rend le développement plus long et plus complexe alors qu’ici seul un code commun est nécessaire et s’adapte parfaitement aux deux systèmes d’exploitation.
 De plus, Flutter est un outil de plus en plus populaire et possède donc une liste intéressante de packages (disponible sur https://pub.dev/). Cela nous permet donc un développement largement plus rapide en évitant de nous attarder sur des fonctionnalités moins importantes.
 Nous avons combiné Flutter avec le BLoC pattern. Il permet de séparer la présentation de la logique métier. Suivre le modèle BLoC facilite la testabilité et la réutilisabilité. Il permet aux développeurs de se concentrer sur l'écriture de la logique métier car elle peut :
-être déplacée vers un ou plusieurs BLoC,
-être supprimée autant que possible de la couche présentation. En d’autres termes, les composants de l’interface utilisateur ne doivent se soucier que des problèmes liés à l’interface utilisateur et non de la logique applicative/métier.
-s’appuyer sur l’utilisation exclusive de Streams pour les entrées (Sink) et les sorties (Stream)
+- être déplacée vers un ou plusieurs BLoC.
+- être supprimée autant que possible de la couche présentation. En d’autres termes, les composants de l’interface utilisateur ne doivent se soucier que des problèmes liés à l’interface utilisateur et non de la logique applicative/métier.
+- s’appuyer sur l’utilisation exclusive de Streams pour les entrées (Sink) et les sorties (Stream).
 
 
 _Dart_
@@ -50,7 +48,7 @@ De plus, sur cet IDE, nul besoin d’installer des multitudes de plugins pour pr
 
 _Profil_
 
-Pour accéder à l’application il est nécessaire de créer un profil utilisateur. Un profil contient les informations suivantes : 
+Pour accéder à l’application il est nécessaire de créer un profil utilisateur, contenant les informations suivantes : 
 - prénom *
 - sexe *
 - adresse email *
@@ -62,13 +60,12 @@ Pour accéder à l’application il est nécessaire de créer un profil utilisat
 
 (*) Informations obligatoires
 
-Il est possible de modifier les informations du profil à tout moment. 
-Dans le profil il est également possible de paramétrer le périmètre de recherche et  la tranche d’âge des personnes recherchées.
+Il est possible de modifier les informations du profil à tout moment. Il est également possible de paramétrer le périmètre de recherche et la tranche d’âge des personnes recherchées.
 
 _Profils proposés_
 
 Les profils proposés à chaque utilisateur sont sélectionnés en fonction de leur localisation et des critères définis dans le profil . 
-Pour chaque profil proposé, il y a possibilité de lire le nom, l’âge, le sexe, la description, regarder la photo et de liker ou disliker le profil.
+Pour chaque profil proposé, il y a possibilité de lire le nom, l’âge, le sexe, la description, regarder la photo et de liker ou disliker le profil (en swipant ou via deux boutons dédiés).
 
 // TODO : Screen page profil
 
@@ -89,7 +86,7 @@ C’est un système de messagerie instantanée. Il ne permet pas d’envoyer de 
 
 // TODO : Screen chat
 
-### Les paramètres
+_Les paramètres_
 
 C’est la page permettant de paramétrer les données de l’utilisateur suivantes :
 - rayon de recherche de personne
@@ -99,7 +96,12 @@ C’est la page permettant de paramétrer les données de l’utilisateur suivan
 - questionnaire
 - photo de profil
 
-// Screen paramètres
+// TODO : Screen paramètres
+
+
+### Cas d'utilisation
+
+// TODO : Expliquer un cas d'utilisation
 
 ### Délais
 
