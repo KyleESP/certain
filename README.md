@@ -48,7 +48,7 @@ De plus, sur cet IDE, nul besoin d’installer des multitudes de plugins pour pr
 
 _Profil_
 
-Pour accéder à l’application il est nécessaire de créer un profil utilisateur. Un profil contient les informations suivantes : 
+Pour accéder à l’application il est nécessaire de créer un profil utilisateur, contenant les informations suivantes : 
 - prénom *
 - sexe *
 - adresse email *
@@ -60,8 +60,7 @@ Pour accéder à l’application il est nécessaire de créer un profil utilisat
 
 (*) Informations obligatoires
 
-Il est possible de modifier les informations du profil à tout moment. 
-Dans le profil il est également possible de paramétrer le périmètre de recherche et  la tranche d’âge des personnes recherchées.
+Il est possible de modifier les informations du profil à tout moment. Il est également possible de paramétrer le périmètre de recherche et la tranche d’âge des personnes recherchées.
 
 _Profils proposés_
 
