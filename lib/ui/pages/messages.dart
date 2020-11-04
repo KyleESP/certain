@@ -4,7 +4,6 @@ import 'package:certain/helpers/functions.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 import 'package:certain/blocs/message/bloc.dart';
 import 'package:certain/blocs/messaging/bloc.dart';
@@ -318,9 +317,11 @@ class _ChatWidgetState extends State<ChatWidget> {
                       width: size.width * 0.03,
                     ),
                     Text(
-                      chat.timestamp != null
-                          ? readTimestamp(chat.timestamp.toDate(), false)
-                          : readTimestamp(widget.creationTime.toDate(), false),
+                      readTimestamp(
+                          chat.timestamp != null
+                              ? chat.timestamp.toDate()
+                              : widget.creationTime.toDate(),
+                          false),
                       style: TextStyle(
                           fontSize: size.height * 0.018, color: Colors.black54),
                     )

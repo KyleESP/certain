@@ -40,7 +40,6 @@ dependencies:
   extended_image: ^1.1.1
   flutter_datetime_picker: ^1.4.0
   equatable: ^1.2.5
-  timeago: ^2.0.27
   uuid: ^2.2.2
   intl: ^0.16.1
   circle_button: ^1.0.1

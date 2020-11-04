@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:certain/ui/pages/swap_card.dart';
 import 'package:certain/ui/widgets/match_card_widget.dart';
-import 'package:certain/ui/widgets/profile_card_widget.dart';
 import 'package:flutter/material.dart';
 
 import 'package:certain/models/user_model.dart';
@@ -37,10 +36,10 @@ class _CardWidgetState extends State<CardWidget> {
         screenWidth: size.width,
         isDraggable: false,
         card: MatchCard(
-          user_name: widget.user.name,
-          user_photo: widget.user.photo,
-          selectedUser_name: widget.selectedUser.name,
-          selectedUser_photo: widget.selectedUser.photo,
+          userName: widget.user.name,
+          userPhoto: widget.user.photo,
+          selectedUserName: widget.selectedUser.name,
+          selectedUserPhoto: widget.selectedUser.photo,
         ),
       ),
     );
