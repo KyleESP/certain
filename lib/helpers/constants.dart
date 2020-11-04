@@ -9,6 +9,11 @@ LinearGradient gradient = LinearGradient(
     end: Alignment.bottomLeft,
     stops: [0.3, 0.6, 1.0],
     colors: [backgroundColorRed, backgroundColorOrange, backgroundColorYellow]);
+LinearGradient gradientReverse = LinearGradient(
+    begin: Alignment.topRight,
+    end: Alignment.bottomLeft,
+    stops: [0.1, 0.4, 1.0],
+    colors: [backgroundColorYellow, backgroundColorOrange, backgroundColorRed]);
 LinearGradient gradientWhite = LinearGradient(
     begin: Alignment.topRight,
     end: Alignment.bottomLeft,
