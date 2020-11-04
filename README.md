@@ -22,9 +22,9 @@ La technologie principale choisie pour réaliser notre application est le framew
 Ce choix a premièrement été réalisé car la plupart des technologies multi-plateformes sont composées de parties spécifiques à Android et iOS, ce qui rend le développement plus long et plus complexe alors qu’ici seul un code commun est nécessaire et s’adapte parfaitement aux deux systèmes d’exploitation.
 De plus, Flutter est un outil de plus en plus populaire et possède donc une liste intéressante de packages (disponible sur https://pub.dev/). Cela nous permet donc un développement largement plus rapide en évitant de nous attarder sur des fonctionnalités moins importantes.
 Nous avons combiné Flutter avec le BLoC pattern. Il permet de séparer la présentation de la logique métier. Suivre le modèle BLoC facilite la testabilité et la réutilisabilité. Il permet aux développeurs de se concentrer sur l'écriture de la logique métier car elle peut :
-être déplacée vers un ou plusieurs BLoC,
-être supprimée autant que possible de la couche présentation. En d’autres termes, les composants de l’interface utilisateur ne doivent se soucier que des problèmes liés à l’interface utilisateur et non de la logique applicative/métier.
-s’appuyer sur l’utilisation exclusive de Streams pour les entrées (Sink) et les sorties (Stream)
+- être déplacée vers un ou plusieurs BLoC.
+- être supprimée autant que possible de la couche présentation. En d’autres termes, les composants de l’interface utilisateur ne doivent se soucier que des problèmes liés à l’interface utilisateur et non de la logique applicative/métier.
+- s’appuyer sur l’utilisation exclusive de Streams pour les entrées (Sink) et les sorties (Stream).
 
 
 _Dart_
