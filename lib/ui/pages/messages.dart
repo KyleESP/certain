@@ -1,4 +1,6 @@
 import 'package:certain/ui/widgets/loader_widget.dart';
+import 'package:certain/helpers/constants.dart';
+import 'package:certain/helpers/functions.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,13 +33,13 @@ class _MessagesState extends State<Messages> {
 
   @override
   void initState() {
-    timeago.setLocaleMessages('fr', timeago.FrMessages());
     _messageBloc = MessageBloc(_messagesRepository);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return BlocBuilder<MessageBloc, MessageState>(
       cubit: _messageBloc,
       builder: (BuildContext context, MessageState state) {
@@ -53,29 +55,70 @@ class _MessagesState extends State<Messages> {
           return StreamBuilder<QuerySnapshot>(
             stream: chatStream,
             builder: (context, snapshot) {
-              if (snapshot.hasData && snapshot.data.docs.isNotEmpty) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return loaderWidget();
-                } else {
-                  return ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    itemCount: snapshot.data.docs.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return ChatWidget(
-                        creationTime:
-                            snapshot.data.docs[index].data()['timestamp'],
-                        userId: widget.userId,
-                        selectedUserId: snapshot.data.docs[index].id,
-                      );
-                    },
-                  );
-                }
-              } else {
-                return Text(
-                  "Tu n'a aucune conversation.",
-                  style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-                );
-              }
+              return Stack(
+                alignment: Alignment.center,
+                children: <Widget>[
+                  Positioned(
+                    top: 0,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.elliptical(200.0, 80.0),
+                          bottomRight: Radius.elliptical(200.0, 80.0)),
+                      child: Container(
+                        height: size.height * 0.2,
+                        width: size.width,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.rectangle,
+                          gradient: gradient,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: size.height * 0.1,
+                    child: Text(
+                      "Messages",
+                      style: TextStyle(
+                          color: Colors.white, fontSize: size.width * 0.06),
+                    ),
+                  ),
+                  Container(
+                      margin: EdgeInsets.only(top: size.height * 0.2),
+                      child: (() {
+                        if (snapshot.hasData && snapshot.data.docs.isNotEmpty) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return loaderWidget();
+                          } else {
+                            return ListView.separated(
+                              scrollDirection: Axis.vertical,
+                              itemCount: snapshot.data.docs.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return ChatWidget(
+                                  creationTime: snapshot.data.docs[index]
+                                      .data()['timestamp'],
+                                  userId: widget.userId,
+                                  selectedUserId: snapshot.data.docs[index].id,
+                                );
+                              },
+                              separatorBuilder:
+                                  (BuildContext context, int index) =>
+                                      const Divider(),
+                            );
+                          }
+                        }
+                      }())),
+                  if (!snapshot.hasData || snapshot.data.docs.isEmpty)
+                    Text(
+                      "Vous n'avez aucune conversation.",
+                      style: TextStyle(
+                        color: Colors.black54,
+                        fontSize: size.height * 0.023,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    )
+                ],
+              );
             },
           );
         }
@@ -213,60 +256,74 @@ class _ChatWidgetState extends State<ChatWidget> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        ClipOval(
-                          child: Container(
-                            height: size.height * 0.06,
-                            width: size.height * 0.06,
-                            child: PhotoWidget(
-                              photoLink: user.photo,
+                    Expanded(
+                      child: Stack(
+                        children: <Widget>[
+                          ClipOval(
+                            child: Container(
+                              height: size.width * 0.13,
+                              width: size.width * 0.13,
+                              child: PhotoWidget(
+                                photoLink: user.photo,
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          width: size.width * 0.02,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              user.name,
-                              style: TextStyle(fontSize: size.height * 0.03),
+                          Positioned(
+                            left: size.width * 0.15,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  user.name,
+                                  style: TextStyle(
+                                      fontSize: size.height * 0.03,
+                                      color: Colors.black54),
+                                ),
+                                chat.lastMessage != null
+                                    ? Text(
+                                        chat.lastMessage,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(color: Colors.grey),
+                                      )
+                                    : chat.lastMessagePhoto == null
+                                        ? Text(
+                                            "Commencez la discussion",
+                                            overflow: TextOverflow.ellipsis,
+                                            style:
+                                                TextStyle(color: Colors.grey),
+                                          )
+                                        : Row(
+                                            children: <Widget>[
+                                              Icon(
+                                                Icons.photo,
+                                                color: Colors.grey,
+                                                size: size.height * 0.02,
+                                              ),
+                                              Text(
+                                                "Photo",
+                                                style: TextStyle(
+                                                  fontSize: size.height * 0.015,
+                                                  color: Colors.grey,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                              ],
                             ),
-                            chat.lastMessage != null
-                                ? Text(
-                                    chat.lastMessage,
-                                    overflow: TextOverflow.fade,
-                                    style: TextStyle(color: Colors.grey),
-                                  )
-                                : chat.lastMessagePhoto == null
-                                    ? Text("Chat Room Open")
-                                    : Row(
-                                        children: <Widget>[
-                                          Icon(
-                                            Icons.photo,
-                                            color: Colors.grey,
-                                            size: size.height * 0.02,
-                                          ),
-                                          Text(
-                                            "Photo",
-                                            style: TextStyle(
-                                              fontSize: size.height * 0.015,
-                                              color: Colors.grey,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                          ],
-                        ),
-                      ],
+                          ),
+                        ],
+                      ),
                     ),
-                    Text(timeago.format(
-                        chat.timestamp != null
-                            ? chat.timestamp.toDate()
-                            : widget.creationTime.toDate(),
-                        locale: 'fr'))
+                    SizedBox(
+                      width: size.width * 0.03,
+                    ),
+                    Text(
+                      chat.timestamp != null
+                          ? readTimestamp(chat.timestamp.toDate(), false)
+                          : readTimestamp(widget.creationTime.toDate(), false),
+                      style: TextStyle(
+                          fontSize: size.height * 0.018, color: Colors.black54),
+                    )
                   ],
                 ),
               ),
@@ -333,7 +390,9 @@ class _MessagingState extends State<Messaging> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.pinkAccent,
+        //backgroundColor: Colors.pinkAccent,
+        flexibleSpace:
+            Container(decoration: BoxDecoration(gradient: gradientReverse)),
         elevation: size.height * 0.02,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -371,6 +430,7 @@ class _MessagingState extends State<Messaging> {
           }
           if (state is MessagingLoadedState) {
             Stream<QuerySnapshot> messageStream = state.messageStream;
+
             return Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -378,17 +438,22 @@ class _MessagingState extends State<Messaging> {
                   stream: messageStream,
                   builder: (context, snapshot) {
                     if (!snapshot.hasData || snapshot.data.docs.isEmpty) {
-                      return Text(
-                        "Commencer la conversation ?",
-                        style: TextStyle(
-                            fontSize: 16.0, fontWeight: FontWeight.bold),
-                      );
+                      return Container(
+                          margin: EdgeInsets.only(top: size.height * 0.05),
+                          child: Text(
+                            "Commencez la conversation ?",
+                            style: TextStyle(
+                              fontSize: size.height * 0.02,
+                              color: Colors.grey[600],
+                            ),
+                          ));
                     } else {
                       return Expanded(
                         child: Column(
                           children: <Widget>[
                             Expanded(
                               child: ListView.builder(
+                                shrinkWrap: true,
                                 scrollDirection: Axis.vertical,
                                 itemBuilder: (BuildContext context, int index) {
                                   return MessageWidget(
@@ -407,27 +472,46 @@ class _MessagingState extends State<Messaging> {
                 ),
                 Container(
                   width: size.width,
-                  height: size.height * 0.06,
-                  color: Colors.pinkAccent,
+                  height: size.height * 0.08,
+                  color: Colors.white,
                   child: Row(
                     children: <Widget>[
                       Expanded(
                         child: Container(
                           height: size.height * 0.05,
+                          margin: EdgeInsets.only(left: size.width * 0.1),
                           padding: EdgeInsets.all(size.height * 0.01),
                           decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius:
-                                BorderRadius.circular(size.height * 0.04),
+                            color: Colors.grey[200],
+                            borderRadius: BorderRadius.circular(20.0),
                           ),
                           child: Center(
                             child: TextField(
                               controller: _messageTextController,
                               textInputAction: TextInputAction.send,
                               maxLines: null,
-                              decoration: null,
+                              decoration: InputDecoration(
+                                //filled: true,
+                                fillColor: Colors.white,
+                                hintText: 'Écrivez votre message...',
+                                contentPadding: const EdgeInsets.only(
+                                    left: 14.0,
+                                    bottom: 0.0,
+                                    top: 0.0,
+                                    right: 0.0),
+                                isDense: true,
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide.none,
+                                  borderRadius: BorderRadius.circular(20.0),
+                                ),
+
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide.none,
+                                  borderRadius: BorderRadius.circular(20.0),
+                                ),
+                              ),
                               textAlignVertical: TextAlignVertical.center,
-                              cursorColor: Colors.pinkAccent,
+                              cursorColor: backgroundColorRed,
                               textCapitalization: TextCapitalization.sentences,
                             ),
                           ),
@@ -437,11 +521,13 @@ class _MessagingState extends State<Messaging> {
                         onTap: isValid ? _onFormSubmitted : null,
                         child: Padding(
                           padding: EdgeInsets.symmetric(
-                              horizontal: size.height * 0.01),
+                              horizontal: size.height * 0.02),
                           child: Icon(
                             Icons.send,
                             size: size.height * 0.04,
-                            color: isValid ? Colors.white : Colors.grey,
+                            color: isValid
+                                ? backgroundColorRed
+                                : backgroundColorRed.withOpacity(0.5),
                           ),
                         ),
                       )
@@ -479,15 +565,6 @@ class _MessageWidgetState extends State<MessageWidget> {
     return _message;
   }
 
-  Widget _getTimeAgo(Size size) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: size.height * 0.01),
-      child: Text(
-        timeago.format(_message.timestamp.toDate(), locale: 'fr'),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -508,15 +585,20 @@ class _MessageWidgetState extends State<MessageWidget> {
                 crossAxisAlignment: WrapCrossAlignment.start,
                 direction: Axis.horizontal,
                 children: <Widget>[
-                  isSender ? _getTimeAgo(size) : Container(),
                   Padding(
-                    padding: EdgeInsets.all(size.height * 0.01),
+                    padding: EdgeInsets.only(
+                        top: size.height * 0.01,
+                        bottom: size.height * 0.01,
+                        right:
+                            isSender ? size.height * 0.02 : size.height * 0.01,
+                        left:
+                            isSender ? size.height * 0.01 : size.height * 0.02),
                     child: ConstrainedBox(
                       constraints: BoxConstraints(maxWidth: size.width * 0.7),
                       child: Container(
                         decoration: BoxDecoration(
                           color:
-                              isSender ? Colors.pinkAccent : Colors.grey[400],
+                              isSender ? backgroundColorRed : Colors.grey[300],
                           borderRadius: isSender
                               ? BorderRadius.only(
                                   topLeft: Radius.circular(size.height * 0.02),
@@ -535,14 +617,29 @@ class _MessageWidgetState extends State<MessageWidget> {
                         child: Text(
                           _message.text,
                           style: TextStyle(
-                              color: isSender ? Colors.white : Colors.black),
+                            color: isSender ? Colors.white : Colors.black,
+                            fontSize: size.height * 0.018,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                  isSender ? SizedBox() : _getTimeAgo(size)
                 ],
-              )
+              ),
+              Padding(
+                padding: EdgeInsets.only(
+                    bottom: size.height * 0.003,
+                    right: isSender ? size.height * 0.02 : size.height * 0.01,
+                    left: isSender ? size.height * 0.01 : size.height * 0.02),
+                child: Text(
+                  readTimestamp(_message.timestamp.toDate(), true),
+                  style: TextStyle(
+                    fontStyle: FontStyle.italic,
+                    fontSize: size.height * 0.014,
+                    color: Colors.grey[500],
+                  ),
+                ),
+              ),
             ],
           );
         }
