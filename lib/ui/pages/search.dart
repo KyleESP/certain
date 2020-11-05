@@ -1,5 +1,3 @@
-import 'package:certain/helpers/constants.dart';
-import 'package:certain/ui/widgets/match_card_widget.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,7 +9,10 @@ import 'package:certain/repositories/search_repository.dart';
 import 'package:certain/repositories/user_repository.dart';
 
 import 'package:certain/ui/pages/swap_card.dart';
+import 'package:certain/ui/widgets/match_card_widget.dart';
 import 'package:certain/ui/widgets/loader_widget.dart';
+
+import 'package:certain/helpers/constants.dart';
 
 class Search extends StatefulWidget {
   final String userId;
@@ -38,12 +39,23 @@ class _SearchState extends State<Search> {
   }
 
   _likeUser() async {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => MatchCardWidget(user: _user, selectedUser: _selectedUser),
-      ),
-    );
+    bool hasMatched = await _searchRepository.likeUser(
+        widget.userId,
+        _selectedUser.uid,
+        _user.name,
+        _user.photo,
+        _selectedUser.name,
+        _selectedUser.photo);
+
+    if (hasMatched) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              MatchCardWidget(user: _user, selectedUser: _selectedUser),
+        ),
+      );
+    }
   }
 
   _dislikeUser() {

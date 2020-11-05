@@ -79,23 +79,37 @@ class SearchRepository {
 
   Future<List<UserModel>> getUsersToShow() async {
     List<UserModel> usersToShow = [];
+    final uid = _firebaseAuth.currentUser.uid;
+    List<String> usersNotToShowList = await _getUsersNotToShowList(uid);
+    UserModel currentUser = await getUserInterests(uid);
     var data;
     int userAge;
+    double distance;
 
     await _firebaseFirestore.collection('users').get().then((users) async {
       for (var user in users.docs) {
         data = user.data();
         userAge = calculateAge(data['birthdate'].toDate());
-        usersToShow.add(new UserModel(
-            uid: user.id,
-            name: data['name'],
-            photo: data['photoUrl'],
-            birthdate: data['birthdate'],
-            location: data['location'],
-            gender: data['gender'],
-            interestedIn: data['interestedIn'],
-            bio: data['bio'],
-            distance: 0.01));
+        if (user.id != uid &&
+            ['b', data['gender']].contains(currentUser.interestedIn) &&
+            ['b', currentUser.gender].contains(data["interestedIn"]) &&
+            !usersNotToShowList.contains(user.id) &&
+            userAge >= currentUser.minAge &&
+            userAge <= currentUser.maxAge) {
+          distance = await getDistance(data['location']);
+          if (distance <= currentUser.maxDistance) {
+            usersToShow.add(new UserModel(
+                uid: user.id,
+                name: data['name'],
+                photo: data['photoUrl'],
+                birthdate: data['birthdate'],
+                location: data['location'],
+                gender: data['gender'],
+                interestedIn: data['interestedIn'],
+                bio: data['bio'],
+                distance: distance));
+          }
+        }
       }
     });
 
