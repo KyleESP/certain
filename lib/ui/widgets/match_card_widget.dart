@@ -1,14 +1,19 @@
-import 'package:certain/helpers/constants.dart';
-import 'package:certain/ui/widgets/default_card_widget.dart';
 import 'package:flutter/material.dart';
 
 import 'package:certain/models/user_model.dart';
 
+import 'package:certain/ui/widgets/default_card_widget.dart';
+
+import 'package:certain/helpers/constants.dart';
+
 class MatchCardWidget extends StatefulWidget {
   final UserModel user;
   final UserModel selectedUser;
+  final Image userImage;
+  final Image selectedUserImage;
 
-  MatchCardWidget({this.user, this.selectedUser});
+  MatchCardWidget(
+      {this.user, this.selectedUser, this.userImage, this.selectedUserImage});
 
   @override
   _MatchCardWidgetState createState() => _MatchCardWidgetState();
@@ -40,9 +45,12 @@ class _MatchCardWidgetState extends State<MatchCardWidget> {
                   child: CircleAvatar(
                     radius: size.width * 0.18,
                     backgroundColor: Colors.white,
-                    child: CircleAvatar(
-                      radius: size.width * 0.17,
-                      backgroundImage: NetworkImage(widget.user.photo),
+                    child: ClipOval(
+                      child: Container(
+                        height: size.width * 0.34,
+                        width: size.width * 0.34,
+                        child: widget.userImage,
+                      ),
                     ),
                   ),
                 ),
@@ -51,9 +59,12 @@ class _MatchCardWidgetState extends State<MatchCardWidget> {
                   child: CircleAvatar(
                     radius: size.width * 0.18,
                     backgroundColor: Colors.white,
-                    child: CircleAvatar(
-                      radius: size.width * 0.17,
-                      backgroundImage: NetworkImage(widget.selectedUser.photo),
+                    child: ClipOval(
+                      child: Container(
+                        height: size.width * 0.34,
+                        width: size.width * 0.34,
+                        child: widget.selectedUserImage,
+                      ),
                     ),
                   ),
                 ),

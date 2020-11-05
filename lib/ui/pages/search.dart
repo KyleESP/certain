@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -48,13 +49,40 @@ class _SearchState extends State<Search> {
         _selectedUser.photo);
 
     if (hasMatched) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) =>
-              MatchCardWidget(user: _user, selectedUser: _selectedUser),
-        ),
-      );
+      Image userImage = Image.network(_user.photo, fit: BoxFit.cover);
+      Completer<ImageInfo> completer = Completer();
+
+      userImage.image
+          .resolve(new ImageConfiguration())
+          .addListener(ImageStreamListener((ImageInfo info, bool _) {
+        completer.complete(info);
+      }));
+      await completer.future;
+
+      if (mounted) {
+        completer = Completer();
+        Image selectedUserImage =
+            new Image.network(_selectedUser.photo, fit: BoxFit.cover);
+        selectedUserImage.image
+            .resolve(new ImageConfiguration())
+            .addListener(ImageStreamListener((ImageInfo info, bool _) {
+          completer.complete(info);
+        }));
+        await completer.future;
+
+        if (mounted) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MatchCardWidget(
+                  user: _user,
+                  selectedUser: _selectedUser,
+                  userImage: userImage,
+                  selectedUserImage: selectedUserImage),
+            ),
+          );
+        }
+      }
     }
   }
 
