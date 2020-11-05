@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:certain/ui/widgets/photo_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:circle_button/circle_button.dart';
@@ -164,12 +165,20 @@ class _SettingsState extends State<Settings> {
                           child: CircleAvatar(
                             radius: size.width * 0.20,
                             backgroundColor: Colors.white,
-                            child: CircleAvatar(
-                              radius: size.width * 0.19,
-                              backgroundImage: photo != null
-                                  ? FileImage(photo)
-                                  : NetworkImage(_user.photo),
-                            ),
+                            child: photo != null
+                                ? CircleAvatar(
+                                    radius: size.width * 0.19,
+                                    backgroundImage: FileImage(photo),
+                                  )
+                                : ClipOval(
+                                    child: Container(
+                                      height: size.width * 0.38,
+                                      width: size.width * 0.38,
+                                      child: PhotoWidget(
+                                        photoLink: _user.photo,
+                                      ),
+                                    ),
+                                  ),
                           ),
                         ),
                       ),
