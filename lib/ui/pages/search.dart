@@ -1,5 +1,5 @@
 import 'package:certain/helpers/constants.dart';
-import 'package:certain/ui/widgets/card_widget.dart';
+import 'package:certain/ui/widgets/match_card_widget.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -38,22 +38,12 @@ class _SearchState extends State<Search> {
   }
 
   _likeUser() async {
-    bool hasMatched = await _searchRepository.likeUser(
-        widget.userId,
-        _selectedUser.uid,
-        _user.name,
-        _user.photo,
-        _selectedUser.name,
-        _selectedUser.photo);
-
-    if (hasMatched) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => CardWidget(_selectedUser, _user),
-        ),
-      );
-    }
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MatchCardWidget(user: _user, selectedUser: _selectedUser),
+      ),
+    );
   }
 
   _dislikeUser() {

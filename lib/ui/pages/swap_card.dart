@@ -449,7 +449,6 @@ class _DraggableCardState extends State<DraggableCard>
   }
 
   void _slideLeft() {
-    // final screenWidth = context.size.width;
     dragStart = _chooseRandomDragStart();
     slideOutTween = Tween(
       begin: const Offset(0.0, 0.0),
