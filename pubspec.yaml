@@ -36,7 +36,6 @@ dependencies:
   flutter_bloc: ^6.0.5
   rxdart: ^0.24.1
   geolocator: ^6.0.0+4
-  file_picker: ^2.0.2
   extended_image: ^1.1.1
   flutter_datetime_picker: ^1.4.0
   equatable: ^1.2.5
@@ -45,6 +44,7 @@ dependencies:
   circle_button: ^1.0.1
   dropdown_search: ^0.4.4
   fluttery_dart2: ^0.0.9
+  image_picker: ^0.6.7+12
 
 flutter_icons:
   android: "launcher_icon"

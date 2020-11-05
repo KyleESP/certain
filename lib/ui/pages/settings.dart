@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:circle_button/circle_button.dart';
@@ -17,6 +16,7 @@ import 'package:certain/ui/widgets/interestedIn_widget.dart';
 
 import 'package:certain/helpers/functions.dart';
 import 'package:certain/helpers/constants.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'edit_mcq.dart';
 
@@ -38,6 +38,7 @@ class _SettingsState extends State<Settings> {
   File photo;
   int _maxDistance;
   RangeValues _ageRange;
+  final picker = ImagePicker();
 
   @override
   void initState() {
@@ -58,6 +59,17 @@ class _SettingsState extends State<Settings> {
       });
       _settingsBloc.add(InterestedInChanged(interestedIn: _interestedIn));
     };
+  }
+
+  _pickFile() async {
+    final pickedFile = await picker.getImage(
+        source: ImageSource.gallery, maxHeight: 1136, maxWidth: 640);
+    setState(() {
+      if (pickedFile != null) {
+        photo = File(pickedFile.path);
+        _settingsBloc.add(PhotoChanged(photo: photo));
+      }
+    });
   }
 
   Widget build(BuildContext context) {
@@ -148,17 +160,7 @@ class _SettingsState extends State<Settings> {
                         radius: size.width * 0.2,
                         backgroundColor: Colors.transparent,
                         child: GestureDetector(
-                          onTap: () async {
-                            FilePickerResult result = await FilePicker.platform
-                                .pickFiles(type: FileType.image);
-                            if (result != null) {
-                              File getPic = File(result.files.single.path);
-                              setState(() {
-                                photo = getPic;
-                              });
-                              _settingsBloc.add(PhotoChanged(photo: photo));
-                            }
-                          },
+                          onTap: _pickFile,
                           child: CircleAvatar(
                             radius: size.width * 0.20,
                             backgroundColor: Colors.white,
@@ -195,16 +197,7 @@ class _SettingsState extends State<Settings> {
                       top: size.height * 0.13,
                       left: size.width * 0.6,
                       child: CircleButton(
-                        onTap: () async {
-                          FilePickerResult result = await FilePicker.platform
-                              .pickFiles(type: FileType.image);
-                          if (result != null) {
-                            File getPic = File(result.files.single.path);
-                            setState(() {
-                              photo = getPic;
-                            });
-                          }
-                        },
+                        onTap: _pickFile,
                         width: size.width * 0.1,
                         height: size.width * 0.1,
                         borderStyle: BorderStyle.none,

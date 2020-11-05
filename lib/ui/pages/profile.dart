@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:certain/helpers/functions.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:file_picker/file_picker.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:circle_button/circle_button.dart';
@@ -59,6 +59,8 @@ class _ProfileFormState extends State<ProfileForm> {
   File photo;
   ProfileBloc _profileBloc;
 
+  final picker = ImagePicker();
+
   bool get isFilled =>
       _nameController.text.isNotEmpty &&
       gender != null &&
@@ -80,6 +82,16 @@ class _ProfileFormState extends State<ProfileForm> {
   void dispose() {
     _nameController.dispose();
     super.dispose();
+  }
+
+  _pickFile() async {
+    final pickedFile = await picker.getImage(
+        source: ImageSource.gallery, maxHeight: 1136, maxWidth: 640);
+    setState(() {
+      if (pickedFile != null) {
+        photo = File(pickedFile.path);
+      }
+    });
   }
 
   @override
@@ -123,17 +135,7 @@ class _ProfileFormState extends State<ProfileForm> {
                         radius: size.width * 0.20,
                         backgroundColor: Colors.transparent,
                         child: GestureDetector(
-                            onTap: () async {
-                              FilePickerResult result = await FilePicker
-                                  .platform
-                                  .pickFiles(type: FileType.image);
-                              if (result != null) {
-                                File getPic = File(result.files.single.path);
-                                setState(() {
-                                  photo = getPic;
-                                });
-                              }
-                            },
+                            onTap: _pickFile,
                             child: CircleAvatar(
                                 radius: size.width * 0.20,
                                 backgroundColor: Colors.white,
@@ -168,16 +170,7 @@ class _ProfileFormState extends State<ProfileForm> {
                     top: size.height * 0.13,
                     left: size.width * 0.6,
                     child: CircleButton(
-                      onTap: () async {
-                        FilePickerResult result = await FilePicker.platform
-                            .pickFiles(type: FileType.image);
-                        if (result != null) {
-                          File getPic = File(result.files.single.path);
-                          setState(() {
-                            photo = getPic;
-                          });
-                        }
-                      },
+                      onTap: _pickFile,
                       width: size.width * 0.1,
                       height: size.width * 0.1,
                       borderStyle: BorderStyle.none,
