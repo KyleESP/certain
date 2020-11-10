@@ -1,3 +1,4 @@
+import 'package:certain/seeders/user_seeder.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
@@ -18,6 +19,10 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
   await Firebase.initializeApp();
+
+  /*UserSeeder userSeeder = UserSeeder();
+  userSeeder.addUsers(true);*/
+
   Bloc.observer = SimpleBlocObserver();
   final UserRepository userRepository = UserRepository();
 

@@ -231,7 +231,6 @@ class UserSeeder {
   ];
 
   Future<File> convertImageToFile(ByteData data, String fileName) async {
-    final buffer = data.buffer;
     Directory tempDir = await getTemporaryDirectory();
     String tempPath = tempDir.path;
     var filePath = tempPath + '/' + fileName;
@@ -239,16 +238,19 @@ class UserSeeder {
         data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
   }
 
-  Future<void> addUsers() async {
+  Future<void> addUsers([bool delete = false]) async {
+    print("Seed users en cours...");
     FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
     FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
 
     //Supprime les données d'un document mais pas ses collections
-    /*await _firebaseFirestore.collection('users').get().then((snapshot) {
-      for (DocumentSnapshot doc in snapshot.docs) {
-        doc.reference.delete();
-      }
-    });*/
+    if (delete) {
+      await _firebaseFirestore.collection('users').get().then((snapshot) {
+        for (DocumentSnapshot doc in snapshot.docs) {
+          doc.reference.delete();
+        }
+      });
+    }
 
     String userId;
     for (var user in usersList) {
@@ -266,8 +268,8 @@ class UserSeeder {
 
       _firebaseAuth.authStateChanges();
       userId = _firebaseAuth.currentUser.uid;
-      user['profile'].putIfAbsent('uid', () => userId);
 
+      user['profile'].putIfAbsent('uid', () => userId);
       user['profile'].putIfAbsent('mcq', () => mcq);
 
       var data = await rootBundle
@@ -291,5 +293,7 @@ class UserSeeder {
         });
       });
     }
+
+    print("Seed users OK");
   }
 }
