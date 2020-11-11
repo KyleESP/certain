@@ -10,7 +10,7 @@ Widget interestedInWidget(text, size, selected, onTap) {
             margin: EdgeInsets.only(
                 right: size * 0.02,
                 left: size * 0.02,
-                top: size * 0.04,
+                top: size * 0.02,
                 bottom: size * 0.03),
             padding: EdgeInsets.all(size * 0.02),
             width: size * 0.25,

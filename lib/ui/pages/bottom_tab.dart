@@ -69,7 +69,7 @@ class _BottomTabState extends State<BottomTab> {
             title: Text('Chat'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.supervised_user_circle),
+            icon: Icon(Icons.account_circle),
             title: Text('Paramètres'),
           )
         ],

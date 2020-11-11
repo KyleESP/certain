@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:certain/ui/widgets/photo_widget.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:circle_button/circle_button.dart';
@@ -122,307 +123,387 @@ class _SettingsState extends State<Settings> {
               _interestedIn = _user.interestedIn;
               _bioController.text = _user.bio;
             }
-            return SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: Container(
-                color: Colors.white,
-                width: size.width,
-                height: size.height,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: <Widget>[
-                    Positioned(
-                      top: 0,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.elliptical(200.0, 100.0),
-                            bottomRight: Radius.elliptical(200.0, 100.0)),
-                        child: Container(
-                          height: size.height * 0.27,
-                          width: size.width,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.rectangle,
-                            gradient: gradient,
-                          ),
+            return Container(
+              color: Colors.white,
+              width: size.width,
+              height: size.height,
+              child: Stack(
+                alignment: Alignment.bottomCenter,
+                children: <Widget>[
+                  Positioned(
+                    top: 0,
+                    child: ClipRRect(
+                      child: Container(
+                        height: size.height * 0.4,
+                        width: size.width,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.rectangle,
+                          gradient: gradient,
                         ),
                       ),
                     ),
-                    Positioned(
-                      top: size.height * 0.06,
-                      child: Text(
-                        "Paramètres",
-                        style: TextStyle(
-                            color: Colors.white, fontSize: size.width * 0.06),
-                      ),
+                  ),
+                  Positioned(
+                    top: size.height * 0.045,
+                    child: Text(
+                      "Paramètres",
+                      style: TextStyle(
+                          color: Colors.white, fontSize: size.width * 0.06),
                     ),
-                    Positioned(
-                      top: size.height * 0.12,
-                      child: CircleAvatar(
-                        radius: size.width * 0.2,
-                        backgroundColor: Colors.transparent,
-                        child: GestureDetector(
-                          onTap: _pickFile,
-                          child: CircleAvatar(
-                            radius: size.width * 0.20,
-                            backgroundColor: Colors.white,
-                            child: photo != null
-                                ? CircleAvatar(
-                                    radius: size.width * 0.19,
-                                    backgroundImage: FileImage(photo),
-                                  )
-                                : ClipOval(
-                                    child: Container(
-                                      height: size.width * 0.38,
-                                      width: size.width * 0.38,
-                                      child: PhotoWidget(
-                                        photoLink: _user.photo,
-                                      ),
+                  ),
+                  Positioned(
+                    top: size.height * 0.095,
+                    child: CircleAvatar(
+                      radius: size.width * 0.18,
+                      backgroundColor: Colors.transparent,
+                      child: GestureDetector(
+                        onTap: _pickFile,
+                        child: CircleAvatar(
+                          radius: size.width * 0.18,
+                          backgroundColor: Colors.white,
+                          child: photo != null
+                              ? CircleAvatar(
+                                  //radius: size.width * 0.12,
+                                  backgroundImage: FileImage(photo),
+                                )
+                              : ClipOval(
+                                  child: Container(
+                                    height: size.width * 0.34,
+                                    width: size.width * 0.34,
+                                    child: PhotoWidget(
+                                      photoLink: _user.photo,
                                     ),
                                   ),
+                                ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: size.height * 0.11,
+                    left: size.width * 0.6,
+                    child: Container(
+                      width: size.width * 0.09,
+                      height: size.width * 0.09,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black54,
+                            spreadRadius: 1,
+                            blurRadius: 10,
+                            offset: Offset(1.0, 3.0),
                           ),
-                        ),
+                        ],
                       ),
                     ),
-                    Positioned(
-                      top: size.height * 0.13,
-                      left: size.width * 0.6,
-                      child: Container(
-                        width: size.width * 0.08,
-                        height: size.width * 0.09,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey[800],
-                              spreadRadius: 1,
-                              blurRadius: 10,
-                              offset: Offset(-0.5, 3.0),
-                            ),
-                          ],
-                        ),
+                  ),
+                  Positioned(
+                    top: size.height * 0.11,
+                    left: size.width * 0.6,
+                    child: CircleButton(
+                      onTap: _pickFile,
+                      width: size.width * 0.09,
+                      height: size.width * 0.09,
+                      borderStyle: BorderStyle.none,
+                      backgroundColor: loginButtonColor,
+                      child: Icon(
+                        Icons.create,
+                        color: Colors.white,
                       ),
                     ),
-                    Positioned(
-                      top: size.height * 0.13,
-                      left: size.width * 0.6,
-                      child: CircleButton(
-                        onTap: _pickFile,
-                        width: size.width * 0.1,
-                        height: size.width * 0.1,
-                        borderStyle: BorderStyle.none,
-                        backgroundColor: loginButtonColor,
-                        child: Icon(
-                          Icons.create,
+                  ),
+                  Positioned(
+                    top: size.height * 0.28,
+                    child: Text(
+                      _user.name,
+                      style: TextStyle(
                           color: Colors.white,
-                        ),
-                      ),
+                          fontSize: size.width * 0.06,
+                          fontWeight: FontWeight.w600),
                     ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        SizedBox(
-                          height: size.height * 0.35,
-                        ),
-                        Container(
-                            width: size.width * 0.85,
-                            child: TextFormField(
-                              controller: _bioController,
-                              keyboardType: TextInputType.multiline,
-                              minLines: 1,
-                              maxLines: 3,
-                              maxLength: 300,
-                              cursorColor: Colors.grey[600],
-                              style: TextStyle(
-                                  color: Colors.grey[600],
-                                  fontSize: size.height * 0.018),
-                              decoration: InputDecoration(
-                                suffixIcon: IconButton(
-                                  color: backgroundColorRed,
-                                  onPressed: () {
-                                    _settingsBloc.add(
-                                        BioChanged(bio: _bioController.text));
-                                  },
-                                  icon: Icon(Icons.update),
-                                ),
-                                labelText: 'Votre bio',
-                                labelStyle: TextStyle(
-                                  color: Colors.grey[700],
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Colors.grey[600],
-                                  ),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Colors.grey[600],
-                                  ),
-                                ),
-                              ),
-                            )),
-                        SizedBox(
-                          height: size.height * 0.02,
-                        ),
-                        Row(
-                          children: <Widget>[
-                            Spacer(),
-                            Text(
-                              "Âge :",
-                              style: TextStyle(
-                                  color: Colors.grey[700],
-                                  fontSize: size.width * 0.04),
-                            ),
-                            Spacer(flex: 7),
-                            Text(
-                              _ageRange.start.toInt().toString() +
-                                  "-" +
-                                  _ageRange.end.toInt().toString() +
-                                  " ans",
-                              style: TextStyle(
-                                  color: Colors.grey[700],
-                                  fontSize: size.width * 0.04),
-                            ),
-                            Spacer(),
-                          ],
-                        ),
-                        Container(
-                          width: size.width * 0.85,
-                          child: RangeSlider(
-                            values: _ageRange,
-                            min: 18,
-                            max: 55,
-                            divisions: 55 - 18,
-                            activeColor: loginButtonColor,
-                            inactiveColor: loginButtonColor.withOpacity(0.2),
-                            labels: RangeLabels(
-                                _ageRange.start.toInt().toString(),
-                                _ageRange.end.toInt().toString()),
-                            onChanged: (RangeValues newValues) {
-                              setState(() {
-                                _ageRange = newValues;
-                              });
-                            },
-                            onChangeEnd: (RangeValues endValues) {
-                              _settingsBloc.add(AgeRangeChanged(
-                                  minAge: endValues.start.toInt(),
-                                  maxAge: endValues.end.toInt()));
-                            },
-                          ),
-                        ),
-                        SizedBox(
-                          height: size.height * 0.02,
-                        ),
-                        Row(
-                          children: <Widget>[
-                            Spacer(),
-                            Text(
-                              "Distance :",
-                              style: TextStyle(
-                                  color: Colors.grey[700],
-                                  fontSize: size.width * 0.04),
-                            ),
-                            Spacer(flex: 7),
-                            Text(
-                              _maxDistance.toString() + " km",
-                              style: TextStyle(
-                                  color: Colors.grey[700],
-                                  fontSize: size.width * 0.04),
-                            ),
-                            Spacer(),
-                          ],
-                        ),
-                        Container(
-                          width: size.width * 0.85,
-                          child: Slider(
-                            value: _maxDistance.toDouble(),
-                            min: 1,
-                            max: 100,
-                            divisions: _maxDistance,
-                            activeColor: loginButtonColor,
-                            inactiveColor: loginButtonColor.withOpacity(0.2),
-                            label: '$_maxDistance',
-                            onChanged: (double newValue) {
-                              setState(() {
-                                _maxDistance = newValue.toInt();
-                              });
-                            },
-                            onChangeEnd: (double newValue) {
-                              _settingsBloc.add(MaxDistanceChanged(
-                                  maxDistance: newValue.toInt()));
-                            },
-                          ),
-                        ),
-                        SizedBox(
-                          height: size.height * 0.015,
-                        ),
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          padding: EdgeInsets.only(left: size.height * 0.04),
-                          margin: EdgeInsets.only(bottom: size.height * 0.01),
-                          child: Text(
-                            "Vous cherchez :",
-                            style: TextStyle(
-                                color: Colors.grey[700],
-                                fontSize: size.width * 0.04),
-                          ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            interestedInWidget("f", size.width, _interestedIn,
-                                _onTapInterestedIn("f")),
-                            interestedInWidget("m", size.width, _interestedIn,
-                                _onTapInterestedIn("m")),
-                            interestedInWidget("b", size.width, _interestedIn,
-                                _onTapInterestedIn("b")),
-                          ],
-                        ),
-                        SizedBox(
-                          height: size.height * 0.01,
-                        ),
-                        RaisedButton(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                          ),
-                          color: logoutButton,
-                          onPressed: () {
-                            Navigator.push(context, MaterialPageRoute(
-                              builder: (context) {
-                                return EditMcq(userId: _user.uid);
-                              },
-                            ));
-                          },
-                          child: Text(
-                            "Modifier votre QCM",
-                            style: TextStyle(
-                                fontSize: size.height * 0.02,
-                                color: Colors.white),
-                          ),
-                        ),
-                        SizedBox(
-                          height: size.height * 0.01,
-                        ),
-                        RaisedButton(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                          ),
-                          color: logoutButton,
-                          onPressed: () => {
-                            BlocProvider.of<AuthenticationBloc>(context)
-                                .add(LoggedOut())
-                          },
-                          child: Text(
-                            "Se déconnecter",
-                            style: TextStyle(
-                                fontSize: size.height * 0.02,
-                                color: Colors.white),
-                          ),
-                        ),
+                  ),
+                  Container(
+                    height: size.height * 0.59,
+                    width: size.width,
+                    padding: EdgeInsets.only(
+                        left: size.width * 0.065, right: size.width * 0.065),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(15.0),
+                        topRight: Radius.circular(15.0),
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black26,
+                          spreadRadius: 1,
+                          blurRadius: 10,
+                          offset: Offset(0.0, 2.0),
+                        )
                       ],
                     ),
-                  ],
-                ),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          SizedBox(
+                            height: size.height * 0.025,
+                          ),
+                          Row(
+                            children: <Widget>[
+                              Icon(
+                                Icons.favorite_border,
+                                color: Colors.grey[700],
+                              ),
+                              SizedBox(
+                                width: size.width * 0.02,
+                              ),
+                              Text(
+                                "Préférences",
+                                style: TextStyle(
+                                  color: Colors.grey[700],
+                                  fontSize: size.height * 0.025,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: size.height * 0.015,
+                          ),
+                          Row(
+                            children: <Widget>[
+                              Text(
+                                "Âge :",
+                                style: TextStyle(
+                                    color: Colors.grey[700],
+                                    fontSize: size.width * 0.04),
+                              ),
+                              Spacer(),
+                              Text(
+                                _ageRange.start.toInt().toString() +
+                                    "-" +
+                                    _ageRange.end.toInt().toString() +
+                                    " ans",
+                                style: TextStyle(
+                                    color: Colors.grey[700],
+                                    fontSize: size.width * 0.04),
+                              ),
+                            ],
+                          ),
+                          Container(
+                            width: size.width * 0.85,
+                            height: size.height * 0.05,
+                            child: RangeSlider(
+                              values: _ageRange,
+                              min: 18,
+                              max: 55,
+                              divisions: 55 - 18,
+                              activeColor: loginButtonColor,
+                              inactiveColor: loginButtonColor.withOpacity(0.2),
+                              labels: RangeLabels(
+                                  _ageRange.start.toInt().toString(),
+                                  _ageRange.end.toInt().toString()),
+                              onChanged: (RangeValues newValues) {
+                                setState(() {
+                                  _ageRange = newValues;
+                                });
+                              },
+                              onChangeEnd: (RangeValues endValues) {
+                                _settingsBloc.add(AgeRangeChanged(
+                                    minAge: endValues.start.toInt(),
+                                    maxAge: endValues.end.toInt()));
+                              },
+                            ),
+                          ),
+                          SizedBox(
+                            height: size.height * 0.005,
+                          ),
+                          Row(
+                            children: <Widget>[
+                              Text(
+                                "Distance :",
+                                style: TextStyle(
+                                    color: Colors.grey[700],
+                                    fontSize: size.width * 0.04),
+                              ),
+                              Spacer(),
+                              Text(
+                                _maxDistance.toString() + " km",
+                                style: TextStyle(
+                                    color: Colors.grey[700],
+                                    fontSize: size.width * 0.04),
+                              ),
+                            ],
+                          ),
+                          Container(
+                            width: size.width * 0.85,
+                            height: size.height * 0.05,
+                            child: Slider(
+                              value: _maxDistance.toDouble(),
+                              min: 1,
+                              max: 100,
+                              divisions: _maxDistance,
+                              activeColor: loginButtonColor,
+                              inactiveColor: loginButtonColor.withOpacity(0.2),
+                              label: '$_maxDistance',
+                              onChanged: (double newValue) {
+                                setState(() {
+                                  _maxDistance = newValue.toInt();
+                                });
+                              },
+                              onChangeEnd: (double newValue) {
+                                _settingsBloc.add(MaxDistanceChanged(
+                                    maxDistance: newValue.toInt()));
+                              },
+                            ),
+                          ),
+                          SizedBox(
+                            height: size.height * 0.003,
+                          ),
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            margin: EdgeInsets.only(bottom: size.height * 0.01),
+                            child: Text(
+                              "Vous cherchez :",
+                              style: TextStyle(
+                                  color: Colors.grey[700],
+                                  fontSize: size.width * 0.04),
+                            ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
+                              interestedInWidget("f", size.width, _interestedIn,
+                                  _onTapInterestedIn("f")),
+                              interestedInWidget("m", size.width, _interestedIn,
+                                  _onTapInterestedIn("m")),
+                              interestedInWidget("b", size.width, _interestedIn,
+                                  _onTapInterestedIn("b")),
+                            ],
+                          ),
+                          SizedBox(
+                            height: size.height * 0.015,
+                          ),
+                          Row(
+                            children: <Widget>[
+                              Icon(
+                                Icons.person_outline,
+                                color: Colors.grey[700],
+                              ),
+                              SizedBox(
+                                width: size.width * 0.02,
+                              ),
+                              Text(
+                                "Profil",
+                                style: TextStyle(
+                                  color: Colors.grey[700],
+                                  fontSize: size.height * 0.025,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: size.height * 0.02,
+                          ),
+                          Container(
+                              width: size.width * 0.85,
+                              child: TextFormField(
+                                controller: _bioController,
+                                keyboardType: TextInputType.multiline,
+                                minLines: 1,
+                                maxLines: 2,
+                                maxLength: 300,
+                                cursorColor: Colors.grey[600],
+                                style: TextStyle(
+                                    color: Colors.grey[600],
+                                    fontSize: size.height * 0.018),
+                                decoration: InputDecoration(
+                                  suffixIcon: IconButton(
+                                    color: backgroundColorRed,
+                                    onPressed: () {
+                                      _settingsBloc.add(
+                                          BioChanged(bio: _bioController.text));
+                                    },
+                                    icon: Icon(Icons.update),
+                                  ),
+                                  labelText: 'Votre bio',
+                                  labelStyle: TextStyle(
+                                    color: Colors.grey[700],
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.grey[600],
+                                    ),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.grey[600],
+                                    ),
+                                  ),
+                                ),
+                              )),
+                          Container(
+                            margin: EdgeInsets.only(left: size.width * 0.01),
+                            child: Row(
+                              children: <Widget>[
+                                RichText(
+                                  text: TextSpan(
+                                    text: 'Modifier votre questionnaire',
+                                    style: TextStyle(
+                                      decoration: TextDecoration.underline,
+                                      color: loginButtonColor,
+                                      fontSize: size.height * 0.02,
+                                    ),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () {
+                                        Navigator.push(context,
+                                            MaterialPageRoute(
+                                          builder: (context) {
+                                            return EditMcq(userId: _user.uid);
+                                          },
+                                        ));
+                                      },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: size.height * 0.01,
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(left: size.width * 0.01),
+                            child: Row(
+                              children: <Widget>[
+                                RichText(
+                                  text: TextSpan(
+                                    text: 'Se déconnecter',
+                                    style: TextStyle(
+                                      decoration: TextDecoration.underline,
+                                      color: loginButtonColor,
+                                      fontSize: size.height * 0.02,
+                                    ),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () {
+                                        BlocProvider.of<AuthenticationBloc>(
+                                                context)
+                                            .add(LoggedOut());
+                                      },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             );
           },
