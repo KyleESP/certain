@@ -77,11 +77,6 @@ class _PlayMcqFormState extends State<PlayMcqForm> {
         showDialog(
             context: context,
             builder: (context) {
-              Future.delayed(Duration(seconds: 3), () {
-                Navigator.pop(context);
-                Navigator.pop(context);
-                Navigator.pop(context);
-              });
               return SimpleDialog(
                 backgroundColor: Colors.transparent,
                 children: <Widget>[
@@ -92,11 +87,21 @@ class _PlayMcqFormState extends State<PlayMcqForm> {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(20.0),
                           child: Container(
-                            height: size.height * 0.5,
+                            height: size.height * 0.48,
                             width: size.width * 0.9,
                             padding: EdgeInsets.all(size.width * 0.02),
                             decoration: BoxDecoration(
                               gradient: gradient,
+                            ),
+                            child: IconButton(
+                              alignment: Alignment(0.98, -0.98),
+                              icon: Icon(Icons.close),
+                              color: Colors.white,
+                              onPressed: () {
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                              },
                             ),
                           ),
                         ),
