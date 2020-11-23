@@ -48,7 +48,7 @@ De plus, sur cet IDE, nul besoin d’installer des multitudes de plugins pour pr
 
 _Profil_
 
-Pour accéder à l’application il est nécessaire de créer un profil utilisateur, contenant les informations suivantes : 
+Pour accéder à l’application il est nécessaire de créer un compte et un profil utilisateur, contenant les informations suivantes : 
 - prénom *
 - sexe *
 - adresse email *
@@ -60,31 +60,37 @@ Pour accéder à l’application il est nécessaire de créer un profil utilisat
 
 (*) Informations obligatoires
 
-Il est possible de modifier les informations du profil à tout moment. Il est également possible de paramétrer le périmètre de recherche et la tranche d’âge des personnes recherchées.
+<img src="maquettes/compte.png" width="200"/>       <img src="maquettes/profil.png" width="200"/>
+
+Il est possible pour l'utilisateur de modifier les informations de son profil à tout moment dans la page paramètres. Il est également possible de paramétrer le périmètre de recherche et la tranche d’âge des personnes recherchées.
 
 _Profils proposés_
 
 Les profils proposés à chaque utilisateur sont sélectionnés en fonction de leur localisation et des critères définis dans le profil . 
-Pour chaque profil proposé, il y a possibilité de lire le nom, l’âge, le sexe, la description, regarder la photo et de liker ou disliker le profil (en swipant ou via deux boutons dédiés).
+Pour chaque profil proposé, il y a possibilité de lire le nom, l’âge, le sexe, la description, regarder la photo et de liker ou disliker le profil (en balayant l'écran à droite ou à gauche ou via les deux boutons dédiés).
 
-// TODO : Screen page profil
+<img src="maquettes/decouvrir.png" width="200"/>
 
-Lors d’un match, un pop-up apparaît indiquant cet évènement.
+Lorsque deux utilisateurs se sont likés mutuellement on dit qu'il y a un match, un pop-up apparaît alors sur l'écran indiquant cet évènement.
 
-// TODO : Screen page match
+<img src="maquettes/match_popup.png" width="200"/>
+
+Tous les matchs en attente sont ensuite consultables dans la page "Vos matchs". Les matchs en attente sont les matchs pour lesquels l'utilisateur n'a pas encore répondu au questionnaire. Pour chaque match il est donc possible soit de répondre au questionnaire soit de supprimer le match.
+
+<img src="maquettes/match_1.png" width="200"/>      <img src="maquettes/match_2.png" width="200"/>
 
 _Questionnaire_
 
 Le QCM est composé de 6 questions avec une seule réponse possible, créé par chaque utilisateur à la création de son profil. Il est possible d’éditer son questionnaire à tout moment dans les paramètres. Le choix des questions par l’utilisateur est fait parmi une banque de questions proposées. 
 Quand un utilisateur match avec une autre personne, il doit répondre au QCM créé par ce dernier. Si son taux de réponses justes est supérieur ou égal à 50% (c’est-à-dire au moins 3 réponses correctes) et vice-versa, alors un chat est ouvert et les deux personnes peuvent entrer en discussion.
 
-// TODO : Screen questionnaire
+<img src="maquettes/questionnaire.png" width="200"/>
 
 _Chat_
 
-C’est un système de messagerie instantanée. Il ne permet pas d’envoyer de photo pour éviter que les personnes envoie des images à caractère sexuel, ce qui pourrait facilement survenir sur ce type d’application.
+C’est un système de messagerie instantanée. Il ne permet pas d’envoyer de photo pour éviter que les personnes envoie des images à caractère sexuel, ce qui pourrait facilement survenir sur ce type d’application. Il est possible de supprimer une discussion en restant appuyer quelques secondes sur celle-ci.
 
-// TODO : Screen chat
+<img src="maquettes/chat_1.png" width="200"/>       <img src="maquettes/chat_2.png" width="200"/>
 
 _Les paramètres_
 
@@ -95,13 +101,20 @@ C’est la page permettant de paramétrer les données de l’utilisateur suivan
 - bio
 - questionnaire
 - photo de profil
+L'utilisateur a également la possibilité via cette page de se déconnecter.
 
-// TODO : Screen paramètres
-
+<img src="maquettes/parametres.png" width="200"/>
 
 ### Cas d'utilisation
 
-// TODO : Expliquer un cas d'utilisation
+Lors de la première utilisation, l’utilisateur doit se créer un compte pour pouvoir accéder à l’application. Ce compte est lié uniquement à l’application, il est créé avec une adresse email et un mot de passe.  
+L’utilisateur doit ensuite créer son profil en indiquant son prénom, sa date de naissance, son sexe, le sexe de la personne qu’il recherche, et en chargeant une photo de profil.
+Ensuite, l’utilisateur doit créer le questionnaire qui sera soumis à ses futurs matchs. En choisissant chacune des questions et en indiquant la réponse qui lui semble correcte.  L’utilisateur a maintenant accès à l’ensemble des fonctionnalités de l’application.  
+Il va pouvoir dans ses paramètres modifier son profil ainsi que son questionnaire. Mais également renseigner ses critères de recherche (âge et distance), et écrire une petite biographie pour que les autres utilisateurs puissent mieux le connaître.  
+L’utilisateur peut découvrir les profils qui lui sont proposés en fonctions des critères qu’il a définis. Il peut liker ou disliker un profil soit avec les boutons prévus à cet effet soit en balayant l’écran à droite (pour liker) ou à gauche (pour disliker). Cette décision est définitive une fois qu’un profil est liké ou disliké il n’apparaitra plus dans le flux des profils à découvrir.   
+Si l’utilisateur like le profil d’un utilisateur qui avait déjà liké son profil alors il va voir apparaitre un message lui indiquant qu’il a matché avec cet utilisateur.  
+Il pourra ensuite retrouver ce match sur la page qui répertorie tous ses matchs en attente. Il a maintenant la possibilité de répondre au questionnaire de l’utilisateur avec qui il a matché ou bien de supprimer le match. S’il décide de répondre au questionnaire et qu’il a plus de 50 % de réponses correctes et que l’autre utilisateur aussi, alors un message s’affiche indiquant qu’il a réussi et que les utilisateurs vont pouvoir discuter.  
+En effet, l’utilisateur va voir apparaitre dans la messagerie instantanée de l’application une nouvelle discussion avec l’autre utilisateur en question. Ils pourront ainsi échanger pour apprendre à se connaître. 
 
 ### Délais
 
