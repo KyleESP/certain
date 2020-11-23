@@ -118,7 +118,7 @@ class _SignUpFormState extends State<SignUpForm> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Center(
-                    heightFactor: 1.6,
+                    heightFactor: 1.5,
                     child: Image.asset('assets/images/logo_add.png',
                         height: 200, width: 200),
                   ),
@@ -126,11 +126,11 @@ class _SignUpFormState extends State<SignUpForm> {
                     child: Text(
                       "Créer votre compte",
                       style: TextStyle(
-                          fontSize: size.width * 0.08, color: Colors.white),
+                          fontSize: size.width * 0.07, color: Colors.white),
                     ),
                   ),
                   SizedBox(
-                    height: 70,
+                    height: size.height * 0.05,
                   ),
                   Container(
                     padding: EdgeInsets.all(size.height * 0.02),

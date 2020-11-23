@@ -132,9 +132,22 @@ class _SignInFormState extends State<SignInForm> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Container(
-                    margin: EdgeInsets.only(top: size.height * 0.15),
+                    margin: EdgeInsets.only(top: size.height * 0.1),
                     child: Image.asset('assets/images/logo.png',
                         height: 200, width: 200),
+                  ),
+                  Container(
+                    child: Text(
+                      "Certain",
+                      style: TextStyle(
+                          fontSize: size.width * 0.08,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: size.height * 0.05,
                   ),
                   Container(
                     padding: EdgeInsets.all(size.height * 0.02),
@@ -237,7 +250,7 @@ class _SignInFormState extends State<SignInForm> {
                   ),
                   Container(
                     padding: EdgeInsets.all(size.height * 0.02),
-                    margin: EdgeInsets.only(top: size.height * 0.18),
+                    margin: EdgeInsets.only(top: size.height * 0.12),
                     child: RichText(
                       text: TextSpan(
                         children: [

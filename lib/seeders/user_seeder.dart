@@ -192,23 +192,23 @@ class UserSeeder {
 
   List<Map<String, String>> mcq = [
     {
-      "question": "Qu’est-ce qui vous irrite le plus ?",
-      "correct_answer": "On vous ignore",
-      "option_2": "On ne vous remercie pas.",
-      "option_3": "On vous impose quelque chose.",
+      "question": "Qu’est-ce qui t'irrite le plus ?",
+      "correct_answer": "Qu'on t'ignore.",
+      "option_2": "Qu'on ne te remercie pas.",
+      "option_3": "Qu'on t'impose quelque chose.",
     },
     {
-      "question": "Vous êtes sur une île déserte, vous cherchez avant tout :",
+      "question": "Tu es sur une île déserte, tu cherches avant tout :",
       "correct_answer": "Une tribu autochtone, ils ont à manger et à boire.",
       "option_2": "Un abri, de préférence une grotte.",
-      "option_3": "À vous faire remarquer en allumant un feu.",
+      "option_3": "À te faire remarquer en allumant un feu.",
     },
     {
-      "question": "Si on vous sort une blague pourrie :",
-      "correct_answer": "Vous vous marrez quand même.",
-      "option_2": "Vous faites comprendre à l’autre que sa blague est naze.",
+      "question": "Si on te sort une blague pourrie :",
+      "correct_answer": "Tu te marres quand même.",
+      "option_2": "Tu fais comprendre à l’autre que sa blague est naze.",
       "option_3":
-          "Vous riez jaune, histoire de ne pas mettre l’autre mal à l’aise.",
+          "Tu ries jaune, histoire de ne pas mettre l’autre mal à l’aise.",
     },
     {
       "question": "Pour t'éclater en soirée ?",
@@ -217,16 +217,16 @@ class UserSeeder {
       "option_3": "Restaurant",
     },
     {
-      "question": "Le compliment qui vous fait craquer :",
+      "question": "Le compliment qui te fait craquer :",
       "correct_answer": "Tu as toujours raison.",
       "option_2": "Tu es incroyable !",
       "option_3": "Je suis si bien avec toi.",
     },
     {
-      "question": "Votre technique de séduction :",
-      "correct_answer": "Vous le faites rire.",
-      "option_2": "Vous l’écoutez.",
-      "option_3": "Vous l’envoûtez.",
+      "question": "Ta technique de séduction :",
+      "correct_answer": "Tu le/la fais rire.",
+      "option_2": "Tu l’écoutes.",
+      "option_3": "Tu l’envoûtes.",
     }
   ];
 

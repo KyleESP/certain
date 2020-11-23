@@ -7,7 +7,6 @@ import 'package:certain/repositories/matches_repository.dart';
 
 class PlayMcqBloc extends Bloc<PlayMcqEvent, PlayMcqState> {
   MatchesRepository _matchesRepository;
-
   PlayMcqBloc(this._matchesRepository) : super(PlayMcqInitialState());
 
   @override
@@ -29,14 +28,14 @@ class PlayMcqBloc extends Bloc<PlayMcqEvent, PlayMcqState> {
           currentUserId: currentUserId, selectedUserId: selectedUserId);
       if (openChat) {
         yield CompletedState(
-            "Vous avez tout deux réussi vos QCM ! Vous pouvez maintenant parler.");
+            "Vous avez tous les deux réussi ! Vous pouvez maintenant discuter.");
       } else {
         yield CompletedState(
-            "Vous avez réussi le QCM ! Patientez que l'autre réussisse aussi.");
+            "Vous avez réussi ! Patientez que l'autre réussisse aussi.");
       }
     } else {
       await _matchesRepository.removeMatch(currentUserId, selectedUserId);
-      yield CompletedState("Vous avez raté le QCM... Dommage !");
+      yield CompletedState("Dommage ! Vous avez échoué...");
     }
   }
 }
