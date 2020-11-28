@@ -6,9 +6,9 @@ Une application mobile Android / iOS permettant de matcher et discuter avec des 
 
 ### Contexte 
 
-L’idée de développer une application de rencontre est survenu après réflexion sur la question “Quel est le type d’application le plus tendance et surtout le plus passe-partout aujourd’hui ?”. En fait, malgré le peu de ressource, la taille de notre équipe et les contraintes de délai, nous avons voulu développer une application peu complexe à conceptualiser mais qui tend à intéresser le plus de personne.
+L’idée de développer une application de rencontre est survenue après réflexion sur la question “Quel est le type d’application le plus tendance et surtout le plus passe-partout aujourd’hui ?”. En fait, malgré le peu de ressources, la taille de notre équipe et les contraintes de délai, nous avons voulu développer une application peu complexe à conceptualiser mais qui tend à intéresser le plus de personnes.
 Bien sûr, les concurrents sont bien présents (Tinder, Fruitz, Lovoo…) et des nouveaux émergent. Nous avons donc cherché à rendre l’application originale pour se distinguer en y ajoutant le concept de questionnaire.
-Le questionnaire aura pour but de filtrer les personnes selon leur personnalité, pour assurer une correspondance maximum. Ce concept est à l’origine du nom de l’application “Certain”, faisant référence au fait qu’on soit quasiment certain que la personne nous corresponde. Lorsque deux personnes ont matché et ont tous deux réussi le questionnaire de l’autre, elles auront la possibilité de chatter directement sur l’application, pour faire plus ample connaissance.
+Le questionnaire aura pour but de filtrer les personnes selon leur personnalité, pour assurer une correspondance maximum. Ce concept est à l’origine du nom de l’application “Certain”, faisant référence au fait qu’on soit quasiment certain que la personne nous corresponde. Lorsque deux personnes ont matché et ont toutes les deux réussi le questionnaire de l’autre, elles auront la possibilité de chatter directement sur l’application, pour faire plus ample connaissance.
 
 ### Périmètre
 
@@ -88,7 +88,7 @@ Quand un utilisateur match avec une autre personne, il doit répondre au QCM cr�
 
 _Chat_
 
-C’est un système de messagerie instantanée. Il ne permet pas d’envoyer de photo pour éviter que les personnes envoie des images à caractère sexuel, ce qui pourrait facilement survenir sur ce type d’application. Il est possible de supprimer une discussion en restant appuyer quelques secondes sur celle-ci.
+C’est un système de messagerie instantanée. Il ne permet pas d’envoyer de photo pour éviter que les personnes envoient des images à caractère sexuel, ce qui pourrait facilement survenir sur ce type d’application. Il est possible de supprimer une discussion en restant appuyé quelques secondes sur celle-ci.
 
 <img src="maquettes/chat_1.png" width="200"/>       <img src="maquettes/chat_2.png" width="200"/>
 
@@ -111,8 +111,8 @@ Lors de la première utilisation, l’utilisateur doit se créer un compte pour 
 L’utilisateur doit ensuite créer son profil en indiquant son prénom, sa date de naissance, son sexe, le sexe de la personne qu’il recherche, et en chargeant une photo de profil.
 Ensuite, l’utilisateur doit créer le questionnaire qui sera soumis à ses futurs matchs. En choisissant chacune des questions et en indiquant la réponse qui lui semble correcte.  L’utilisateur a maintenant accès à l’ensemble des fonctionnalités de l’application.  
 Il va pouvoir dans ses paramètres modifier son profil ainsi que son questionnaire. Mais également renseigner ses critères de recherche (âge et distance), et écrire une petite biographie pour que les autres utilisateurs puissent mieux le connaître.  
-L’utilisateur peut découvrir les profils qui lui sont proposés en fonctions des critères qu’il a définis. Il peut liker ou disliker un profil soit avec les boutons prévus à cet effet soit en balayant l’écran à droite (pour liker) ou à gauche (pour disliker). Cette décision est définitive une fois qu’un profil est liké ou disliké il n’apparaitra plus dans le flux des profils à découvrir.   
-Si l’utilisateur like le profil d’un utilisateur qui avait déjà liké son profil alors il va voir apparaitre un message lui indiquant qu’il a matché avec cet utilisateur.  
+L’utilisateur peut découvrir les profils qui lui sont proposés en fonction des critères qu’il a définis. Il peut liker ou disliker un profil soit avec les boutons prévus à cet effet soit en balayant l’écran à droite (pour liker) ou à gauche (pour disliker). Cette décision est définitive une fois qu’un profil est liké ou disliké il n’apparaîtra plus dans le flux des profils à découvrir.   
+Si l’utilisateur like le profil d’un utilisateur qui avait déjà liké son profil alors il va voir apparaître un message lui indiquant qu’il a matché avec cet utilisateur.  
 Il pourra ensuite retrouver ce match sur la page qui répertorie tous ses matchs en attente. Il a maintenant la possibilité de répondre au questionnaire de l’utilisateur avec qui il a matché ou bien de supprimer le match. S’il décide de répondre au questionnaire et qu’il a plus de 50 % de réponses correctes et que l’autre utilisateur aussi, alors un message s’affiche indiquant qu’il a réussi et que les utilisateurs vont pouvoir discuter.  
 En effet, l’utilisateur va voir apparaitre dans la messagerie instantanée de l’application une nouvelle discussion avec l’autre utilisateur en question. Ils pourront ainsi échanger pour apprendre à se connaître. 
 
